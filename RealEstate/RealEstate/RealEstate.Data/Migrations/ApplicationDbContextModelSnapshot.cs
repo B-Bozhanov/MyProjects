@@ -278,6 +278,32 @@ namespace RealEstate.Data.Migrations
                     b.ToTable("Districts");
                 });
 
+            modelBuilder.Entity("RealEstate.Models.DataModels.Image", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<byte[]>("Content")
+                        .IsRequired()
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PropertyId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PropertyId");
+
+                    b.ToTable("Image");
+                });
+
             modelBuilder.Entity("RealEstate.Models.DataModels.Place", b =>
                 {
                     b.Property<int>("Id")
@@ -306,10 +332,22 @@ namespace RealEstate.Data.Migrations
                     b.Property<int>("BuildingTypeId")
                         .HasColumnType("int");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("DistrictId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ExpirationDays")
+                        .HasColumnType("int");
+
                     b.Property<int?>("Floor")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<int>("Options")
                         .HasColumnType("int");
 
                     b.Property<decimal?>("Price")
@@ -317,6 +355,9 @@ namespace RealEstate.Data.Migrations
 
                     b.Property<int>("PropertyTypeId")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("PublishedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("Size")
                         .HasColumnType("int");
@@ -328,6 +369,9 @@ namespace RealEstate.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("YardSize")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -452,6 +496,17 @@ namespace RealEstate.Data.Migrations
                     b.Navigation("Place");
                 });
 
+            modelBuilder.Entity("RealEstate.Models.DataModels.Image", b =>
+                {
+                    b.HasOne("RealEstate.Models.DataModels.Property", "Property")
+                        .WithMany("Images")
+                        .HasForeignKey("PropertyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Property");
+                });
+
             modelBuilder.Entity("RealEstate.Models.DataModels.Property", b =>
                 {
                     b.HasOne("RealEstate.Models.DataModels.BuildingType", "BuildingType")
@@ -492,6 +547,11 @@ namespace RealEstate.Data.Migrations
             modelBuilder.Entity("RealEstate.Models.DataModels.Place", b =>
                 {
                     b.Navigation("Districts");
+                });
+
+            modelBuilder.Entity("RealEstate.Models.DataModels.Property", b =>
+                {
+                    b.Navigation("Images");
                 });
 
             modelBuilder.Entity("RealEstate.Models.DataModels.PropertyType", b =>

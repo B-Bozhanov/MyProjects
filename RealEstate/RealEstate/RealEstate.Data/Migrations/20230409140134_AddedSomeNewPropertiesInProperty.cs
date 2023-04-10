@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace RealEstate.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class AddedSomeNewPropertiesInProperty : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -240,7 +240,13 @@ namespace RealEstate.Data.Migrations
                     Floor = table.Column<int>(type: "int", nullable: true),
                     TotalFloors = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    Options = table.Column<int>(type: "int", nullable: false),
+                    ExpirationDays = table.Column<int>(type: "int", nullable: false),
+                    PublishedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     DistrictId = table.Column<int>(type: "int", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
                     PropertyTypeId = table.Column<int>(type: "int", nullable: false),
                     BuildingTypeId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -263,6 +269,27 @@ namespace RealEstate.Data.Migrations
                         name: "FK_Properties_PropertyTypes_PropertyTypeId",
                         column: x => x.PropertyTypeId,
                         principalTable: "PropertyTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Image",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Content = table.Column<byte[]>(type: "varbinary(max)", nullable: false),
+                    PropertyId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Image", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Image_Properties_PropertyId",
+                        column: x => x.PropertyId,
+                        principalTable: "Properties",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -336,6 +363,11 @@ namespace RealEstate.Data.Migrations
                 column: "PlaceId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Image_PropertyId",
+                table: "Image",
+                column: "PropertyId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Properties_BuildingTypeId",
                 table: "Properties",
                 column: "BuildingTypeId");
@@ -373,6 +405,9 @@ namespace RealEstate.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetUserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Image");
 
             migrationBuilder.DropTable(
                 name: "PropertyTag");

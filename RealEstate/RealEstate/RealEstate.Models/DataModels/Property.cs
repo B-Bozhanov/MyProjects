@@ -5,6 +5,10 @@
         public Property()
         {
             this.Tags = new HashSet<Tag>();
+            this.Images = new HashSet<Image>();
+
+            this.ExpirationDays = 90; // By default
+            this.Options = PropertyOption.Sale; // By default
         }
 
         public int Id { get; set; }
@@ -21,9 +25,21 @@
 
         public decimal? Price { get; set; }
 
+        public PropertyOption Options { get; set; }
+
+        public int ExpirationDays { get; set; }
+
+        public DateTime PublishedOn { get; set; }
+
+        public bool IsDeleted { get; set; } = false;
+
+        public string? Description { get; set; }
+
         public int DistrictId { get; set; }
 
         public virtual District? District { get; set; }
+
+        public int Year { get; set; }
 
         public int PropertyTypeId { get; set; }
 
@@ -33,6 +49,8 @@
 
         public virtual BuildingType? BuildingType { get; set; }
 
-        public virtual ICollection<Tag> Tags { get; set; }
+        public virtual ICollection<Tag>? Tags { get; set; }
+
+        public virtual ICollection<Image>? Images { get; set; }
     }
 }

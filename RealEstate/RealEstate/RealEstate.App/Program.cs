@@ -4,6 +4,8 @@ namespace RealEstate.App
     using Microsoft.EntityFrameworkCore;
 
     using RealEstate.App.Data;
+    using RealEstate.Services;
+    using RealEstate.Services.Interfaces;
 
     public class Program
     {
@@ -21,7 +23,7 @@ namespace RealEstate.App
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
 
-            builder.Services.AddTransient<ApplicationDbContext>();
+            ConfigureServices(builder);
 
             var app = builder.Build();
 
@@ -50,6 +52,13 @@ namespace RealEstate.App
             app.MapRazorPages();
 
             app.Run();
+        }
+
+        private static void ConfigureServices(WebApplicationBuilder builder)
+        {
+            builder.Services.AddTransient<ApplicationDbContext>();
+            builder.Services.AddTransient<IImportService, ImportService>();
+            builder.Services.AddTransient<IPropertyService, PropertyService>();
         }
     }
 }

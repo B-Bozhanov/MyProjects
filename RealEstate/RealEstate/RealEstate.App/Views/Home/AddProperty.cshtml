@@ -1,19 +1,19 @@
-﻿@model ImportPropModel
+﻿@model PropertyViewModel
 
 
 
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <div class="form-group">
-        <select class="form-control" id="">
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
-            <option>4</option>
-            <option>5</option>
+         <label asp-for="Type"></label>
+        <select class="form-control">
+           @foreach (var item in Model.PropertyTypeViewModels)
+            {
+                <option value="@item.Id">@item.Name</option>
+            }
         </select>
     </div>
     <div class="form-group">
-        <label for="exampleFormControlSelect1">Example select</label>
+        <label asp-for="Type"></label>
         <select class="form-control" id="exampleFormControlSelect1">
             <option>1</option>
             <option>2</option>
@@ -43,5 +43,17 @@
     <div class="form-check-inline">
         <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="rent">
         <label class="form-check-label" for="exampleRadios2">Rent</label>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 control-label">
+            Attachment(s)
+            (Attach multiple files.)
+        </label>
+        <span>Select Images:</span>
+        <input type="file" name="images" multiple/>
+        <hr />
+        <button type="submit" class="btn btn-primary mb-4">Upload</button>
+        <br />
+        <span style="color:green">@TempData["Message"]</span>
     </div>
 </form>

@@ -2,7 +2,6 @@
 {
     using Newtonsoft.Json;
 
-    using RealEstate.App.Data;
     using RealEstate.Models.ImportViewModels;
     using RealEstate.Services.Interfaces;
 
@@ -22,12 +21,12 @@
                 throw new InvalidOperationException("Json can not be empty!");
             }
 
-            var jsonProps = JsonConvert.DeserializeObject<IEnumerable<ImportPropModel>>(json);
+            var jsonProps = JsonConvert.DeserializeObject<IEnumerable<PropertyViewModel>>(json);
 
            
             foreach (var jsonProp in jsonProps!)
             {
-                propertyService.Add(jsonProp);
+                this.propertyService.Add(jsonProp);
             }
         }
     }

@@ -4,13 +4,13 @@
 
     using RealEstate.Models.DataModels;
 
-    public class ImportPropModel
+    public class PropertyViewModel
     {
-        public ImportPropModel()
+        public PropertyViewModel()
         {
             this.ExpirationDays = 90; // By default
             this.Option = PropertyOption.Sale; // By default
-            this.Images = new List<byte[]>();
+            this.Images = new List<Image>();
         }
 
         public string? Url { get; set; }
@@ -40,6 +40,10 @@
 
         public decimal? Price { get; set; }
 
-        public List<byte[]>? Images { get; set; }
+        public ICollection<Image>? Images { get; set; }
+
+        public int TypeId { get; set; }
+
+        public IEnumerable<PropertyTypeViewModel> PropertyTypeViewModels { get; set; }
     }
 }

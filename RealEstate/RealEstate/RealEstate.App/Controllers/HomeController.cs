@@ -7,6 +7,7 @@
 
     using RealEstate.App.Data;
     using RealEstate.App.Models;
+    using RealEstate.Models.DataModels;
     using RealEstate.Models.ImportViewModels;
     using RealEstate.Services.Interfaces;
 
@@ -15,12 +16,14 @@
         private readonly ILogger<HomeController> _logger;
         private readonly IImportService importService;
         private readonly IPropertyService propertyService;
+        private readonly ApplicationDbContext context;
 
-        public HomeController(ILogger<HomeController> logger, IImportService importService, IPropertyService propertyService)
+        public HomeController(ILogger<HomeController> logger, IImportService importService, IPropertyService propertyService, ApplicationDbContext context)
         {
             _logger = logger;
             this.importService = importService;
             this.propertyService = propertyService;
+            this.context = context;
         }
 
         public IActionResult Index()
@@ -50,13 +53,34 @@
 
         public IActionResult AddProperty()
         {
-            return this.View();
+            return this.View(new PropertyViewModel
+            {
+                PropertyTypeViewModels = this.GetTypes()
+            });
         }
 
         [HttpPost]
-        public IActionResult AddProperty(ImportPropModel model)
+        public IActionResult AddProperty(IFormCollection form)
         {
-            propertyService.Add(model);
+            //TODO validations:
+
+            var images = form.Files;
+
+            // TODO: Model binding
+
+            var importPropModel = new PropertyViewModel();
+
+            foreach (var imgFile in images)
+            {
+                var stream = new MemoryStream();
+                imgFile.CopyTo(stream);
+
+                var image = new Image { Name = imgFile.Name, Content = stream.ToArray() };
+
+                importPropModel.Images!.Add(image);
+            }
+
+            this.propertyService.Add(importPropModel);
 
             return this.View();
         }
@@ -103,6 +127,17 @@
             var fileBytes = memoryStream.ToArray();
 
             return Encoding.UTF8.GetString(fileBytes);
+        }
+
+        private IEnumerable<PropertyTypeViewModel> GetTypes()
+        {
+            return context.PropertyTypes
+                .Select(t => new PropertyTypeViewModel 
+                { 
+                    Id = t.Id, 
+                    Name = t.Name 
+                })
+                .ToList();
         }
     }
 }

@@ -4,6 +4,6 @@
 
     public interface IPropertyService
     {
-        void Add(ImportPropModel propertyModel);
+        void Add(PropertyViewModel propertyModel);
     }
 }

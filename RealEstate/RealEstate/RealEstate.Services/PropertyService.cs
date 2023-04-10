@@ -14,7 +14,7 @@
             this.context = context;
         }
 
-        public void Add(ImportPropModel propertyModel)
+        public void Add(PropertyViewModel propertyModel)
         {
             var property = new Property
             {
@@ -32,11 +32,9 @@
             var districtName = districtParts[1];
 
             var place = context.Places.FirstOrDefault(p => p.Name == placeName);
-
             place ??= new Place { Name = placeName };
 
             var dbDistrict = context.Districts.FirstOrDefault(d => d.Name == districtName);
-
             if (dbDistrict == null)
             {
                 dbDistrict = new District { Name = districtName };
@@ -57,9 +55,9 @@
 
             if (propertyModel.Images != null)
             {
-                foreach (var imageBytes in propertyModel.Images!)
+                foreach (var image in propertyModel.Images!)
                 {
-                    property.Images!.Add(imageBytes);
+                    property.Images!.Add(image);
                 }
             }
            

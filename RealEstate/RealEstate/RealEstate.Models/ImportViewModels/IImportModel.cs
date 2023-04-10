@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace RealEstate.Models.ImportViewModels
 {
-    internal class AddPropertyViewModel
+    public class IImportModel
     {
     }
 }

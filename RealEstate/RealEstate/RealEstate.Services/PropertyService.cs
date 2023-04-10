@@ -14,7 +14,7 @@
             this.context = context;
         }
 
-        public void Add(PropertyViewModel propertyModel)
+        public void Add(AddPropertyModel propertyModel)
         {
             var property = new Property
             {

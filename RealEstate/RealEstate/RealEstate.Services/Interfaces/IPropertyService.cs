@@ -4,6 +4,6 @@
 
     public interface IPropertyService
     {
-        void Add(PropertyViewModel propertyModel);
+        void Add(AddPropertyModel propertyModel);
     }
 }

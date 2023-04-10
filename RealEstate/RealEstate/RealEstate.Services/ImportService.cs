@@ -21,7 +21,7 @@
                 throw new InvalidOperationException("Json can not be empty!");
             }
 
-            var jsonProps = JsonConvert.DeserializeObject<IEnumerable<PropertyViewModel>>(json);
+            var jsonProps = JsonConvert.DeserializeObject<IEnumerable<AddPropertyModel>>(json);
 
            
             foreach (var jsonProp in jsonProps!)

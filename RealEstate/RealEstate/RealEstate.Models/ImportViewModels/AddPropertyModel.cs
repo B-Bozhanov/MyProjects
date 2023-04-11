@@ -1,5 +1,7 @@
 ﻿namespace RealEstate.Models.ImportViewModels
 {
+    using Microsoft.AspNetCore.Mvc;
+
     using RealEstate.Models.DataModels;
 
     using System.ComponentModel.DataAnnotations;
@@ -54,6 +56,7 @@
         [Display(Name = "Building Type")]
         public int BuildingTypeId { get; set; }
 
+        [BindProperty]
         public List<BuildingTypeViewModel> BuildingTypes { get; set; }
 
         [Display(Name = "Place")]

@@ -34,8 +34,11 @@
         public IActionResult Add(AddPropertyModel property, IFormCollection form)
         {
             // TODO validations:
-            var test = property.BuildingTypes.Where(x => x.IsChecked);
             var images = form.Files;
+
+            foreach (var item in form)
+            {
+            }
 
             // TODO: Model binding
             // TODO: If ther is no some of assigments!

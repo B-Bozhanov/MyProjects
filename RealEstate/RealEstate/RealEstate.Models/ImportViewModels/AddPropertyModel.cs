@@ -51,6 +51,11 @@
 
         public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; init; }
 
+        [Display(Name = "Building Type")]
+        public int BuildingTypeId { get; set; }
+
+        public List<BuildingTypeViewModel> BuildingTypes { get; set; }
+
         [Display(Name = "Place")]
         public int PlaceId { get; set; }
 

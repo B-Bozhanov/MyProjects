@@ -32,6 +32,19 @@
                         }
                     </select>
                 </div>
+                <label asp-for="BuildingTypes"></label>
+                <br />
+                @foreach (var type in Model.BuildingTypes)
+                {
+                    <div class="form-check-inline">
+                        <input type="checkbox" asp-for="@type.IsChecked" class="form-check-input" />
+                        <label class="form-check-label" asp-for="@type.IsChecked"> @type.Name </label>
+                        <input type="hidden" asp-for="@type.Id" />
+                        <input type="hidden" asp-for="@type.Name" />
+                    </div>
+                }
+                <br />
+                <br />
                 <div class="form-group">
                     <label asp-for="Description"></label>
                     <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
@@ -51,6 +64,7 @@
                 <br />
                 <div class="form-group">
                     <span>Select Images:</span>
+                    <br />
                     <input type="file" name="images" multiple />
                 </div>
                 <br />
@@ -59,13 +73,3 @@
         </div>
     </div>
 </div>
-<script>
-    $('#filecount').filestyle({
-
-        input: false,
-
-        buttonName: 'btn-danger',
-
-        iconName: 'glyphicon glyphicon-folder-close'
-    });
-</script>

@@ -26,14 +26,15 @@
                 PropertyTypes = this.GetPropertiesTypes(),
                 Places = this.GetPlaces(),
                 Districts = this.GetDistricts(),
-            });
+                BuildingTypes = this.GetBuildingTypes()
+            }); ;
         }
 
         [HttpPost]
         public IActionResult Add(AddPropertyModel property, IFormCollection form)
         {
             // TODO validations:
-
+            var test = property.BuildingTypes.Where(x => x.IsChecked);
             var images = form.Files;
 
             // TODO: Model binding
@@ -82,6 +83,18 @@
         {
             return context.Districts
                 .Select(t => new DistrictsViewModel
+                {
+                    Id = t.Id,
+                    Name = t.Name
+                })
+                .OrderBy(t => t.Name)
+                .ToList();
+        }
+
+        private List<BuildingTypeViewModel> GetBuildingTypes()
+        {
+            return context.BuildingTypes
+                .Select(t => new BuildingTypeViewModel
                 {
                     Id = t.Id,
                     Name = t.Name

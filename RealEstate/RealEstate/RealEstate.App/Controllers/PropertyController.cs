@@ -37,7 +37,8 @@
             var images = form.Files;
 
             // TODO: Model binding
-            // TODO: If ther is no some of assigments!
+            // TODO: If there is no some of assigments!
+
             foreach (var imgFile in images)
             {
                 var stream = new MemoryStream();

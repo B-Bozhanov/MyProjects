@@ -4,13 +4,9 @@
     using System.Text;
 
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore.Scaffolding.Internal;
 
-    using RealEstate.App.Data;
-    using RealEstate.App.Models;
-    using RealEstate.Models.DataModels;
-    using RealEstate.Models.ImportViewModels;
-    using RealEstate.Services.Interfaces;
+    using RealEstate.Models.ErrorViewModels;
+
 
     public class HomeController : Controller
     {

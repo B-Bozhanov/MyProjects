@@ -1,6 +1,6 @@
-﻿namespace RealEstate.Models.ImportViewModels
+﻿namespace RealEstate.Models.ImportModels
 {
-    public class DistrictsViewModel
+    public class PlacesModel
     {
         public int Id { get; set; }
 

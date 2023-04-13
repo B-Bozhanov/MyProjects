@@ -1,4 +1,4 @@
-﻿namespace RealEstate.App.Data
+﻿namespace RealEstate.Data
 {
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;

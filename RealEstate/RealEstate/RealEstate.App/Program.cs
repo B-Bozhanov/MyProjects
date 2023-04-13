@@ -3,7 +3,7 @@ namespace RealEstate.App
     using Microsoft.AspNetCore.Identity;
     using Microsoft.EntityFrameworkCore;
 
-    using RealEstate.App.Data;
+    using RealEstate.Data;
     using RealEstate.Services;
     using RealEstate.Services.Interfaces;
 

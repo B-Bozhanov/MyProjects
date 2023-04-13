@@ -2,7 +2,7 @@
 {
     using Newtonsoft.Json;
 
-    using RealEstate.Models.ImportViewModels;
+    using RealEstate.Models.ImportModels;
     using RealEstate.Services.Interfaces;
 
     public class ImportService : IImportService

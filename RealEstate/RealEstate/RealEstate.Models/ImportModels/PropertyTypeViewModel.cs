@@ -1,4 +1,4 @@
-﻿namespace RealEstate.Models.ImportViewModels
+﻿namespace RealEstate.Models.ImportModels
 {
     public class PropertyTypeViewModel
     {

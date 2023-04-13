@@ -1,8 +1,8 @@
 ﻿namespace RealEstate.Services
 {
-    using RealEstate.App.Data;
+    using RealEstate.Data;
     using RealEstate.Models.DataModels;
-    using RealEstate.Models.ImportViewModels;
+    using RealEstate.Models.ImportModels;
     using RealEstate.Services.Interfaces;
 
     public class PropertyService : IPropertyService
@@ -27,7 +27,7 @@
                 Price = propertyModel.Price,
             };
 
-            var districtParts = propertyModel.District!.Split(',', StringSplitOptions.RemoveEmptyEntries);
+            var districtParts = propertyModel.DistrictName!.Split(',', StringSplitOptions.RemoveEmptyEntries);
             var placeName = districtParts[0];
             var districtName = districtParts[1];
 
@@ -41,11 +41,11 @@
                 dbDistrict.Place = place;
             }
 
-            var propertyType = context.PropertyTypes.FirstOrDefault(pt => pt.Name == propertyModel.Type);
-            propertyType ??= new PropertyType { Name = propertyModel.Type };
+            var propertyType = context.PropertyTypes.FirstOrDefault(pt => pt.Name == propertyModel.PropertyTypeName);
+            propertyType ??= new PropertyType { Name = propertyModel.PropertyTypeName };
 
-            var dbBuildingType = context.BuildingTypes.FirstOrDefault(bt => bt.Name == propertyModel.BuildingType);
-            dbBuildingType ??= new BuildingType { Name = propertyModel.BuildingType };
+            var dbBuildingType = context.BuildingTypes.FirstOrDefault(bt => bt.Name == propertyModel.BuildingTypeName);
+            dbBuildingType ??= new BuildingType { Name = propertyModel.BuildingTypeName };
 
             
             property.District = dbDistrict;

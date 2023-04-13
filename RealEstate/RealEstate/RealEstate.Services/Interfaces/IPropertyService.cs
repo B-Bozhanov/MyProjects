@@ -1,6 +1,6 @@
 ﻿namespace RealEstate.Services.Interfaces
 {
-    using RealEstate.Models.ImportViewModels;
+    using RealEstate.Models.ImportModels;
 
     public interface IPropertyService
     {

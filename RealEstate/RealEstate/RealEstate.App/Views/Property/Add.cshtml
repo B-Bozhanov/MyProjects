@@ -17,72 +17,72 @@
         <div class="col-md-6 align-content-center">
             <form method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <input type="text" class="form-control" list="PropertyTypeId" placeholder="Type" />
+                    <label asp-for="PropertyTypeName"></label>
+                    <input asp-for="PropertyTypeName" class="form-control" list="properties" placeholder="Select property type..." />
                 </div>
-                <datalist id="PropertyTypeId">
-                    <select asp-for="PropertyTypeId" class="form-select">
-                        @foreach (var type in Model.PropertyTypes)
-                        {
-                            <option value="@type.Name"></option>
-                        }
-                    </select>
+                <datalist id="properties">
+                    @foreach (var type in Model.PropertyTypes)
+                    {
+                        <option value="@type.Name"></option>
+                    }
                 </datalist>
-                <div class="form-group">
-                    <label asp-for="PlaceId"></label>
-                    <select asp-for="PlaceId" class="form-select">
+                <br\>
+                    <div class="form-group">
+                        <label asp-for="PlaceName"></label>
+                        <input asp-for="PlaceName" class="form-control" list="places" placeholder="Select place..." />
+                    </div>
+                    <datalist id="places">
                         @foreach (var place in Model.Places)
                         {
-                            <option value="@place.Id">@place.Name</option>
+                            <option value="@place.Name"></option>
                         }
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label asp-for="DistrictId"></label>
-                    <select asp-for="DistrictId" class="form-select">
-                        @foreach (var district in Model.Districts)
-                        {
-                            <option value="@district.Id">@district.Name</option>
-                        }
-                    </select>
-                </div>
-                <label asp-for="BuildingTypes"></label>
-                <input asp-for="BuildingTypes" />
-                <br />
-                @foreach (var buildingType in Model.BuildingTypes)
-                {
-                    <div class="form-check form-check-inline">
-                        <input type="checkbox" asp-for="@buildingType.IsChecked" class="form-check-input" />
-                        <label class="form-check-label" asp-for="@buildingType.IsChecked"> @buildingType.Name </label>
-                        <input type="hidden" asp-for="@buildingType.Id" />
-                        <input type="hidden" asp-for="@buildingType.Name" />
-                    </div>
-                }
-                <br />
-                <br />
-                <div class="form-group">
-                    <label asp-for="Description"></label>
-                    <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label asp-for="Option"></label>
-                    <br />
-                    <div class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
-                        <label class="form-check-label">Sale</label>
-                    </div>
-                    <div class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
-                        <label class="form-check-label">Rent</label>
-                    </div>
-                </div>
-                <br />
-                <div class="form-group">
-                    <span>Select Images:</span>
-                    <br />
-                    <input type="file" name="images" multiple />
-                </div>
-                <br />
-                <button type="submit" class="btn btn-primary mb-4">Add</button>
+                    </datalist>
+                    <br\>
+                        <div class="form-group">
+                            <label asp-for="DistrictName"></label>
+                            <input asp-for="DistrictName" class="form-control" list="districts" placeholder="Select district..." />
+                        </div>
+                        <datalist id="districts">
+                            @foreach (var district in Model.Districts)
+                            {
+                                <option value="@district.Name"></option>
+                            }
+                        </datalist>
+                        <br\>
+                            <label asp-for="BuildingTypes"></label>
+                            <br />
+                            <select asp-for="BuildingTypeName" class="form-control">
+                                @foreach (var buildingType in Model.BuildingTypes)
+                                {
+                                    <option value="@buildingType.Name">@buildingType.Name</option>
+                                }
+                            </select>
+                            <br />
+                            <br />
+                            <div class="form-group">
+                                <label asp-for="Description"></label>
+                                <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="Option"></label>
+                                <br />
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
+                                    <label class="form-check-label">Sale</label>
+                                </div>
+                                <div class="form-check-inline">
+                                    <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
+                                    <label class="form-check-label">Rent</label>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="form-group">
+                                <span>Select Images:</span>
+                                <br />
+                                <input type="file" name="images" multiple />
+                            </div>
+                            <br />
+                            <button type="submit" class="btn btn-primary mb-4">Add</button>
             </form>
         </div>
     </div>

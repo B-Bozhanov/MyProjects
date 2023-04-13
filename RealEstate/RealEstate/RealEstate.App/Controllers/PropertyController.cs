@@ -2,9 +2,9 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    using RealEstate.App.Data;
+    using RealEstate.Data;
     using RealEstate.Models.DataModels;
-    using RealEstate.Models.ImportViewModels;
+    using RealEstate.Models.ImportModels;
     using RealEstate.Services.Interfaces;
     public class PropertyController : Controller
     {
@@ -31,7 +31,7 @@
         }
 
         [HttpPost]
-        public IActionResult Add(AddPropertyModel property, IFormCollection form)
+        public IActionResult Add(AddPropertyModel property, IFormCollection form, List<BuildingTypeModel> buildingType)
         {
             // TODO validations:
             var images = form.Files;
@@ -71,10 +71,10 @@
                 .ToList();
         }
 
-        private IEnumerable<PlacesViewModel> GetPlaces()
+        private IEnumerable<PlacesModel> GetPlaces()
         {
             return context.Places
-                .Select(t => new PlacesViewModel
+                .Select(t => new PlacesModel
                 {
                     Id = t.Id,
                     Name = t.Name
@@ -83,10 +83,10 @@
                 .ToList();
         }
 
-        private IEnumerable<DistrictsViewModel> GetDistricts()
+        private IEnumerable<DistrictsModel> GetDistricts()
         {
             return context.Districts
-                .Select(t => new DistrictsViewModel
+                .Select(t => new DistrictsModel
                 {
                     Id = t.Id,
                     Name = t.Name
@@ -95,10 +95,10 @@
                 .ToList();
         }
 
-        private List<BuildingTypeViewModel> GetBuildingTypes()
+        private List<BuildingTypeModel> GetBuildingTypes()
         {
             return context.BuildingTypes
-                .Select(t => new BuildingTypeViewModel
+                .Select(t => new BuildingTypeModel
                 {
                     Id = t.Id,
                     Name = t.Name

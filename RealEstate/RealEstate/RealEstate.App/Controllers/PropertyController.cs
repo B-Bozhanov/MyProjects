@@ -2,7 +2,6 @@
 {
     using Microsoft.AspNetCore.Mvc;
 
-    using RealEstate.Data;
     using RealEstate.Models.DataModels;
     using RealEstate.Models.ImportModels;
     using RealEstate.Services.Interfaces;
@@ -10,24 +9,29 @@
     {
         private readonly IImportService importService;
         private readonly IPropertyService propertyService;
-        private readonly ApplicationDbContext context;
 
-        public PropertyController(IImportService importService, IPropertyService propertyService, ApplicationDbContext context)
+        public PropertyController(IImportService importService, IPropertyService propertyService)
         {
             this.importService = importService;
             this.propertyService = propertyService;
-            this.context = context;
         }
 
         public IActionResult Add()
         {
             return this.View(new AddPropertyModel
             {
-                PropertyTypes = this.GetPropertiesTypes(),
-                Places = this.GetPlaces(),
-                Districts = this.GetDistricts(),
-                BuildingTypes = this.GetBuildingTypes()
-            }); ;
+                PropertyTypes = this.propertyService.GetPropertiesTypes()
+                .Select(x => new PropertyTypeViewModel { Name = x.Name, Id = x.Id}),
+
+                Places = this.propertyService.GetPlaces()
+                .Select(x => new PlacesModel { Name = x.Name, Id = x.Id}),
+
+                Districts = this.propertyService.GetDistricts()
+                .Select(x => new DistrictsModel { Name = x.Name, Id = x.Id}),
+
+                BuildingTypes = this.propertyService.GetBuildingsTypes()
+                .Select(x => new BuildingTypeModel { Name = x.Name, Id = x.Id})
+            }); 
         }
 
         [HttpPost]
@@ -55,56 +59,7 @@
 
             this.propertyService.Add(property);
 
-            return this.RedirectToAction(nameof(Index));
-        }
-
-
-        private IEnumerable<PropertyTypeViewModel> GetPropertiesTypes()
-        {
-            return context.PropertyTypes
-                .Select(t => new PropertyTypeViewModel
-                {
-                    Id = t.Id,
-                    Name = t.Name
-                })
-                .OrderBy(t => t.Name)
-                .ToList();
-        }
-
-        private IEnumerable<PlacesModel> GetPlaces()
-        {
-            return context.Places
-                .Select(t => new PlacesModel
-                {
-                    Id = t.Id,
-                    Name = t.Name
-                })
-                .OrderBy(t => t.Name)
-                .ToList();
-        }
-
-        private IEnumerable<DistrictsModel> GetDistricts()
-        {
-            return context.Districts
-                .Select(t => new DistrictsModel
-                {
-                    Id = t.Id,
-                    Name = t.Name
-                })
-                .OrderBy(t => t.Name)
-                .ToList();
-        }
-
-        private List<BuildingTypeModel> GetBuildingTypes()
-        {
-            return context.BuildingTypes
-                .Select(t => new BuildingTypeModel
-                {
-                    Id = t.Id,
-                    Name = t.Name
-                })
-                .OrderBy(t => t.Name)
-                .ToList();
+            return this.Redirect("/");
         }
     }
 }

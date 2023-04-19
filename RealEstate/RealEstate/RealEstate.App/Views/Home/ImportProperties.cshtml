@@ -1,11 +1,10 @@
-﻿<form method="post" enctype="multipart/form-data">
+﻿<form method="post" asp-action="ImportProperties" asp-controller="Home" enctype="multipart/form-data">
     <div class="row">
-        <div class="col-md-6 offcanvas-md">
-            <div class="md-4">
-                <label for="formFile" class="form-label">Select file</label>
-                <input class="form-control" type="file" id="formFile" name="file">
+        <div class="col-md-3">
+            <div class="mb-3">
+                <label for="file" class="form-label">Select file - (Supported formats are - .json!)</label>
+                <input class="form-control" type="file" id="file" name="file">
             </div>
-            <br>
             <button type="submit" class="btn btn-primary mb-4">Upload</button>
         </div>
     </div>

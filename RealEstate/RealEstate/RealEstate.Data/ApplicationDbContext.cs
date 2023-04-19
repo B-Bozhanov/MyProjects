@@ -23,5 +23,7 @@
         public DbSet<District> Districts { get; set; }
 
         public DbSet<Place> Places { get; set; }
+
+        public DbSet<Image> Images { get; set; }
     }
 }

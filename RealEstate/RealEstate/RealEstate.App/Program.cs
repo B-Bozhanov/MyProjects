@@ -4,6 +4,8 @@ namespace RealEstate.App
     using Microsoft.EntityFrameworkCore;
 
     using RealEstate.Data;
+    using RealEstate.Data.Interfaces;
+    using RealEstate.Data.Repositories;
     using RealEstate.Services;
     using RealEstate.Services.Interfaces;
 
@@ -12,21 +14,15 @@ namespace RealEstate.App
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
-            builder.Services.AddControllersWithViews();
-
-            ConfigureServices(builder);
-
+            ConfigureDataServices(builder.Services, builder.Configuration);
+            ConfigureApplicationServices(builder.Services);
             var app = builder.Build();
+            ConfigureApp(app);
+            app.Run();
+        }
 
+        private static void ConfigureApp(WebApplication app)
+        {
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -40,6 +36,7 @@ namespace RealEstate.App
             }
 
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
 
             app.UseRouting();
@@ -49,16 +46,40 @@ namespace RealEstate.App
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
 
-            app.Run();
+            app.MapRazorPages();
         }
 
-        private static void ConfigureServices(WebApplicationBuilder builder)
+        private static void ConfigureApplicationServices(IServiceCollection services)
         {
-            builder.Services.AddTransient<ApplicationDbContext>();
-            builder.Services.AddTransient<IImportService, ImportService>();
-            builder.Services.AddTransient<IPropertyService, PropertyService>();
+            services.AddTransient<IImportService, ImportService>();
+            services.AddTransient<IPropertyService, PropertyService>();
+        }
+
+        private static void ConfigureDataServices(IServiceCollection services, IConfiguration configuration)
+        {
+            var connectionString = configuration.GetConnectionString("DefaultConnection") 
+                ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(connectionString));
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
+
+            services.AddDefaultIdentity<IdentityUser>(options => 
+                 options.SignIn.RequireConfirmedAccount = true)
+                .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddControllersWithViews();
+
+            // Configure repositories:
+
+            services.AddScoped<IPlaceRepository, PlaceRepository>();
+            services.AddScoped<IPropertyRepository, PropertyRepository>();
+            services.AddScoped<IDistrictRepository, DistrictRepository>();
+            services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
+            services.AddScoped<IBuildingTypeRepository, BuildingTypeRepository>();
+            services.AddScoped<IImageRepository, ImageRepository>();
         }
     }
 }

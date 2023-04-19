@@ -12,13 +12,14 @@
     ViewData["Title"] = "Add property";
 }
 
-<div class="container">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-md-6 align-content-center">
-            <form method="post" enctype="multipart/form-data">
+        <div class="col-md-11">
+            <form class="form-check-inline" method="post" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label asp-for="PropertyTypeName"></label>
-                    <input asp-for="PropertyTypeName" class="form-control" list="properties" placeholder="Select property type..." />
+                    <h1 style="font-size:large"><label asp-for="Type"></label></h1>
+                    <input asp-for="Type" class="form-control" list="properties" placeholder="Select property type..." />
+                    <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
                 <datalist id="properties">
                     @foreach (var type in Model.PropertyTypes)
@@ -28,8 +29,9 @@
                 </datalist>
                 <br\>
                     <div class="form-group">
-                        <label asp-for="PlaceName"></label>
+                        <h1 style="font-size:large"><label asp-for="PlaceName"></label></h1>
                         <input asp-for="PlaceName" class="form-control" list="places" placeholder="Select place..." />
+                        <span asp-validation-for="PlaceName" class="text-danger"></span>
                     </div>
                     <datalist id="places">
                         @foreach (var place in Model.Places)
@@ -39,8 +41,9 @@
                     </datalist>
                     <br\>
                         <div class="form-group">
-                            <label asp-for="DistrictName"></label>
-                            <input asp-for="DistrictName" class="form-control" list="districts" placeholder="Select district..." />
+                            <h1 style="font-size:large"><label asp-for="District"></label></h1>
+                            <input asp-for="District" class="form-control" list="districts" placeholder="Select district..." />
+                            <span asp-validation-for="District" class="text-danger"></span>
                         </div>
                         <datalist id="districts">
                             @foreach (var district in Model.Districts)
@@ -48,41 +51,142 @@
                                 <option value="@district.Name"></option>
                             }
                         </datalist>
-                        <br\>
-                            <label asp-for="BuildingTypes"></label>
-                            <br />
-                            <select asp-for="BuildingTypeName" class="form-control">
-                                @foreach (var buildingType in Model.BuildingTypes)
-                                {
-                                    <option value="@buildingType.Name">@buildingType.Name</option>
-                                }
+                        <br />
+                        <br />
+
+                        <h1 style="font-size:large">Detail info </h1>
+                        <br />
+                        <div class="row">
+                            <div class="col-3">
+                                <h1 style="font-size:large"><label asp-for="Size"></label></h1>
+                                <input asp-for="Size" class="form-control" placeholder="Property size">
+                                <span asp-validation-for="Size" class="text-danger"></span>
+                            </div>
+                            <div class="col-3">
+                                <h1 style="font-size:large"><label asp-for="Floor"></label></h1>
+                                <select asp-for="Floor" class="form-select">
+                                    @for (int i = 0; i < 100; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <h1 style="font-size:large"><label asp-for="TotalFloors"></label></h1>
+                                <select asp-for="TotalFloors" class="form-select">
+                                    @for (int i = 1; i <= 100; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <h1 style="font-size:large"><label asp-for="TotalBedRooms"></label></h1>
+                                <select asp-for="TotalBedRooms" class="form-select">
+                                    @for (int i = 0; i < 15; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <h1 style="font-size:large"><label asp-for="TotalBathRooms"></label></h1>
+                                <select asp-for="TotalBathRooms" class="form-select">
+                                    @for (int i = 0; i < 15; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-3">
+                                <h1 style="font-size:large"><label asp-for="TotalGarages"></label></h1>
+                                <select asp-for="TotalGarages" class="form-select">
+                                    @for (int i = 0; i < 15; i++)
+                                    {
+                                        <option value="@i">@i</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+
+                        <br />
+                        <br />
+                        <h1 style="font-size:large">Building Type</h1>
+                        <div class="row">
+                            @foreach (var buildingType in Model.BuildingTypes)
+                            {
+                                <div class="col-auto">
+                                    <div class="form-check-inline">
+                                        <input name="AreChecked" type="checkbox" value="@buildingType.Id" /> <p>@buildingType.Name</p>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                        <br />
+                        <br />
+                        <div class="form-group">
+                            <h1 style="font-size:large"><label asp-for="Description"></label></h1>
+                            <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
+                        </div>
+                        <br />
+                        <br />
+                        <div class="form-group">
+                            <h1 style="font-size:large"><label asp-for="Option"></label></h1>
+                            <div class="form-check-inline">
+                                <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
+                                <label class="form-check-label">Sale</label>
+                            </div>
+                            <div class="form-check-inline">
+                                <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
+                                <label class="form-check-label">Rent</label>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="col-3">
+
+                            @*Price*@
+                            <h1 style="font-size:large"><label asp-for="Price"></label></h1>
+                            <input asp-for="Price" class="form-control" placeholder="Set price" />
+                            <span asp-validation-for="Price" class="text-danger"></span>
+                        </div>
+                        <br />
+
+                        @*Expiration Date*@
+                        <div class="col-3">
+                            <h1 style="font-size:large"><label asp-for="ExpirationDays"></label></h1>
+                            <select class="form-select" asp-for="ExpirationDays">
+                                <option value="30">30 days</option>
+                                <option value="60">60 days</option>
+                                <option value="90">90 days</option>
                             </select>
-                            <br />
-                            <br />
-                            <div class="form-group">
-                                <label asp-for="Description"></label>
-                                <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
+                            <span asp-validation-for="ExpirationDays" class="text-danger"></span>
+                        </div>
+                        <br />
+                        @*Contacts*@
+                        <h1 style="font-size:large"><label asp-for="ContactsModel"></label></h1>
+                        <div class="row">
+                            <div class="col-3">
+                                <input class="form-control" asp-for="ContactsModel.Names" placeholder="Names" />
                             </div>
-                            <div class="form-group">
-                                <label asp-for="Option"></label>
-                                <br />
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
-                                    <label class="form-check-label">Sale</label>
-                                </div>
-                                <div class="form-check-inline">
-                                    <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
-                                    <label class="form-check-label">Rent</label>
-                                </div>
+                            <div class="col-3">
+                                <input class="form-control" type="email" asp-for="ContactsModel.Email" placeholder="Your email" />
                             </div>
-                            <br />
-                            <div class="form-group">
-                                <span>Select Images:</span>
-                                <br />
-                                <input type="file" name="images" multiple />
+                            <div class="col-3">
+                                <input class="form-control" type="tel" asp-for="ContactsModel.PhoneNumber" placeholder="Phone number" />
                             </div>
-                            <br />
-                            <button type="submit" class="btn btn-primary mb-4">Add</button>
+                            <span asp-validation-for="ContactsModel" class="text-danger"></span>
+                            <span asp-validation-for="ContactsModel.Names" class="text-danger"></span>
+                            <span asp-validation-for="ContactsModel.Email" class="text-danger"></span>
+                            <span asp-validation-for="ContactsModel.PhoneNumber" class="text-danger"></span>
+                        </div>
+                        @*Buttons*@
+                        <br />
+                        <div class="form-group">
+                            <h1 style="font-size:large">Select Images:</h1>
+                            <input type="file" name="images" multiple />
+                        </div>
+                        <br />
+                        <button type="submit" class="btn btn-primary mb-4">Add</button>
             </form>
         </div>
     </div>

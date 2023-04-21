@@ -3,6 +3,7 @@
     using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
+    using RealEstate.Data.Configuration;
     using RealEstate.Models.DataModels;
 
     public class ApplicationDbContext : IdentityDbContext
@@ -25,5 +26,14 @@
         public DbSet<Place> Places { get; set; }
 
         public DbSet<Image> Images { get; set; }
+
+        public DbSet<UserContact> UsersContacts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            base.OnModelCreating(builder);
+
+            builder.ApplyConfiguration(new BuildingTypeConfiguration());
+        }
     }
 }

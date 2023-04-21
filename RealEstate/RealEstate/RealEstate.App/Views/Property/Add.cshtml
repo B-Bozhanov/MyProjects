@@ -1,13 +1,5 @@
 ﻿@model AddPropertyModel
 
-
-@*<div class="form-group">
-    <input type="text" class="form-control" list="select-list-id" />
-</div>
-<datalist id="select-list-id">
-    <option value="What was your childhood nickname?"></option>
-    <option value="In what city did you meet your spouse/significant other?"></option>
-</datalist>*@
 @{
     ViewData["Title"] = "Add property";
 }
@@ -54,6 +46,7 @@
                         <br />
                         <br />
 
+                        @*Details*@
                         <h1 style="font-size:large">Detail info </h1>
                         <br />
                         <div class="row">
@@ -111,19 +104,31 @@
 
                         <br />
                         <br />
+
+                        @*Building types*@
                         <h1 style="font-size:large">Building Type</h1>
                         <div class="row">
-                            @foreach (var buildingType in Model.BuildingTypes)
+                            @for (var i = 0; i < @Model.BuildingTypes!.Count; i++)
                             {
-                                <div class="col-auto">
-                                    <div class="form-check-inline">
-                                        <input name="AreChecked" type="checkbox" value="@buildingType.Id" /> <p>@buildingType.Name</p>
-                                    </div>
+                                <div class="col">
+                                    <input type="checkbox" asp-for="@Model.BuildingTypes[i].IsChecked" class="form-check-input" />
+                                    <label class="form-check-label" asp-for="@Model.BuildingTypes[i].IsChecked">
+                                        @Model.BuildingTypes[i].Name
+                                    </label>
+                                    <input type="hidden" asp-for="@Model.BuildingTypes[i].Id" />
+                                    <input type="hidden" asp-for="@Model.BuildingTypes[i].Name" />
                                 </div>
                             }
+                            <br />
+                            <br />
+                        </div>
+                        <div class="col-3">
+                            <input asp-for="BuildingType" class="form-control" placeholder="Add new building type" />
                         </div>
                         <br />
                         <br />
+
+                        @*Description*@
                         <div class="form-group">
                             <h1 style="font-size:large"><label asp-for="Description"></label></h1>
                             <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
@@ -162,6 +167,7 @@
                             <span asp-validation-for="ExpirationDays" class="text-danger"></span>
                         </div>
                         <br />
+
                         @*Contacts*@
                         <h1 style="font-size:large"><label asp-for="ContactsModel"></label></h1>
                         <div class="row">
@@ -179,6 +185,7 @@
                             <span asp-validation-for="ContactsModel.Email" class="text-danger"></span>
                             <span asp-validation-for="ContactsModel.PhoneNumber" class="text-danger"></span>
                         </div>
+
                         @*Buttons*@
                         <br />
                         <div class="form-group">

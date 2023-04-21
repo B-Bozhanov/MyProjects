@@ -49,6 +49,10 @@
 
         public virtual BuildingType? BuildingType { get; set; }
 
+        public string UserContactId { get; set; }
+
+        public virtual UserContact UserContact { get; set; }
+
         public virtual ICollection<Tag>? Tags { get; set; }
 
         public virtual ICollection<Image>? Images { get; set; }

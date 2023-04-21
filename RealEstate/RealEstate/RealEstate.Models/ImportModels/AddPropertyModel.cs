@@ -1,25 +1,18 @@
 ﻿namespace RealEstate.Models.ImportModels
 {
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using Microsoft.AspNetCore.Mvc;
+
+    using Microsoft.AspNetCore.Http;
 
     using RealEstate.Models.DataModels;
 
     public class AddPropertyModel
     {
-        public AddPropertyModel()
-        {
-            Images = new List<Image>();
-        }
-
         public decimal? Price { get; set; }
 
-        public string? Url { get; set; }
-
+        [Required(AllowEmptyStrings = false, ErrorMessage = "The field is required!")]
         public int Size { get; set; }
 
-        [Required]
         [Display(Name = "Ad Expiration")]
         public int ExpirationDays { get; set; }
 
@@ -31,12 +24,16 @@
 
         public int? Floor { get; set; }
 
+        [Display(Name = "Total Floors")]
         public int? TotalFloors { get; set; }
 
+        [Display(Name = "Bed Rooms")]
         public int? TotalBedRooms { get; set; }
 
+        [Display(Name = "Bath Rooms")]
         public int? TotalBathRooms { get; set; }
 
+        [Display(Name = "Garages")]
         public int? TotalGarages { get; set; }
 
         public string? Condition { get; set; }
@@ -50,7 +47,7 @@
         [Required(AllowEmptyStrings = false, ErrorMessage = "The field is required!")]
         [MinLength(3, ErrorMessage = "The min length is 3")]
         [Display(Name = "Place")]
-        public string PlaceName { get; set; }
+        public string PlaceName { get; set; } = null!;
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "The field is required!")]
         [MinLength(3, ErrorMessage = "The min length is 3")]
@@ -60,28 +57,25 @@
         [Required(AllowEmptyStrings = false,ErrorMessage = "The field is required!")]
         [MinLength(3, ErrorMessage = "The min length is 3")]
         [Display(Name = "Type")]
-        public string Type { get; set; }
+        public string Type { get; set; } = null!;
 
-        //[Required(AllowEmptyStrings = false, ErrorMessage = "The field is required!")]
-        //[MinLength(2, ErrorMessage = "The min length is 3")]
-        //[Display(Name = "Building Type")]
+        [MinLength(2, ErrorMessage = "The min length is 3")]
+        [Display(Name = "Building Type")]
         public string BuildingType { get; set; } = null!;
 
-        [Required(AllowEmptyStrings = false, ErrorMessage = "The field is required!")]
-        [Display(Name = "Select Building Type")]
-        public int BuildingTypeId { get; set; }
-
         [Required]
-        public ContactsModel ContactsModel { get; set; }
+        [Display(Name = "Contacts")]
+        public ContactsModel ContactsModel { get; set; } = null!;
 
-        public ICollection<Image>? Images { get; set; } = new List<Image>();
+        [FileExtensions(Extensions = "jpeg, jpg")]
+        public IFormFileCollection? Images { get; set; }
 
-        public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; init; }
+        public IEnumerable<PropertyTypeViewModel>? PropertyTypes { get; init; }
 
-        public IEnumerable<BuildingTypeModel> BuildingTypes { get; set; }
+        public IList<BuildingTypeModel>? BuildingTypes { get; set; }
 
-        public IEnumerable<PlacesModel> Places { get; init; }
+        public IEnumerable<PlacesModel>? Places { get; init; }
 
-        public IEnumerable<DistrictsModel> Districts { get; set; }
+        public IEnumerable<DistrictsModel>? Districts { get; set; }
     }
 }

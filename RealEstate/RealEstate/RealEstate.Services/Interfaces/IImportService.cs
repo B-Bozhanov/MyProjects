@@ -1,7 +1,9 @@
 ﻿namespace RealEstate.Services.Interfaces
 {
+    using Microsoft.AspNetCore.Http;
+
     public interface IImportService
     {
-        void Import(string text);
+        void Import(IFormFile file);
     }
 }

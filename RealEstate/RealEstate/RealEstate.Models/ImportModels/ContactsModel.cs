@@ -11,7 +11,7 @@
         [EmailAddress]
         public string Email { get; set; } = null!;
 
-        [Required]
+        [Required(ErrorMessage = "The Phone number field is required!")]
         [Phone]
         public string PhoneNumber { get; set; } = null!;
     }

@@ -11,7 +11,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\RealEstate.AutoMapper\RealEstate.AutoMapper.csproj" />
 		<ProjectReference Include="..\RealEstate.Data\RealEstate.Data.csproj" />
 		<ProjectReference Include="..\RealEstate.Models\RealEstate.Models.csproj" />
 	</ItemGroup>

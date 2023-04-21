@@ -11,13 +11,13 @@
 
         public IEnumerable<Property> GetProperties();
 
-        public IEnumerable<PropertyType> GetPropertiesTypes();
+        public IEnumerable<PropertyTypeViewModel> GetPropertiesTypes();
 
-        public IEnumerable<Place> GetPlaces();
+        public IEnumerable<PlacesModel> GetPlaces();
 
-        public IEnumerable<District> GetDistricts();
+        public IEnumerable<DistrictsModel> GetDistricts();
 
-        public IEnumerable<BuildingType> GetBuildingsTypes();
+        public IList<BuildingTypeModel> GetBuildingsTypes();
 
         public IEnumerable<Property> GetTop10Newest();
     }

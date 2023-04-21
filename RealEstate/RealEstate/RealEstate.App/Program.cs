@@ -4,6 +4,7 @@ namespace RealEstate.App
     using Microsoft.EntityFrameworkCore;
 
     using RealEstate.Data;
+    using RealEstate.Data.Extencions;
     using RealEstate.Data.Interfaces;
     using RealEstate.Data.Repositories;
     using RealEstate.Services;
@@ -23,6 +24,8 @@ namespace RealEstate.App
 
         private static void ConfigureApp(WebApplication app)
         {
+            app.MigrateDatabase();
+
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -80,6 +83,7 @@ namespace RealEstate.App
             services.AddScoped<IPropertyTypeRepository, PropertyTypeRepository>();
             services.AddScoped<IBuildingTypeRepository, BuildingTypeRepository>();
             services.AddScoped<IImageRepository, ImageRepository>();
+            services.AddScoped<IUserContactsRepository, UserContactsRepository>();
         }
     }
 }

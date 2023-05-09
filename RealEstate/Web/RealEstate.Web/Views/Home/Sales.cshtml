@@ -1,0 +1,10 @@
+﻿<div class="form-group">
+    <label for="input-prefetch">Timezone</label>
+    <input type="text" class="form-control" placeholder="Timezone" id="input-prefetch" data-prefetch="https://iqbalfn.com/timezone/?group=Asia">
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', e => {
+        $('#input-prefetch').autocomplete()
+    }, false);
+</script>

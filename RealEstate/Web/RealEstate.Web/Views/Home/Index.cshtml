@@ -1,14 +1,19 @@
-﻿@model PropertyViewModel
+﻿@model AddPropertyViewModel
 
 @{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-@*
-    @foreach (var item in Model.Images)
-    {
-        <img src="@item.Content" alt="@item.Name" />
-    }*@
-</div>
+    <div class="title-box-d">
+        <h3 class="title-d">Search Property</h3>
+    </div>
+   @* <span class="close-box-collapse right-boxed bi bi-x"></span>*@
+   @* <div class="box-collapse-wrap form">*@
+        <form class="form-a">
+            <div class="row">
+                <div class="col-md-12">
+                    <button type="submit" class="btn btn-b">Search Property</button>
+                </div>
+            </div>
+        </form>
+   

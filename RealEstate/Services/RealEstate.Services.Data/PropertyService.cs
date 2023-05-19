@@ -8,11 +8,12 @@
     using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
-    using RealEstate.Web.ViewModels.BuildingTypeModel;
+    using RealEstate.Services.Mapping;
     using RealEstate.Web.ViewModels.ContactModel;
     using RealEstate.Web.ViewModels.Districts;
-    using RealEstate.Web.ViewModels.Places;
     using RealEstate.Web.ViewModels.Property;
+    using RealEstate.Web.ViewModels.PropertyTypes;
+    using RealEstate.Web.ViewModels.Regions;
 
     public class PropertyService : IPropertyService
     {
@@ -62,7 +63,7 @@
             };
 
             var districtName = propertyModel.District;
-            var placeName = propertyModel.PlaceName;
+            var placeName = string.Empty;
 
             if (import == "Import")
             {
@@ -124,17 +125,7 @@
             this.propertyRepository.SaveChangesAsync();
         }
 
-        public IEnumerable<Property> GetProperties() => this.propertyRepository.All();
-
-        public IList<BuildingTypeModel> GetBuildingsTypes() => this.buildingTypeRepository
-            .All()
-            .Select(bt => new BuildingTypeModel
-            {
-                Name = bt.Name,
-                Id = bt.Id,
-            })
-            .OrderBy(bt => bt.Name)
-            .ToList();
+        public IEnumerable<Property> Get() => this.propertyRepository.All();
 
         public IEnumerable<DistrictModel> GetDistricts() => this.districtRepository
             .All()
@@ -146,34 +137,20 @@
             .OrderBy(d => d.Name)
             .ToList();
 
-        public IEnumerable<PlaceModel> GetPlaces() => this.regionRepository
+        public IEnumerable<RegionViewModel> GetRegions() => this.regionRepository
             .All()
-            .Select(p => new PlaceModel
-            {
-                Name = p.Name,
-                Id = p.Id,
-            })
             .OrderBy(p => p.Name)
+            .To<RegionViewModel>()
             .ToList();
 
-        public IEnumerable<PropertyTypeViewModel> GetPropertiesTypes() => this.propertyTypeRepository
-            .All()
-            .Select(pt => new PropertyTypeViewModel
-            {
-                Name = pt.Name,
-                Id = pt.Id,
-            })
-            .OrderBy(pt => pt.Name)
-            .ToList();
-
-        public IEnumerable<PropertyViewModel> GetTop10NewestSells()
+        public IEnumerable<AddPropertyViewModel> GetTop10NewestSells()
         {
             var properties = this.propertyRepository
                 .All()
                 .Where(p => p.Options == PropertyOption.Sale)
                 .OrderByDescending(p => p.Id)
                 .Take(10)
-                .Select(p => new PropertyViewModel
+                .Select(p => new AddPropertyViewModel
                 {
                     Prize = p.Price,
                     Type = this.propertyTypeRepository

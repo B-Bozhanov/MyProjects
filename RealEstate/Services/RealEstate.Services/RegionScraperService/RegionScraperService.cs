@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text.Json;
     using System.Threading.Tasks;
 
     using AngleSharp;
@@ -12,6 +13,7 @@
 
     using RealEstate.Services.Interfaces;
     using RealEstate.Services.RegionScraperService.Constants;
+    using RealEstate.Services.RegionScraperService.Models;
 
     public class RegionScraperService : IRegionScraperService
     {
@@ -30,14 +32,15 @@
             // "https://bg.wikipedia.org/wiki/%D0%9A%D0%B0%D1%82%D0%B5%D0%B3%D0%BE%D1%80%D0%B8%D1%8F:%D0%9A%D0%B2%D0%B0%D1%80%D1%82%D0%B0%D0%BB%D0%B8_%D0%B2_%D0%91%D1%8A%D0%BB%D0%B3%D0%B0%D1%80%D0%B8%D1%8F";
 
             // "https://www.ekatte.com/";
+
+            this.regionsUrl = Urls.RegionsUrl;
+            this.downTownsUrl = Urls.DownTownsUrl;
+
             this.context = context;
         }
 
-        public async Task<IEnumerable<Region>> GetRegionsAsync(string downTownUrl, string regionsUrl)
+        public async Task<IEnumerable<Region>> GetRegionsAsync(string country = null)
         {
-            this.downTownsUrl = downTownUrl;
-            this.regionsUrl = regionsUrl;
-
             var regions = new List<Region>();
 
             this.downTownsDocument = await this.context.OpenAsync(this.downTownsUrl);
@@ -62,11 +65,13 @@
             return regions;
         }
 
-        public void SaveAsJson(string path, string fileName, IEnumerable<Region> regions)
+        public async Task<string> GetAllAsJason()
         {
+            var regions = await this.GetRegionsAsync();
+
             var json = JsonConvert.SerializeObject(regions, Formatting.Indented);
 
-            File.WriteAllText($@"{path}{fileName}.jason", json); // TODO: Move directory eventualy '\' to path.
+            return json;
         }
 
         private Dictionary<string, List<string>> GetTownsDistricts(List<string> townsUrlExtencions)

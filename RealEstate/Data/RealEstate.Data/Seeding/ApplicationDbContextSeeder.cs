@@ -30,6 +30,9 @@
                               new PropertyCategoryTypeSeeder(),
                               new PropertyTypeSeeder(),
                               new BuildingTypeSeeder(),
+                              new RolesSeeder(),
+                              new UsersSeeder(),
+                              new RegionSeeder(),
                           };
 
             foreach (var seeder in seeders)

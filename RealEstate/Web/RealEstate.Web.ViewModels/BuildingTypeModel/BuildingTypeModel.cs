@@ -1,6 +1,9 @@
 ﻿namespace RealEstate.Web.ViewModels.BuildingTypeModel
 {
-    public class BuildingTypeModel
+    using RealEstate.Data.Models;
+    using RealEstate.Services.Mapping;
+
+    public class BuildingTypeModel : IMapFrom<BuildingType>
     {
         public int Id { get; set; }
 

@@ -1,9 +1,14 @@
-﻿namespace RealEstate.Web
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using RealEstate.Data;
+namespace RealEstate.Web
 {
+    using System;
     using System.Reflection;
 
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -41,7 +46,8 @@
                 options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
-                .AddRoles<ApplicationRole>().AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddRoles<ApplicationRole>()
+                .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.Configure<CookiePolicyOptions>(
                 options =>
@@ -53,7 +59,7 @@
             services.AddControllersWithViews(
                 options =>
                 {
-                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                   // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
@@ -71,6 +77,13 @@
             services.AddTransient<IPropertyService, PropertyService>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IRegionScraperService, RegionScraperService>();
+            services.AddTransient<IRegionService, RegionService>();
+            services.AddTransient<IPropertyTypeService, PropertyTypeService>();
+            services.AddTransient<IBuildingTypeService, BuildingTypeService>();
+            services.AddTransient<IRegionService, RegionService>();
+            services.AddTransient<IDistrictService, DistrictService>();
+            services.AddTransient<IDownTownService, DownTownService>();
+            services.AddTransient<IPlaceService, PlaceService>();
         }
 
         private static void Configure(WebApplication app)
@@ -80,7 +93,10 @@
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
                 dbContext.Database.Migrate();
-                new ApplicationDbContextSeeder().SeedAsync(dbContext, serviceScope.ServiceProvider).GetAwaiter().GetResult();
+                new ApplicationDbContextSeeder()
+                    .SeedAsync(dbContext, serviceScope.ServiceProvider)
+                    .GetAwaiter()
+                    .GetResult();
             }
 
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);

@@ -15,6 +15,11 @@
         [Required]
         public string Name { get; set; }
 
+        [Required]
+        public string DownTownId { get; set; }
+
+        public virtual DownTown DownTown { get; set; }
+
         public virtual ICollection<Property> Properties { get; set; }
     }
 }

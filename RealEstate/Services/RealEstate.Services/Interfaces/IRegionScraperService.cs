@@ -3,12 +3,12 @@
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
-    using RealEstate.Services.RegionScraperService;
+    using RealEstate.Services.RegionScraperService.Models;
 
     public interface IRegionScraperService
     {
-        public Task<IEnumerable<Region>> GetRegionsAsync(string downTownsUrl, string regionsUrl);
+        public Task<IEnumerable<Region>> GetRegionsAsync(string country = null);
 
-        public void SaveAsJson(string path, string fileName, IEnumerable<Region> regions);
+        public Task<string> GetAllAsJason();
     }
 }

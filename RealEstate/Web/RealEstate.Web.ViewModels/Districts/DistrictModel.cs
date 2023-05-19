@@ -1,6 +1,9 @@
 ﻿namespace RealEstate.Web.ViewModels.Districts
 {
-    public class DistrictModel
+    using RealEstate.Data.Models;
+    using RealEstate.Services.Mapping;
+
+    public class DistrictModel : IMapFrom<District>
     {
         public int Id { get; set; }
 

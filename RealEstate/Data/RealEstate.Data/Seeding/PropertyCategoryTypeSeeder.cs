@@ -6,7 +6,7 @@
 
     using RealEstate.Data.Models;
 
-    internal class PropertyCategoryTypeSeeder : ISeeder
+    internal class PropertyCategoryTypeSeeder : DataSeeder, ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
@@ -15,11 +15,9 @@
                 return;
             }
 
-            await dbContext.PropertyCategoryTypes.AddAsync(new PropertyCategoryType { Id = 1, Name = "Жилищни имоти" });
-            await dbContext.PropertyCategoryTypes.AddAsync(new PropertyCategoryType { Id = 2, Name = "Бизнес имоти" });
-            await dbContext.PropertyCategoryTypes.AddAsync(new PropertyCategoryType { Id = 3, Name = "Земеделска земя" });
-            await dbContext.PropertyCategoryTypes.AddAsync(new PropertyCategoryType { Id = 4, Name = "Други" });
-            await dbContext.PropertyCategoryTypes.AddAsync(new PropertyCategoryType { Id = 5, Name = "Всички" });
+            var propertyCategoryTypes = this.GetData<PropertyCategoryType>(nameof(PropertyCategoryType));
+
+            await dbContext.AddRangeAsync(propertyCategoryTypes);
         }
     }
 }

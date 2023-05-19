@@ -17,7 +17,7 @@ namespace RealEstate.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "7.0.5")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -308,8 +308,9 @@ namespace RealEstate.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DownTownId")
-                        .HasColumnType("int");
+                    b.Property<string>("DownTownId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -332,11 +333,8 @@ namespace RealEstate.Data.Migrations
 
             modelBuilder.Entity("RealEstate.Data.Models.DownTown", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -354,8 +352,9 @@ namespace RealEstate.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RegionId")
-                        .HasColumnType("int");
+                    b.Property<string>("RegionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -423,8 +422,9 @@ namespace RealEstate.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("RegionId")
-                        .HasColumnType("int");
+                    b.Property<string>("RegionId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
@@ -589,11 +589,8 @@ namespace RealEstate.Data.Migrations
 
             modelBuilder.Entity("RealEstate.Data.Models.Region", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -601,8 +598,9 @@ namespace RealEstate.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DownTownId")
-                        .HasColumnType("int");
+                    b.Property<string>("DownTownId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
@@ -679,9 +677,21 @@ namespace RealEstate.Data.Migrations
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Email")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Names")
                         .IsRequired()
@@ -692,6 +702,8 @@ namespace RealEstate.Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
 
                     b.ToTable("UsersContacts");
                 });
@@ -764,9 +776,13 @@ namespace RealEstate.Data.Migrations
 
             modelBuilder.Entity("RealEstate.Data.Models.District", b =>
                 {
-                    b.HasOne("RealEstate.Data.Models.DownTown", null)
+                    b.HasOne("RealEstate.Data.Models.DownTown", "DownTown")
                         .WithMany("Districts")
-                        .HasForeignKey("DownTownId");
+                        .HasForeignKey("DownTownId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("DownTown");
                 });
 
             modelBuilder.Entity("RealEstate.Data.Models.Image", b =>
@@ -873,8 +889,7 @@ namespace RealEstate.Data.Migrations
                 {
                     b.Navigation("Districts");
 
-                    b.Navigation("Region")
-                        .IsRequired();
+                    b.Navigation("Region");
                 });
 
             modelBuilder.Entity("RealEstate.Data.Models.Place", b =>

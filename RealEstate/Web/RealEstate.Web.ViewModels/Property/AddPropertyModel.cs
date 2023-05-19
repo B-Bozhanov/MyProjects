@@ -9,7 +9,8 @@
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.ContactModel;
     using RealEstate.Web.ViewModels.Districts;
-    using RealEstate.Web.ViewModels.Places;
+    using RealEstate.Web.ViewModels.PropertyTypes;
+    using RealEstate.Web.ViewModels.Regions;
 
     public class AddPropertyModel
     {
@@ -53,12 +54,18 @@
         [Required(AllowEmptyStrings = false, ErrorMessage = "The field is required!")]
         [MinLength(3, ErrorMessage = "The min length is 3")]
         [Display(Name = "Place")]
-        public string PlaceName { get; set; } = null!;
+        public int PlaceId { get; set; }
+
+        public int RegionId { get; set; }
+
+        public int DownTownId { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "The field is required!")]
         [MinLength(3, ErrorMessage = "The min length is 3")]
         [Display(Name = "District")]
         public string District { get; set; } = null!;
+
+        public int DistrictId { get; set; }
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "The field is required!")]
         [MinLength(3, ErrorMessage = "The min length is 3")]
@@ -71,6 +78,8 @@
         [Display(Name = "Building Type")]
         public string BuildingType { get; set; }
 
+        public string BuildingTypeId { get; set; }
+
         [Required]
         [Display(Name = "Contacts")]
         public ContactModel ContactModel { get; set; } = null!;
@@ -80,10 +89,12 @@
 
         public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; init; }
 
-        public IList<BuildingTypeModel> BuildingTypes { get; set; }
+        public IEnumerable<BuildingTypeModel> BuildingTypes { get; set; }
 
-        public IEnumerable<PlaceModel> Places { get; init; }
+        public IEnumerable<RegionViewModel> Regions { get; init; }
 
         public IEnumerable<DistrictModel> Districts { get; set; }
+
+        public IEnumerable<RegionDownTown> RegionDownTown { get; set; }
     }
 }

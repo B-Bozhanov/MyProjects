@@ -19,8 +19,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\..\Data\RealEstate.Data.Common\RealEstate.Data.Common.csproj" />
 		<ProjectReference Include="..\..\Data\RealEstate.Data.Models\RealEstate.Data.Models.csproj" />
+		<ProjectReference Include="..\..\Data\RealEstate.Data\RealEstate.Data.csproj" />
 		<ProjectReference Include="..\..\Web\RealEstate.Web.ViewModels\RealEstate.Web.ViewModels.csproj" />
 		<ProjectReference Include="..\RealEstate.Services.Mapping\RealEstate.Services.Mapping.csproj" />
 	</ItemGroup>

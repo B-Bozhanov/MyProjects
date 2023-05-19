@@ -1,36 +1,35 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System.IO;
     using System.Threading.Tasks;
 
-    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
-    using RealEstate.Services.Interfaces;
-    using RealEstate.Web.ViewModels.RegionScraper;
+    using Newtonsoft.Json;
 
-    public class UpdateRegionController : Controller
+    using RealEstate.Services.Data.Interfaces;
+    using RealEstate.Services.Interfaces;
+
+    // [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
+    public class UpdateRegionController : BaseController
     {
         private readonly IRegionScraperService scraper;
+        private readonly IRegionService regionService;
 
-        public UpdateRegionController(IRegionScraperService scraper)
+        public UpdateRegionController(IRegionScraperService scraper, IRegionService regionService)
         {
             this.scraper = scraper;
+            this.regionService = regionService;
         }
 
-        [Authorize(Roles = "admin")]
-        public IActionResult Update()
+        //[HttpPost]
+        public async Task<IActionResult> UpdateRegions()
         {
-            return this.View(new UpdateRegionViewModel());
-        }
+            var regions = await this.scraper.GetAllAsJason();
 
-        [HttpPost]
-        [Authorize(Roles = "creator")]
-        public async Task<IActionResult> Update(string downTownsUrl, string regionsUrl)
-        {
-            var regions = await this.scraper.GetRegionsAsync(downTownsUrl, regionsUrl);
+            //this.regionService.SaveToFile(regions);
 
-            this.scraper.SaveAsJson(new string("TODO"), "bgRegions", regions);
-
+            return this.Content("Done");
             return this.RedirectToAction(nameof(this.Succsses));
         }
 

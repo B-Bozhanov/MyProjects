@@ -15,9 +15,9 @@
         [Required]
         public string Name { get; set; }
 
-        public int RegionId { get; set; }
-
         [Required]
+        public string RegionId { get; set; }
+
         public virtual Region Region { get; set; }
 
         public virtual ICollection<Property> Properties { get; set; }

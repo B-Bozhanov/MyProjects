@@ -7,7 +7,7 @@
 
     public interface IRegionScraperService
     {
-        public Task<IEnumerable<Region>> GetRegionsAsync(string country = null);
+        public Task<IEnumerable<Location>> GetRegionsAsync(string country = null);
 
         public Task<string> GetAllAsJason();
     }

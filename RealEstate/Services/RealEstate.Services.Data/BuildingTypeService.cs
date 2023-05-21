@@ -17,7 +17,7 @@
             this.buildingTypeRepository = buildingTypeRepository;
         }
 
-        public IEnumerable<T> Get<T>()
+        public IList<T> Get<T>()
         {
             return this.buildingTypeRepository
                 .All()

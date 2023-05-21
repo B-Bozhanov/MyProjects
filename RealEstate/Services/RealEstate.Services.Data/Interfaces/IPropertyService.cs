@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
+    using System.Threading.Tasks;
 
     using RealEstate.Data.Models;
     using RealEstate.Web.ViewModels.Districts;
@@ -10,14 +11,12 @@
 
     public interface IPropertyService
     {
-        void Add(AddPropertyModel propertyModel, [CallerMemberName] string import = null!);
+        Task Add(AddPropertyViewModel propertyModel, [CallerMemberName] string import = null!);
 
         public IEnumerable<Property> Get();
 
         public IEnumerable<RegionViewModel> GetRegions();
 
         public IEnumerable<DistrictModel> GetDistricts();
-
-        public IEnumerable<AddPropertyViewModel> GetTop10NewestSells();
     }
 }

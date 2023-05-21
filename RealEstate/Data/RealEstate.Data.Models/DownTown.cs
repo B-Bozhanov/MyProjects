@@ -20,7 +20,7 @@
         [Required]
         public string RegionId { get; set; }
 
-        public virtual Region Region { get; set; }
+        public virtual Location Region { get; set; }
 
         public virtual ICollection<District> Districts { get; set; }
     }

@@ -1,8 +1,8 @@
 ﻿namespace RealEstate.Services.RegionScraperService.Models
 {
-    public class District
+    public class PopulatedPlace
     {
-        public District(string name)
+        public PopulatedPlace(string name)
         {
             this.Name = name;
         }

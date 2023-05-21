@@ -39,9 +39,9 @@
             this.context = context;
         }
 
-        public async Task<IEnumerable<Region>> GetRegionsAsync(string country = null)
+        public async Task<IEnumerable<Location>> GetRegionsAsync(string country = null)
         {
-            var regions = new List<Region>();
+            var locations = new List<Location>();
 
             this.downTownsDocument = await this.context.OpenAsync(this.downTownsUrl);
             this.regionsDocument = await this.context.OpenAsync(this.regionsUrl);
@@ -57,12 +57,12 @@
 
                 var populatedPlaces = this.GetPopulatedPlacesAsync(this.context, this.regionsUrl, QuerySelectors.PopulatedPlaceName, QuerySelectors.TitleHtmlAttribute).Result;
 
-                var region = new Region().Parse(populatedPlaces, townsDistricts);
+                var location = new Location().Parse(populatedPlaces, townsDistricts);
 
-                regions.Add(region);
+                locations.Add(location);
             });
 
-            return regions;
+            return locations;
         }
 
         public async Task<string> GetAllAsJason()
@@ -76,7 +76,7 @@
 
         private Dictionary<string, List<string>> GetTownsDistricts(List<string> townsUrlExtencions)
         {
-            var townsDistricts = new Dictionary<string, List<string>>();
+            var townsDistricts = new Dictionary<string, List<PopulatedPlace>>();
 
             Parallel.ForEach(townsUrlExtencions, townUrlExtencion =>
             {
@@ -85,10 +85,10 @@
 
                 var currentTownDistricts = this.GetDistrictsAsync(this.context, this.downTownsUrl).Result;
 
-                townsDistricts.Add(townName, currentTownDistricts);
+               // townsDistricts.Add(townName, currentTownDistricts);
             });
 
-            return townsDistricts;
+            return null;//townsDistricts;
         }
 
         private List<string> GetTownsExtencions(IDocument document, string townSelectors)

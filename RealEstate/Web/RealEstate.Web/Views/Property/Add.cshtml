@@ -1,4 +1,4 @@
-﻿@model AddPropertyModel
+﻿@model AddPropertyViewModel
 
 @{
     ViewData["Title"] = "Add property";
@@ -11,59 +11,47 @@
                 <div class="title-box-d offset-4">
                     <h3 class="title-d"> @ViewData["Title"]</h3>
                 </div>
+                <div asp-validation-summary=All class="text-danger"></div>
+
+                @*Type*@
                 <div class="form-group">
                     <h1 style="font-size:large"><label asp-for="TypeId" class="form-label"></label></h1>
                     <select asp-for="TypeId" class="form-select">
                         <span asp-validation-for="TypeId" class="text-danger"></span>
+
                         @foreach (var type in Model.PropertyTypes)
                         {
                             <option value="@type.Id">@type.Name</option>
                         }
-                    </select>
-                </div>
-                <br />
-                <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="RegionId"></label></h1>
-                    <select asp-for="RegionId" class="form-select" id="region" placeholder="Select region...">
-                        <span asp-validation-for="RegionId" class="text-danger"></span>
-                        <option></option>
-                        @foreach (var region in Model.RegionDownTown)
-                        {
-                            <option value="@region.Id">@region.Name</option>
-                        }
-                    </select>
-                </div>
-                <br />
-                <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="DistrictId" id="districtLabel"></label></h1>
-                    <select asp-for="DistrictId" class="form-select" id="district" placeholder="Select district...">
-                        <span asp-validation-for="DistrictId" class="text-danger"></span>
-                        @* @foreach (var region in Model.Regions)
-                        {
-                        if (region.DownTown == null)
-                        {
-                        continue;
-                        }
 
-                        foreach (var district in region.DownTown.Districts)
-                        {
-                        <option value="@district.Id">@district.Name</option>
-                        }
-                        }*@
                     </select>
                 </div>
+                <br />
+
+                @*Location*@
                 <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="PlaceId" id="placeLabel"></label></h1>
-                    <select asp-for="PlaceId" class="form-select" id="place" placeholder="Select place...">
-                        <span asp-validation-for="PlaceId" class="text-danger"></span>
-                        @*  @foreach (var region in Model.Regions)
+                    <h1 style="font-size:large"><label asp-for="LocationId"></label></h1>
+                    <select asp-for="LocationId" class="form-select" id="region">
+                        <option value="">Select location</option>
+                        @foreach (var region in Model.Regions)
                         {
-                        foreach (var place in region.Places)
-                        {
-                        <option value="@place.Id">@place.Name</option>
+                            <optgroup>
+                                <option value="@region.Id">@region.Name</option>
+                                <option value="@region.DownTown.Id">@region.DownTown.Name</option>
+                            </optgroup>
                         }
-                        }*@
                     </select>
+                    <span asp-validation-for="LocationId" class="text-danger"></span>
+                </div>
+                <br />
+
+                @*PopulatedPlace*@
+                <div class="form-group">
+                    <h1 style="font-size:large"><label asp-for="PopulatedPlaceId" id="PopulatedPlaceIdLabel"></label></h1>
+                    <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
+                        <option value="">Select Populated place</option>
+                    </select>
+                    <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
                 </div>
                 <br />
 
@@ -73,8 +61,13 @@
                 <div class="row">
                     <div class="col-3">
                         <h1 style="font-size:large"><label asp-for="Size"></label></h1>
-                        <input asp-for="Size" class="form-control" placeholder="Property size">
+                        <input asp-for="Size" class="form-control">
                         <span asp-validation-for="Size" class="text-danger"></span>
+                    </div>
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="Year"></label></h1>
+                        <input asp-for="Year" class="form-control">
+                        <span asp-validation-for="Year" class="text-danger"></span>
                     </div>
                     <div class="col-3">
                         <h1 style="font-size:large"><label asp-for="Floor"></label></h1>
@@ -84,6 +77,7 @@
                                 <option value="@i">@i</option>
                             }
                         </select>
+                        <br />
                     </div>
                     <div class="col-3">
                         <h1 style="font-size:large"><label asp-for="TotalFloors"></label></h1>
@@ -93,6 +87,7 @@
                                 <option value="@i">@i</option>
                             }
                         </select>
+                        <br />
                     </div>
                     <div class="col-3">
                         <h1 style="font-size:large"><label asp-for="TotalBedRooms"></label></h1>
@@ -102,6 +97,7 @@
                                 <option value="@i">@i</option>
                             }
                         </select>
+                        <br />
                     </div>
                     <div class="col-3">
                         <h1 style="font-size:large"><label asp-for="TotalBathRooms"></label></h1>
@@ -111,6 +107,7 @@
                                 <option value="@i">@i</option>
                             }
                         </select>
+                        <br />
                     </div>
                     <div class="col-3">
                         <h1 style="font-size:large"><label asp-for="TotalGarages"></label></h1>
@@ -120,6 +117,7 @@
                                 <option value="@i">@i</option>
                             }
                         </select>
+                        <br />
                     </div>
                 </div>
 
@@ -129,28 +127,16 @@
                 @*Building types*@
                 <h1 style="font-size:large">Building Type</h1>
                 <div class="row">
-                    @foreach (var buildingType in Model.BuildingTypes)
+                    @for (int i = 0; i < Model.BuildingTypes.Count(); i++)
                     {
                         <div class="col">
-                            <input type="checkbox" asp-for="@buildingType.IsChecked" class="form-check-input" />
-                            <label class="form-check-label" asp-for="@buildingType.IsChecked">
-                                @buildingType.Name
-                            </label>
-                            <input type="hidden" asp-for="@buildingType.Id" />
-                            <input type="hidden" asp-for="@buildingType.Name" />
+                            <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
+                            <label class="form-check-label">@Model.BuildingTypes[i].Name</label>
+                            <input type="hidden" asp-for="BuildingTypes[i].Id" />
+                            <input type="hidden" asp-for="BuildingTypes[i].Name" />
+                            <input type="hidden" asp-for="BuildingTypes[i].IsChecked" />
                         </div>
                     }
-                    @*  @for (var i = 0; i < @Model.BuildingTypes.Count(); i++)
-                    {
-                    <div class="col">
-                    <input type="checkbox" asp-for="@Model.BuildingTypes[i].IsChecked" class="form-check-input" />
-                    <label class="form-check-label" asp-for="@Model.BuildingTypes[i].IsChecked">
-                    @Model.BuildingTypes[i].Name
-                    </label>
-                    <input type="hidden" asp-for="@Model.BuildingTypes[i].Id" />
-                    <input type="hidden" asp-for="@Model.BuildingTypes[i].Name" />
-                    </div>
-                    }*@
                     <br />
                     <br />
                 </div>
@@ -244,52 +230,6 @@
 </div>
 
 @section Scripts{
-
-    <script>
-        $('#downTown').attr('disabled', false);
-
-        $(document).ready(function () {
-            $("#districtLabel").hide();
-        });
-        $(document).ready(function () {
-            $("#district").hide();
-        });
-
-        $(document).ready(function () {
-            $("#placeLabel").hide();
-        });
-        $(document).ready(function () {
-            $("#place").hide();
-        });
-
-        $('#region').change(function () {
-            var id = $(this).val();
-            console.log(id);
-            $.ajax({
-
-                type: 'POST',
-                dataType: "JSON",
-                url: '/Property/GetPlacesByRegionId',
-                data: { id: id },
-                success:
-                    function (response) {
-                        var markup;
-
-                        for (var i = 0; i < response.data.length; i++) {
-
-                            markup += " <option value=" + response.data[i].id + ">"+ response.data[i].name +"</option>";
-                        }
-                        markup += "<br />";
-                        $("#district").html(markup);
-                        $("#district").show();
-                        $("#districtLabel").show();
-                    },
-                error:
-                    function (response) {
-
-                    }
-            });
-        });
-    </script>
+    <script src="~/js/jquery.poplatedplacesgetter.js"></script>
 }
 

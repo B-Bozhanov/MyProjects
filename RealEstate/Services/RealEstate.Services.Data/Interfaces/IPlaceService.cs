@@ -6,6 +6,6 @@
     {
         public IEnumerable<T> Get<T>();
 
-        public IEnumerable<T> GetPlacesByRegionId<T>(string id);
+        public IEnumerable<T> GetPlacesByRegionId<T>(int id);
     }
 }

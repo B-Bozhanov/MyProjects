@@ -10,9 +10,9 @@
 
     public class RegionService : IRegionService
     {
-        private readonly IDeletableEntityRepository<Region> regionRepository;
+        private readonly IDeletableEntityRepository<Location> regionRepository;
 
-        public RegionService(IDeletableEntityRepository<Region> regionRepository)
+        public RegionService(IDeletableEntityRepository<Location> regionRepository)
         {
             this.regionRepository = regionRepository;
         }

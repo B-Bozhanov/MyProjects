@@ -27,6 +27,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Data\RealEstate.Data.Models\RealEstate.Data.Models.csproj" />
     <ProjectReference Include="..\..\Services\RealEstate.Services.Mapping\RealEstate.Services.Mapping.csproj" />
+    <ProjectReference Include="..\RealEstate.Web.Infrastructure\RealEstate.Web.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

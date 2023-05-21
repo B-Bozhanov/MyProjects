@@ -10,9 +10,9 @@
 
     public class PlaceService : IPlaceService
     {
-        private readonly IDeletableEntityRepository<Place> placeRepository;
+        private readonly IDeletableEntityRepository<PopulatedPlace> placeRepository;
 
-        public PlaceService(IDeletableEntityRepository<Place> placeRepository)
+        public PlaceService(IDeletableEntityRepository<PopulatedPlace> placeRepository)
         {
             this.placeRepository = placeRepository;
         }
@@ -24,10 +24,10 @@
             .To<T>()
             .ToList();
 
-        public IEnumerable<T> GetPlacesByRegionId<T>(string id)
+        public IEnumerable<T> GetPlacesByRegionId<T>(int id)
             => this.placeRepository
             .All()
-            .Where(p => p.RegionId == id)
+            .Where(p => p.LocationId == id)
             .OrderBy(p => p.Name)
             .To<T>()
             .ToList();

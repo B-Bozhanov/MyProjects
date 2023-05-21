@@ -1,6 +1,9 @@
 ﻿namespace RealEstate.Services.Data.Interfaces
 {
-    public interface IBuildingTypeService : IService
+    using System.Collections.Generic;
+
+    public interface IBuildingTypeService
     {
+        public IList<T> Get<T>();
     }
 }

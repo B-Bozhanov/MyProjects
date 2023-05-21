@@ -5,14 +5,14 @@
 
     using RealEstate.Data.Models;
 
-    public class RegionConfiguration : IEntityTypeConfiguration<Region>
+    public class RegionConfiguration : IEntityTypeConfiguration<Location>
     {
-        public void Configure(EntityTypeBuilder<Region> region)
+        public void Configure(EntityTypeBuilder<Location> region)
         {
-            region
-               .HasOne(e => e.DownTown)
-               .WithOne(e => e.Region)
-               .HasForeignKey<Region>(e => e.DownTownId);
+            //region
+            //   .HasOne(e => e.DownTown)
+            //   .WithOne(e => e.Region)
+            //   .HasForeignKey<Location>(e => e.DownTownId);
         }
     }
 }

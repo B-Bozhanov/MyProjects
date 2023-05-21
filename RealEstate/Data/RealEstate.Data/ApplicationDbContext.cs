@@ -34,13 +34,9 @@
 
         public DbSet<BuildingType> BuildingTypes { get; set; }
 
-        public DbSet<Region> Regions { get; set; }
+        public DbSet<Location> Locations { get; set; }
 
-        public DbSet<DownTown> DownTown { get; set; }
-
-        public DbSet<District> Districts { get; set; }
-
-        public DbSet<Place> Places { get; set; }
+        public DbSet<PopulatedPlace> PopulatedPlaces { get; set; }
 
         public DbSet<Image> Images { get; set; }
 

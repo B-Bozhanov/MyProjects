@@ -7,7 +7,7 @@
     using RealEstate.Web.ViewModels.DownTowns;
     using RealEstate.Web.ViewModels.Places;
 
-    public class RegionViewModel : IMapFrom<Region>
+    public class RegionViewModel : IMapFrom<Location>
     {
         public string Id { get; set; }
 

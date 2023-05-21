@@ -24,7 +24,7 @@
             .To<T>()
             .ToList();
 
-        public IEnumerable<T> GetDistrictByDownTownId<T>(string id)
+        public ICollection<T> GetDistrictByDownTownId<T>(string id)
             => this.districtRepository
             .All()
             .Where(d => d.DownTownId == id)

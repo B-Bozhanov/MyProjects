@@ -6,6 +6,6 @@
     {
         public IEnumerable<T> Get<T>();
 
-        public IEnumerable<T> GetDistrictByDownTownId<T>(string id);
+        public ICollection<T> GetDistrictByDownTownId<T>(string id);
     }
 }

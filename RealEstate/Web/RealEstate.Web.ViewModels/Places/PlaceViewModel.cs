@@ -3,7 +3,7 @@
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
 
-    public class PlaceViewModel : IMapFrom<Place>
+    public class PlaceViewModel : IMapFrom<PopulatedPlace>
     {
         public int Id { get; set; }
 

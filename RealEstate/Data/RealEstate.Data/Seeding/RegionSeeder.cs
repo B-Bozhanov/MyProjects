@@ -11,65 +11,35 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
-            if (dbContext.Regions.Any())
+            if (dbContext.Locations.Any())
             {
                 return;
             }
 
-            var regions = this.GetData<Region>(nameof(Region));
+            var locations = this.GetData<Location>(nameof(Location));
 
-            await AddDataAsync(dbContext, regions);
+            await AddDataAsync(dbContext, locations);
         }
 
-        private static async Task AddDataAsync(ApplicationDbContext dbContext, IEnumerable<Region> regions)
+        private static async Task AddDataAsync(ApplicationDbContext dbContext, IEnumerable<Location> locations)
         {
-            var id = 0;
-
-            foreach (var region in regions)
+            foreach (var location in locations)
             {
-                id++;
-
-                var dbRegion = new Region
+                var dbLocation = new Location
                 {
-                    Name = region.Name,
+                    Name = location.Name,
                 };
 
-                if (region.DownTown == null)
+                foreach (var populatedPlace in location.PopulatedPlaces)
                 {
-                    continue;
-                }
-
-                var dbDownTown = new DownTown
-                {
-                    Name = region.DownTown.Name,
-                };
-
-                dbRegion.DownTown = dbDownTown;
-                dbDownTown.Region = dbRegion;
-                dbDownTown.RegionId = dbRegion.Id;
-
-                foreach (var district in region.DownTown.Districts)
-                {
-                    var dbDistrict = new District
+                    var dbPopulatedPLace = new PopulatedPlace
                     {
-                        Name = district.Name,
+                        Name = populatedPlace.Name,
+                        Location = dbLocation,
                     };
 
-                    dbDistrict.DownTown = dbDownTown;
-
-                    await dbContext.Districts.AddAsync(dbDistrict);
-                }
-
-                foreach (var place in region.Places)
-                {
-                    var dbPlace = new Place
-                    {
-                        Name = place.Name,
-                    };
-
-                    dbPlace.Region = dbRegion;
-
-                    await dbContext.Places.AddAsync(dbPlace);
+                    await dbContext.PopulatedPlaces.AddAsync(dbPopulatedPLace);
+                    await dbContext.SaveChangesAsync();
                 }
             }
         }

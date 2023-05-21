@@ -16,8 +16,6 @@
             this.Options = PropertyOption.Sale; // By default
         }
 
-        public string Url { get; set; }
-
         public int Size { get; set; }
 
         public int? YardSize { get; set; }
@@ -32,17 +30,11 @@
 
         public int ExpirationDays { get; set; }
 
-        public DateTime PublishedOn { get; set; }
-
         public string Description { get; set; }
 
-        public int? PlaceId { get; set; }
+        public int PopulatedPlaceId { get; set; }
 
-        public virtual Place Place { get; set; }
-
-        public int? DistrictId { get; set; }
-
-        public virtual District District { get; set; }
+        public virtual PopulatedPlace PopulatedPlace { get; set; }
 
         public int Year { get; set; }
 

@@ -3,8 +3,10 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Win32;
 
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Web.ViewModels;
@@ -42,44 +44,27 @@
 
         public IActionResult Add()
         {
-            // var test = this.propertyService.GetTop10NewestSells();
-
-            var regionsDownTowns = new List<RegionDownTown>();
-            var regions = this.regionService.Get<RegionViewModel>();
-
-            foreach (var region in regions)
-            {
-                if (region.DownTown == null)
-                {
-                    continue;
-                }
-
-                regionsDownTowns.Add(new RegionDownTown { Id = region.Id, Name = region.Name });
-                regionsDownTowns.Add(new RegionDownTown { Id = region.DownTown.Id, Name = region.DownTown.Name });
-            }
-
-            return this.View(new AddPropertyModel
+            return this.View(new AddPropertyViewModel
             {
                 PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>(),
                 Regions = this.regionService.Get<RegionViewModel>(),
-                RegionDownTown = regionsDownTowns,
                 BuildingTypes = this.buildingTypeService.Get<BuildingTypeModel>(),
             });
         }
 
-        public IActionResult GetDistrictsByDownTownId(string id)
+        [HttpPost]
+        public async Task<IActionResult> Add(AddPropertyViewModel property)
         {
-            var districts = this.districtService.GetDistrictByDownTownId<DistrictModel>(id);
-
-            return this.Json(new { data = districts });
+            await this.propertyService.Add(property);
+            return this.Redirect("/");
         }
 
         [HttpPost]
-        public IActionResult GetPlacesByRegionId(string id)
+        public IActionResult GetPlacesByRegionId(int id)
         {
             var places = this.placeService.GetPlacesByRegionId<PlaceViewModel>(id);
 
-            if (places == null || places.Count() == 0)
+            if (places.Count() == 0)
             {
                 return this.GetDistrictsByDownTownId(id);
             }
@@ -87,11 +72,16 @@
             return this.Json(new { data = places });
         }
 
-        [HttpPost]
-        public IActionResult Add(AddPropertyModel property)
+        private IActionResult GetDistrictsByDownTownId(string id)
         {
-            this.propertyService.Add(property);
-            return this.Redirect("/");
+            var districts = this.districtService.GetDistrictByDownTownId<DistrictModel>(id);
+
+            if (districts.Count() == 1)
+            {
+                districts.Add(new DistrictModel { Name = "TODO: Search for districts!" });
+            }
+
+            return this.Json(new { data = districts });
         }
     }
 }

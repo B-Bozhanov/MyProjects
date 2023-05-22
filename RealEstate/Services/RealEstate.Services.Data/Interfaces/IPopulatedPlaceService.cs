@@ -2,10 +2,10 @@
 {
     using System.Collections.Generic;
 
-    public interface IDistrictService
+    public interface IPopulatedPlaceService
     {
         public IEnumerable<T> Get<T>();
 
-        public ICollection<T> GetDistrictByDownTownId<T>(string id);
+        public IEnumerable<T> GetPopulatedPlacesByLocationId<T>(int id);
     }
 }

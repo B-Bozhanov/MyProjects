@@ -77,13 +77,11 @@ namespace RealEstate.Web
             services.AddTransient<IPropertyService, PropertyService>();
             services.AddTransient<IImageService, ImageService>();
             services.AddTransient<IRegionScraperService, RegionScraperService>();
-            services.AddTransient<IRegionService, RegionService>();
+            services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<IPropertyTypeService, PropertyTypeService>();
             services.AddTransient<IBuildingTypeService, BuildingTypeService>();
-            services.AddTransient<IRegionService, RegionService>();
-            services.AddTransient<IDistrictService, DistrictService>();
-            services.AddTransient<IDownTownService, DownTownService>();
-            services.AddTransient<IPlaceService, PlaceService>();
+            services.AddTransient<ILocationService, LocationService>();
+            services.AddTransient<IPopulatedPlaceService, PopulatedPlaceService>();
         }
 
         private static void Configure(WebApplication app)

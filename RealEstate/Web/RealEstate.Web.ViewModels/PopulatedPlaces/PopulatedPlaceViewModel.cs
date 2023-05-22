@@ -1,9 +1,9 @@
-﻿namespace RealEstate.Web.ViewModels.Districts
+﻿namespace RealEstate.Web.ViewModels.PopulatedPlaces
 {
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
 
-    public class DistrictModel : IMapFrom<District>
+    public class PopulatedPlaceViewModel : IMapFrom<PopulatedPlace>
     {
         public int Id { get; set; }
 

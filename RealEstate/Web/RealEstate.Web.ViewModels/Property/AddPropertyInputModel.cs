@@ -3,9 +3,8 @@
     using System.Collections.Generic;
 
     using RealEstate.Data.Models;
-    using RealEstate.Web.ViewModels.Districts;
+    using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PropertyTypes;
-    using RealEstate.Web.ViewModels.Regions;
 
     public class AddPropertyInputModel
     {
@@ -13,9 +12,7 @@
 
         public PropertyTypeViewModel Type { get; init; } = null!;
 
-        public RegionViewModel Place { get; init; } = null!;
-
-        public DistrictModel District { get; init; } = null!;
+        public LocationViewModel Location { get; init; } = null!;
 
         public int Size { get; init; }
 

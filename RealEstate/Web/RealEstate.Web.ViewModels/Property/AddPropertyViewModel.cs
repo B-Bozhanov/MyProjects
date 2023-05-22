@@ -12,8 +12,8 @@
     using RealEstate.Web.Infrastructure.CustomAttributes;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.ContactModel;
+    using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PropertyTypes;
-    using RealEstate.Web.ViewModels.Regions;
 
     public class AddPropertyViewModel : IMapTo<Property>
     {
@@ -73,6 +73,6 @@
 
         public IList<BuildingTypeModel> BuildingTypes { get; set; }
 
-        public IEnumerable<RegionViewModel> Regions { get; init; }
+        public IEnumerable<LocationViewModel> Locations { get; init; }
     }
 }

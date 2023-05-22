@@ -10,17 +10,14 @@
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Mapping;
-    using RealEstate.Web.ViewModels.Districts;
+    using RealEstate.Web.ViewModels.Locations;
+    using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.Property;
-    using RealEstate.Web.ViewModels.PropertyTypes;
-    using RealEstate.Web.ViewModels.Regions;
 
     public class PropertyService : IPropertyService
     {
         private readonly IImageService imageService;
-        private readonly IDeletableEntityRepository<DownTown> downTownRepository;
-        private readonly IDeletableEntityRepository<Location> regionRepository;
-        private readonly IDeletableEntityRepository<District> districtRepository;
+        private readonly IDeletableEntityRepository<Location> locationRepository;
         private readonly IDeletableEntityRepository<Property> propertyRepository;
         private readonly IDeletableEntityRepository<PropertyType> propertyTypeRepository;
         private readonly IDeletableEntityRepository<BuildingType> buildingTypeRepository;
@@ -31,9 +28,7 @@
         private readonly IImageService imageService1;
 
         public PropertyService(
-              IDeletableEntityRepository<DownTown> downTownRepository,
               IDeletableEntityRepository<Location> regionRepository,
-              IDeletableEntityRepository<District> districtRepository,
               IDeletableEntityRepository<Property> propertyRepository,
               IDeletableEntityRepository<PropertyType> propertyTypeRepository,
               IDeletableEntityRepository<BuildingType> buildingTypeRepository,
@@ -42,9 +37,7 @@
               IDeletableEntityRepository<PopulatedPlace> populatedPlaceRepository,
               IImageService imageService)
         {
-            this.downTownRepository = downTownRepository;
-            this.regionRepository = regionRepository;
-            this.districtRepository = districtRepository;
+            this.locationRepository = regionRepository;
             this.propertyRepository = propertyRepository;
             this.propertyTypeRepository = propertyTypeRepository;
             this.buildingTypeRepository = buildingTypeRepository;
@@ -85,9 +78,9 @@
 
         public IEnumerable<Property> Get() => this.propertyRepository.All();
 
-        public IEnumerable<DistrictModel> GetDistricts() => this.districtRepository
+        public IEnumerable<PopulatedPlaceViewModel> GetPopulatedPlaces() => this.populatedPlaceRepository
             .All()
-             .Select(d => new DistrictModel
+             .Select(d => new PopulatedPlaceViewModel
              {
                  Name = d.Name,
                  Id = d.Id,
@@ -95,10 +88,10 @@
             .OrderBy(d => d.Name)
             .ToList();
 
-        public IEnumerable<RegionViewModel> GetRegions() => this.regionRepository
+        public IEnumerable<LocationViewModel> GetLocations() => this.locationRepository
             .All()
             .OrderBy(p => p.Name)
-            .To<RegionViewModel>()
+            .To<LocationViewModel>()
             .ToList();
     }
 }

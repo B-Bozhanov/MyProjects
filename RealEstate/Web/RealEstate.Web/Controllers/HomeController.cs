@@ -2,11 +2,9 @@
 {
     using System.Diagnostics;
 
-    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
-    using RealEstate.Data.Models;
     using RealEstate.Web.ViewModels;
 
     public class HomeController : BaseController

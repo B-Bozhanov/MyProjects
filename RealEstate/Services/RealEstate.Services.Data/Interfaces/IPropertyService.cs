@@ -5,9 +5,9 @@
     using System.Threading.Tasks;
 
     using RealEstate.Data.Models;
-    using RealEstate.Web.ViewModels.Districts;
+    using RealEstate.Web.ViewModels.Locations;
+    using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.Property;
-    using RealEstate.Web.ViewModels.Regions;
 
     public interface IPropertyService
     {
@@ -15,8 +15,8 @@
 
         public IEnumerable<Property> Get();
 
-        public IEnumerable<RegionViewModel> GetRegions();
+        public IEnumerable<LocationViewModel> GetLocations();
 
-        public IEnumerable<DistrictModel> GetDistricts();
+        public IEnumerable<PopulatedPlaceViewModel> GetPopulatedPlaces();
     }
 }

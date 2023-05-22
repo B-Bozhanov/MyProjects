@@ -14,20 +14,20 @@
     public class UpdateRegionController : BaseController
     {
         private readonly IRegionScraperService scraper;
-        private readonly IRegionService regionService;
+        private readonly ILocationService locationService;
 
-        public UpdateRegionController(IRegionScraperService scraper, IRegionService regionService)
+        public UpdateRegionController(IRegionScraperService scraper, ILocationService regionService)
         {
             this.scraper = scraper;
-            this.regionService = regionService;
+            this.locationService = regionService;
         }
 
         //[HttpPost]
         public async Task<IActionResult> UpdateRegions()
         {
-            var regions = await this.scraper.GetAllAsJason();
+            var locations = await this.scraper.GetAllAsJason();
 
-            //this.regionService.SaveToFile(regions);
+            this.locationService.SaveToFile(locations);
 
             return this.Content("Done");
             return this.RedirectToAction(nameof(this.Succsses));

@@ -8,24 +8,24 @@
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Mapping;
 
-    public class PlaceService : IPlaceService
+    public class PopulatedPlaceService : IPopulatedPlaceService
     {
-        private readonly IDeletableEntityRepository<PopulatedPlace> placeRepository;
+        private readonly IDeletableEntityRepository<PopulatedPlace> populatedPlaceRepository;
 
-        public PlaceService(IDeletableEntityRepository<PopulatedPlace> placeRepository)
+        public PopulatedPlaceService(IDeletableEntityRepository<PopulatedPlace> placeRepository)
         {
-            this.placeRepository = placeRepository;
+            this.populatedPlaceRepository = placeRepository;
         }
 
         public IEnumerable<T> Get<T>()
-            => this.placeRepository
+            => this.populatedPlaceRepository
             .All()
             .OrderBy(p => p.Name)
             .To<T>()
             .ToList();
 
-        public IEnumerable<T> GetPlacesByRegionId<T>(int id)
-            => this.placeRepository
+        public IEnumerable<T> GetPopulatedPlacesByLocationId<T>(int id)
+            => this.populatedPlaceRepository
             .All()
             .Where(p => p.LocationId == id)
             .OrderBy(p => p.Name)

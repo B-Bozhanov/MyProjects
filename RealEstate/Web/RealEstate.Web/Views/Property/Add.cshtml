@@ -33,11 +33,10 @@
                     <h1 style="font-size:large"><label asp-for="LocationId"></label></h1>
                     <select asp-for="LocationId" class="form-select" id="region">
                         <option value="">Select location</option>
-                        @foreach (var region in Model.Regions)
+                        @foreach (var location in Model.Locations)
                         {
                             <optgroup>
-                                <option value="@region.Id">@region.Name</option>
-                                <option value="@region.DownTown.Id">@region.DownTown.Name</option>
+                                <option value="@location.Id">@location.Name</option>
                             </optgroup>
                         }
                     </select>

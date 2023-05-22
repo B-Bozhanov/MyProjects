@@ -32,7 +32,7 @@
                               new BuildingTypeSeeder(),
                               new RolesSeeder(),
                               new UsersSeeder(),
-                              new RegionSeeder(),
+                              new LocationSeeder(),
                           };
 
             foreach (var seeder in seeders)

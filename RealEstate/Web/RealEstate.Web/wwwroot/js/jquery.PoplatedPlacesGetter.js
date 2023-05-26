@@ -11,7 +11,8 @@ $('#region').change(function () {
     $.ajax({
         type: 'POST',
         dataType: "JSON",
-        url: "/Property/GetPopulatedPlaces",
+        url:  "/Property/GetPopulatedPlaces",
+        cors: true,
         data: { id: id },
         success:
             function (response) {

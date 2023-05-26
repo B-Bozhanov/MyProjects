@@ -1,58 +1,60 @@
-﻿using CsvHelper;
-using HtmlAgilityPack;
-using System.IO;
-using System.Collections.Generic;
-using System.Globalization;
-using StartUp;
-using PuppeteerSharp;
+﻿using System.Text;
+
 using AngleSharp;
-using AngleSharp.Dom;
+using AngleSharp.Common;
+using AngleSharp.Io;
+using AngleSharp.Text;
 
-//var httpClient = new HttpClient();
-//var response = await httpClient.GetAsync("https://en.wikipedia.org/wiki/Greece");
-//var content1 = await response.Content.ReadAsStringAsync();
+using RestSharp;
 
-using var browserFetcher = new BrowserFetcher();
-await browserFetcher.DownloadAsync(BrowserFetcher.DefaultChromiumRevision);
-var browser = await Puppeteer.LaunchAsync(new LaunchOptions
+internal class Program
 {
-    Headless = true
-});
-var page = await browser.NewPageAsync();
-await page.GoToAsync("https://en.wikipedia.org/wiki/Greece");
-
-var content = await page.GetContentAsync();
-
-var context = BrowsingContext.New(Configuration.Default);
-var document = await context.OpenAsync(req => req.Content(content));
-
-var info = document.QuerySelectorAll("*").Where(e => e.LocalName == "div" && e.ClassName == "mw-parser-output");
-
-foreach (var item in info)
-{
-    var test = item.Text().Split("\n").Select(t => t.Trim()).Where(t => !string.IsNullOrWhiteSpace(t));
-    foreach (var t in test)
+    private static async Task Main(string[] args)
     {
-        Console.WriteLine(t);
+        Console.OutputEncoding = Encoding.UTF8;
+
+        // TODO: Take all with only one package!
+
+        var config = Configuration.Default.WithDefaultLoader();
+        var context = BrowsingContext.New(config);
+
+        var document = await context.OpenAsync("https://imoti.bg/");
+
+        var locationsNames = document.QuerySelectorAll(".form-wrap .form-input > option[value]");
+
+        var locationsIdes = locationsNames
+            .Select(x => x.OuterHtml.ToString()
+                .Split(' ')[1]
+                .Replace("value=\"", string.Empty)
+                .Replace("\"", string.Empty))
+            .Skip(1)
+            .ToList();
+
+        locationsIdes.Remove(locationsIdes.Last());
+
+        var client = new RestClient("https://imoti.bg/bg/ajax/getLocations/");
+        var request = new RestRequest();
+        request.AddParameter("Get", "Post");
+
+        var locations = new Dictionary<string, string>();
+
+        foreach (var id in locationsIdes)
+        {
+            request.AddParameter("id", $"{id}");
+            var response = client.Post(request).Content.Split("\r\n");
+
+            foreach (var item in response)
+            {
+                await Console.Out.WriteLineAsync(item);
+                break;
+            }
+            break;
+        }
+
+
+        //var content = response.Content; // Raw content as string
+        //var response2 = client.Post<Person>(request);
+        //var name = response2.Data.Name;
+        //await Console.Out.WriteLineAsync(content);
     }
 }
-Console.WriteLine(content);
-//HtmlWeb web = new HtmlWeb();
-//HtmlDocument document = web.Load("https://en.wikipedia.org/wiki/Greece");
-
-//var headerNames = document.DocumentNode.SelectNodes("//div[@class='vector-pinned-container']");
-
-//var titles = new List<Row>();
-
-//foreach (var item in headerNames)
-//{
-//    titles.Add(new Row { Title = item.InnerText });
-//}
-
-//using (var writer = new StreamWriter("test.csv"))
-//using (var csv = new CsvWriter(writer, CultureInfo.InvariantCulture))
-//{
-//    csv.WriteRecords(titles);
-//}
-
-//Console.WriteLine();

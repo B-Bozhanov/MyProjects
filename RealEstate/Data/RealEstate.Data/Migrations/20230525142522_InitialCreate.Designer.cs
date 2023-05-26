@@ -12,8 +12,8 @@ using RealEstate.Data;
 namespace RealEstate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230522124002_CardinalChangeDatabseStructure")]
-    partial class CardinalChangeDatabseStructure
+    [Migration("20230525142522_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

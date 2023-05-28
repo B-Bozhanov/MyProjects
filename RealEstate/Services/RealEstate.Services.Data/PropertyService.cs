@@ -46,7 +46,7 @@
             this.populatedPlaceRepository = populatedPlaceRepository;
         }
 
-        public async Task Add(AddPropertyViewModel propertyModel, [CallerMemberName] string import = null!)
+        public async Task Add(AddPropertyViewModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!)
         {
             var property = new Property
             {

@@ -11,7 +11,7 @@
 
     public interface IPropertyService
     {
-        Task Add(AddPropertyViewModel propertyModel, [CallerMemberName] string import = null!);
+        Task Add(AddPropertyViewModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!);
 
         public IEnumerable<Property> Get();
 

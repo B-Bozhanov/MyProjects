@@ -2,8 +2,11 @@
 {
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
+    using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.Locations;
@@ -18,21 +21,25 @@
         private readonly ILocationService locationService;
         private readonly IBuildingTypeService buildingTypeService;
         private readonly IPopulatedPlaceService populatedPlaceService;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public PropertyController(
             IPropertyService propertyService,
             IPropertyTypeService propertyTypeService,
             ILocationService regionService,
             IBuildingTypeService buildingTypeService,
-            IPopulatedPlaceService placeService)
+            IPopulatedPlaceService placeService,
+            UserManager<ApplicationUser> userManager)
         {
             this.propertyService = propertyService;
             this.propertyTypeService = propertyTypeService;
             this.locationService = regionService;
             this.buildingTypeService = buildingTypeService;
             this.populatedPlaceService = placeService;
+            this.userManager = userManager;
         }
 
+        [Authorize]
         public IActionResult Add()
         {
             return this.View(new AddPropertyViewModel
@@ -44,9 +51,16 @@
         }
 
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add(AddPropertyViewModel property)
         {
-            await this.propertyService.Add(property);
+            var user = await this.userManager.GetUserAsync(this.User);
+
+            if (user == null)
+            {
+            }
+
+            await this.propertyService.Add(property, user);
             return this.Redirect("/");
         }
 

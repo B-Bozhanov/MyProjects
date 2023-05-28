@@ -20,41 +20,64 @@ internal class Program
 
         var document = await context.OpenAsync("https://imoti.bg/");
 
-        var locationsNames = document.QuerySelectorAll(".form-wrap .form-input > option[value]");
+        var locationsElements = document.QuerySelectorAll(".form-wrap .form-input > option[value]");
 
-        var locationsIdes = locationsNames
+        var locationsNames = locationsElements
+            .Select(x => x.TextContent)
+            .Skip(1)
+            .SkipLast(1)
+            .ToList();
+
+        var locationsIdes = locationsElements
             .Select(x => x.OuterHtml.ToString()
                 .Split(' ')[1]
                 .Replace("value=\"", string.Empty)
                 .Replace("\"", string.Empty))
             .Skip(1)
+            .SkipLast(1)
             .ToList();
 
-        locationsIdes.Remove(locationsIdes.Last());
-
         var client = new RestClient("https://imoti.bg/bg/ajax/getLocations/");
+
         var request = new RestRequest();
+
         request.AddParameter("Get", "Post");
 
-        var locations = new Dictionary<string, string>();
+        var locations = new List<Location>();
 
-        foreach (var id in locationsIdes)
+        for (int id = 0; id < locationsIdes.Count; id++)
         {
-            request.AddParameter("id", $"{id}");
-            var response = client.Post(request).Content.Split("\r\n");
+            request.AddParameter("id", $"{locationsIdes[id]}");
 
-            foreach (var item in response)
+            var response = client.Post(request).Content!
+                .Split(new char[2] { '\n', '\t' })
+                .ToList();
+
+            var location = new Location
             {
-                await Console.Out.WriteLineAsync(item);
-                break;
+                Name = locationsNames[id],
+            };
+
+            for (int j = 3; j < response.Count - 2; j += 2)
+            {
+                var currentPlace = response[j].Replace("</option>", string.Empty).Split('>', StringSplitOptions.RemoveEmptyEntries)[1];
+
+                location.PopulatedPlaces.Add(currentPlace);
             }
-            break;
+
+            locations.Add(location);
+        }
+    }
+
+    public class Location
+    {
+        public Location()
+        {
+            this.PopulatedPlaces = new List<string>();
         }
 
+        public string Name { get; set; } = null!;
 
-        //var content = response.Content; // Raw content as string
-        //var response2 = client.Post<Person>(request);
-        //var name = response2.Data.Name;
-        //await Console.Out.WriteLineAsync(content);
+        public List<string> PopulatedPlaces { get; set; }
     }
 }

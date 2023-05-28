@@ -50,6 +50,10 @@
 
         public virtual UserContact UserContact { get; set; }
 
+        public string ApplicationUserId { get; set; }
+
+        public virtual ApplicationUser ApplicationUser { get; set; }
+
         public virtual ICollection<Tag> Tags { get; set; }
 
         public virtual ICollection<Image> Images { get; set; }

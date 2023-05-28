@@ -11,15 +11,15 @@
 
     public class LocationService : ILocationService
     {
-        private readonly IDeletableEntityRepository<Location> locationService;
+        private readonly IDeletableEntityRepository<Location> locationRepository;
 
-        public LocationService(IDeletableEntityRepository<Location> regionRepository)
+        public LocationService(IDeletableEntityRepository<Location> locationRepository)
         {
-            this.locationService = regionRepository;
+            this.locationRepository = locationRepository;
         }
 
         public IEnumerable<T> Get<T>()
-            => this.locationService
+            => this.locationRepository
                 .All()
                 .OrderBy(p => p.Name)
                 .To<T>()

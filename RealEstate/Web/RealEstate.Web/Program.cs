@@ -1,6 +1,5 @@
-using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
-using RealEstate.Data;
+// Add migrations related user to property
+
 namespace RealEstate.Web
 {
     using System;
@@ -9,12 +8,14 @@ namespace RealEstate.Web
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-
+    using RealEstate.Data;
     using RealEstate.Data;
     using RealEstate.Data.Common;
     using RealEstate.Data.Common.Repositories;
@@ -24,6 +25,7 @@ namespace RealEstate.Web
     using RealEstate.Services.Data;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Interfaces;
+    using RealEstate.Services.LocationScraperService;
     using RealEstate.Services.Mapping;
     using RealEstate.Services.Messaging;
     using RealEstate.Services.RegionScraperService;
@@ -76,7 +78,7 @@ namespace RealEstate.Web
             services.AddTransient<ISettingsService, SettingsService>();
             services.AddTransient<IPropertyService, PropertyService>();
             services.AddTransient<IImageService, ImageService>();
-            services.AddTransient<IRegionScraperService, RegionScraperService>();
+            services.AddTransient<IRegionScraperService, LocationScraperService>();
             services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<IPropertyTypeService, PropertyTypeService>();
             services.AddTransient<IBuildingTypeService, BuildingTypeService>();

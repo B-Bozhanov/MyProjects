@@ -403,6 +403,9 @@ namespace RealEstate.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("ApplicationUserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<int>("BuildingTypeId")
                         .HasColumnType("int");
 
@@ -455,6 +458,8 @@ namespace RealEstate.Data.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("BuildingTypeId");
 
@@ -712,6 +717,10 @@ namespace RealEstate.Data.Migrations
 
             modelBuilder.Entity("RealEstate.Data.Models.Property", b =>
                 {
+                    b.HasOne("RealEstate.Data.Models.ApplicationUser", "ApplicationUser")
+                        .WithMany("Properties")
+                        .HasForeignKey("ApplicationUserId");
+
                     b.HasOne("RealEstate.Data.Models.BuildingType", "BuildingType")
                         .WithMany("Properties")
                         .HasForeignKey("BuildingTypeId")
@@ -733,6 +742,8 @@ namespace RealEstate.Data.Migrations
                     b.HasOne("RealEstate.Data.Models.UserContact", "UserContact")
                         .WithMany("Properties")
                         .HasForeignKey("UserContactId");
+
+                    b.Navigation("ApplicationUser");
 
                     b.Navigation("BuildingType");
 
@@ -759,6 +770,8 @@ namespace RealEstate.Data.Migrations
                     b.Navigation("Claims");
 
                     b.Navigation("Logins");
+
+                    b.Navigation("Properties");
 
                     b.Navigation("Roles");
                 });

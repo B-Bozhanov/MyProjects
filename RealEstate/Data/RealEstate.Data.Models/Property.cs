@@ -1,6 +1,5 @@
 ﻿namespace RealEstate.Data.Models
 {
-    using System;
     using System.Collections.Generic;
 
     using RealEstate.Data.Common.Models;
@@ -13,7 +12,7 @@
             this.Images = new HashSet<Image>();
 
             this.ExpirationDays = 90; // By default
-            this.Options = PropertyOption.Sale; // By default
+            this.Option = PropertyOption.Sale; // By default
         }
 
         public int Size { get; set; }
@@ -26,7 +25,7 @@
 
         public decimal? Price { get; set; }
 
-        public PropertyOption Options { get; set; }
+        public PropertyOption Option { get; set; }
 
         public int ExpirationDays { get; set; }
 

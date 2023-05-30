@@ -1,11 +1,13 @@
 ﻿namespace RealEstate.Services.Data
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
-    using RealEstate.Data;
+    using Microsoft.EntityFrameworkCore;
+
     using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
@@ -16,19 +18,16 @@
 
     public class PropertyService : IPropertyService
     {
-        private readonly IImageService imageService;
         private readonly IDeletableEntityRepository<Location> locationRepository;
         private readonly IDeletableEntityRepository<Property> propertyRepository;
         private readonly IDeletableEntityRepository<PropertyType> propertyTypeRepository;
         private readonly IDeletableEntityRepository<BuildingType> buildingTypeRepository;
-        private readonly IDeletableEntityRepository<Image> imageRepository;
         private readonly IDeletableEntityRepository<UserContact> userContactsRepository;
         private readonly IDeletableEntityRepository<PopulatedPlace> populatedPlaceRepository;
-        private readonly ApplicationDbContext applicationDbContext;
-        private readonly IImageService imageService1;
+        private readonly IImageService imageService;
 
         public PropertyService(
-              IDeletableEntityRepository<Location> regionRepository,
+              IDeletableEntityRepository<Location> locationRepository,
               IDeletableEntityRepository<Property> propertyRepository,
               IDeletableEntityRepository<PropertyType> propertyTypeRepository,
               IDeletableEntityRepository<BuildingType> buildingTypeRepository,
@@ -37,16 +36,16 @@
               IDeletableEntityRepository<PopulatedPlace> populatedPlaceRepository,
               IImageService imageService)
         {
-            this.locationRepository = regionRepository;
+            this.locationRepository = locationRepository;
             this.propertyRepository = propertyRepository;
             this.propertyTypeRepository = propertyTypeRepository;
             this.buildingTypeRepository = buildingTypeRepository;
-            this.imageRepository = imageRepository;
             this.userContactsRepository = userContactsRepository;
             this.populatedPlaceRepository = populatedPlaceRepository;
+            this.imageService = imageService;
         }
 
-        public async Task Add(AddPropertyViewModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!)
+        public async Task Add(AddPropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!)
         {
             var property = new Property
             {
@@ -58,7 +57,7 @@
                 Price = propertyModel.Price,
                 Description = propertyModel.Description,
                 ExpirationDays = propertyModel.ExpirationDays,
-                Options = propertyModel.Option,
+                Option = propertyModel.Option,
                 PropertyType = this.propertyTypeRepository.All().First(pt => pt.Id == propertyModel.TypeId),
             };
 
@@ -72,11 +71,16 @@
 
             property.BuildingType = dbBuildingType;
 
+            property.ApplicationUser = user;
+
+            if (propertyModel.Images != null)
+            {
+                await this.imageService.Save(propertyModel.Images, property);
+            }
+
             await this.propertyRepository.AddAsync(property);
             await this.propertyRepository.SaveChangesAsync();
         }
-
-        public IEnumerable<Property> Get() => this.propertyRepository.All();
 
         public IEnumerable<PopulatedPlaceViewModel> GetPopulatedPlaces() => this.populatedPlaceRepository
             .All()
@@ -93,5 +97,39 @@
             .OrderBy(p => p.Name)
             .To<LocationViewModel>()
             .ToList();
+
+        public PropertyViewModel GetById(int id)
+            => this.propertyRepository
+                 .AllAsNoTracking()
+                 .Where(p => p.Id == id)
+                 .To<PropertyViewModel>()
+                 .First();
+
+        public IEnumerable<PropertyViewModel> GetTopNewest(int count)
+            => this.propertyRepository
+                 .AllAsNoTracking()
+                 .OrderByDescending(p => p.Id)
+                 .Take(count)
+                 .To<PropertyViewModel>()
+                 .ToArray();
+
+        public IEnumerable<PropertyViewModel> GetTopMostExpensive(int count)
+            => this.propertyRepository
+                 .AllAsNoTracking()
+                 .OrderByDescending(p => p.Price)
+                 .Take(count)
+                 .To<PropertyViewModel>()
+                 .ToArray();
+
+        public int GetAllCount() => this.propertyRepository
+                  .AllAsNoTracking()
+                  .Count();
+
+        public IEnumerable<PropertyViewModel> GetAll()
+            => this.propertyRepository.All()
+                  .AsNoTracking()
+                  .OrderByDescending(p => p.Id)
+                  .To<PropertyViewModel>()
+                  .ToArray();
     }
 }

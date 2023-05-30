@@ -15,7 +15,7 @@
                 return;
             }
 
-            var propertyTypes = this.GetData<PropertyType>(nameof(PropertyType));
+            var propertyTypes = this.GetDataFromJson<PropertyType>(nameof(PropertyType));
 
             await dbContext.PropertyTypes.AddRangeAsync(propertyTypes);
         }

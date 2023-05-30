@@ -11,9 +11,17 @@
 
     public interface IPropertyService
     {
-        Task Add(AddPropertyViewModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!);
+        public int GetAllCount();
 
-        public IEnumerable<Property> Get();
+        public Task Add(AddPropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!);
+
+        public PropertyViewModel GetById(int id);
+
+        public IEnumerable<PropertyViewModel> GetAll();
+
+        public IEnumerable<PropertyViewModel> GetTopNewest(int count);
+
+        public IEnumerable<PropertyViewModel> GetTopMostExpensive(int count);
 
         public IEnumerable<LocationViewModel> GetLocations();
 

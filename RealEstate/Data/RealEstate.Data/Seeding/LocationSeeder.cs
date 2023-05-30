@@ -16,7 +16,7 @@
                 return;
             }
 
-            var locations = this.GetData<Location>(nameof(Location));
+            var locations = this.GetDataFromJson<Location>(nameof(Location));
 
             await AddDataAsync(dbContext, locations);
         }

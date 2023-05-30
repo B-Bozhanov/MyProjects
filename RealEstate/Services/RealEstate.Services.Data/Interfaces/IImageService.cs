@@ -1,12 +1,13 @@
 ﻿namespace RealEstate.Services.Data.Interfaces
 {
-    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Http;
+
     using RealEstate.Data.Models;
 
     public interface IImageService
     {
-        ICollection<Image> GetImages(IFormFileCollection files);
+        public Task Save(IFormFileCollection images, Property property);
     }
 }

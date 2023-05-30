@@ -1,33 +1,63 @@
 ﻿namespace RealEstate.Services.Data
 {
-    using System.Collections.Generic;
+    using System;
     using System.IO;
+    using System.Threading;
+    using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
-
+    using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
 
+    using SixLabors.ImageSharp;
+    using SixLabors.ImageSharp.Formats;
+    using SixLabors.ImageSharp.Formats.Png;
+    using SixLabors.ImageSharp.PixelFormats;
+    using SixLabors.ImageSharp.Processing;
+
+    using static RealEstate.Common.GlobalConstants.Images;
+
     public class ImageService : IImageService
     {
-        public ICollection<Image> GetImages(IFormFileCollection files)
+        private readonly IHostingEnvironment hostingEnvironment;
+        private readonly IDeletableEntityRepository<RealEstate.Data.Models.Image> imageRepository;
+
+        public ImageService(IHostingEnvironment hostingEnvironment, IDeletableEntityRepository<RealEstate.Data.Models.Image> imageRepository)
         {
-            var images = new List<Image>();
+            this.hostingEnvironment = hostingEnvironment;
+            this.imageRepository = imageRepository;
+        }
 
-            if (files != null)
+        public async Task Save(IFormFileCollection images, Property property)
+        {
+            var rootPath = this.hostingEnvironment.WebRootPath;
+            var imagePath = $"{rootPath}{ImagePath}";
+
+            foreach (var image in images)
             {
-                foreach (var file in files)
-                {
-                    var stream = new MemoryStream();
-                    file.CopyTo(stream);
+                var imageExtencion = new FileInfo(image.FileName).Extension;
+                var imageName = $"{Guid.NewGuid()}.{imageExtencion}";
 
-                    var image = new Image { Name = file.Name }; // Content = stream.ToArray() }
+                var dbImage = new RealEstate.Data.Models.Image { Name = imageName };
 
-                    images.Add(image);
-                }
+                dbImage.Property = property;
+
+                var memoryStream = new MemoryStream();
+
+                await image.CopyToAsync(memoryStream);
+
+                var imageToResize = SixLabors.ImageSharp.Image.Load(new ReadOnlySpan<byte>(memoryStream.ToArray()));
+
+                imageToResize.Mutate(x => x.Resize(600, 800, KnownResamplers.Lanczos3));
+
+                using var fileStream = new FileStream($"{imagePath}{imageName}", FileMode.Create);
+
+                imageToResize.Save(fileStream, imageToResize.Metadata.DecodedImageFormat);//Replace Png encoder with the file format of choice
+
+                await this.imageRepository.AddAsync(dbImage);
             }
-
-            return images;
         }
     }
 }

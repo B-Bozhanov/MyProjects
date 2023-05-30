@@ -9,7 +9,7 @@
 
     public abstract class DataSeeder 
     {
-        public IEnumerable<T> GetData<T>(string fileName)
+        public IEnumerable<T> GetDataFromJson<T>(string fileName)
         {
             var json = File.ReadAllText($"{GlobalConstants.SeedDataPath}{fileName}s.json");
 

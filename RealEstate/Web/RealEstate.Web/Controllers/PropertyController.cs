@@ -22,6 +22,7 @@
         private readonly IBuildingTypeService buildingTypeService;
         private readonly IPopulatedPlaceService populatedPlaceService;
         private readonly UserManager<ApplicationUser> userManager;
+        private readonly SignInManager<ApplicationUser> signInManager;
 
         public PropertyController(
             IPropertyService propertyService,
@@ -29,7 +30,8 @@
             ILocationService regionService,
             IBuildingTypeService buildingTypeService,
             IPopulatedPlaceService placeService,
-            UserManager<ApplicationUser> userManager)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             this.propertyService = propertyService;
             this.propertyTypeService = propertyTypeService;
@@ -37,12 +39,13 @@
             this.buildingTypeService = buildingTypeService;
             this.populatedPlaceService = placeService;
             this.userManager = userManager;
+            this.signInManager = signInManager;
         }
 
         [Authorize]
         public IActionResult Add()
         {
-            return this.View(new AddPropertyViewModel
+            return this.View(new AddPropertyInputModel
             {
                 PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>(),
                 Locations = this.locationService.Get<LocationViewModel>(),
@@ -52,17 +55,32 @@
 
         [HttpPost]
         [Authorize]
-        public async Task<IActionResult> Add(AddPropertyViewModel property)
+        public async Task<IActionResult> Add(AddPropertyInputModel property)
         {
             var user = await this.userManager.GetUserAsync(this.User);
 
+            if (this.signInManager.IsSignedIn(this.User))
+            {
+                // TODO:
+            }
+
             if (user == null)
             {
+                // TODO:
             }
 
             await this.propertyService.Add(property, user);
             return this.Redirect("/");
         }
+
+        public IActionResult PropertySingle(int id)
+            => this.View(this.propertyService.GetById(id));
+
+        public IActionResult PropertyGrid()
+            => this.View(new PropertyIntroViewModel
+            {
+                All = this.propertyService.GetAll(),
+            });
 
         [HttpPost]
         public IActionResult GetPopulatedPlaces(int id)

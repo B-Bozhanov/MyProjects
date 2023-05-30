@@ -12,8 +12,8 @@ using RealEstate.Data;
 namespace RealEstate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20230528094946_RelatedAppUserProperty")]
-    partial class RelatedAppUserProperty
+    [Migration("20230528142007_RenameOptionsToOption")]
+    partial class RenameOptionsToOption
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -299,8 +299,11 @@ namespace RealEstate.Data.Migrations
 
             modelBuilder.Entity("RealEstate.Data.Models.Image", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -433,7 +436,7 @@ namespace RealEstate.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Options")
+                    b.Property<int>("Option")
                         .HasColumnType("int");
 
                     b.Property<int>("PopulatedPlaceId")

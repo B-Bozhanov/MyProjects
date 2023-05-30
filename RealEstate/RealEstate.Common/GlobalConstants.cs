@@ -32,5 +32,17 @@
 
             return administrators;
         }
+
+        public static class Images
+        {
+            public const string ImagePath = "/assets/img/Properties/";
+        }
+
+        public static class Properties
+        {
+            public const int TopNewest = 3;
+
+            public const int TopMostExpensive = 4;
+        }
     }
 }

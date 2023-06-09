@@ -5,6 +5,7 @@ namespace RealEstate.Web
     using System;
     using System.Reflection;
 
+    using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
@@ -58,6 +59,18 @@ namespace RealEstate.Web
                     options.MinimumSameSitePolicy = SameSiteMode.None;
                 });
 
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.Cookie.Name = "AutenticationCookie";
+                options.Cookie.HttpOnly = true;
+                options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
+                options.LoginPath = "/Account/Login";
+                // ReturnUrlParameter requires 
+                //using Microsoft.AspNetCore.Authentication.Cookies;
+                options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
+                options.SlidingExpiration = true;
+            });
+
             services.AddControllersWithViews(
                 options =>
                 {
@@ -84,6 +97,7 @@ namespace RealEstate.Web
             services.AddTransient<IBuildingTypeService, BuildingTypeService>();
             services.AddTransient<ILocationService, LocationService>();
             services.AddTransient<IPopulatedPlaceService, PopulatedPlaceService>();
+            services.AddTransient<IAccountService, AccountService>();
         }
 
         private static void Configure(WebApplication app)

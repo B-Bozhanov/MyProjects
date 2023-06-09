@@ -36,13 +36,26 @@
         public static class Images
         {
             public const string ImagePath = "/assets/img/Properties/";
+            public const int Width = 1920;
+            public const int Height = 1080;
         }
 
         public static class Properties
         {
-            public const int TopNewest = 3;
+            public const int TopNewest = 5;
 
-            public const int TopMostExpensive = 4;
+            public const int TopMostExpensive = 3;
+        }
+
+        public static class Account
+        {
+            public const int UsernameMaxLength = 20;
+            public const int UsernameMinLength = 3;
+
+            public static class ErrorMessages
+            {
+                public const string InvalidLogin = "Invalid Login!";
+            }
         }
     }
 }

@@ -73,11 +73,7 @@
 
             property.ApplicationUser = user;
 
-            if (propertyModel.Images != null)
-            {
-                await this.imageService.Save(propertyModel.Images, property);
-            }
-
+            await this.imageService.Add(propertyModel.Images, property);
             await this.propertyRepository.AddAsync(property);
             await this.propertyRepository.SaveChangesAsync();
         }

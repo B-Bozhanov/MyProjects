@@ -1,12 +1,11 @@
 ﻿namespace RealEstate.Web.Controllers
 {
-    using System;
     using System.Diagnostics;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Logging;
 
-    using RealEstate.Data.Common.Repositories;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Web.ViewModels;
     using RealEstate.Web.ViewModels.Property;
@@ -15,17 +14,15 @@
 
     public class HomeController : BaseController
     {
-        private readonly ILogger<HomeController> _logger;
         private readonly IPropertyService propertyService;
 
         public HomeController(
-            ILogger<HomeController> logger,
             IPropertyService propertyService)
         {
-            this._logger = logger;
             this.propertyService = propertyService;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             return this.View(new PropertyIntroViewModel

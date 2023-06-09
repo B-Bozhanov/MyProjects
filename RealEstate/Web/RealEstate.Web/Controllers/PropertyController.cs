@@ -42,7 +42,12 @@
             this.signInManager = signInManager;
         }
 
-        [Authorize]
+        public IActionResult Index()
+           => this.View(new PropertyIntroViewModel
+           {
+               All = this.propertyService.GetAll(),
+           });
+
         public IActionResult Add()
         {
             return this.View(new AddPropertyInputModel
@@ -54,7 +59,6 @@
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Add(AddPropertyInputModel property)
         {
             var user = await this.userManager.GetUserAsync(this.User);
@@ -70,17 +74,12 @@
             }
 
             await this.propertyService.Add(property, user);
-            return this.Redirect("/");
+
+            return this.RedirectToAction(nameof(this.Success));
         }
 
         public IActionResult PropertySingle(int id)
             => this.View(this.propertyService.GetById(id));
-
-        public IActionResult PropertyGrid()
-            => this.View(new PropertyIntroViewModel
-            {
-                All = this.propertyService.GetAll(),
-            });
 
         [HttpPost]
         public IActionResult GetPopulatedPlaces(int id)
@@ -88,6 +87,11 @@
             var populatedPlaces = this.populatedPlaceService.GetPopulatedPlacesByLocationId<PopulatedPlaceViewModel>(id);
 
             return this.Json(new { data = populatedPlaces });
+        }
+
+        public IActionResult Success()
+        {
+            return this.View();
         }
     }
 }

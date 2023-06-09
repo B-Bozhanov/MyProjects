@@ -8,6 +8,6 @@
 
     public interface IImageService
     {
-        public Task Save(IFormFileCollection images, Property property);
+        public Task Add(IFormFileCollection images, Property property);
     }
 }

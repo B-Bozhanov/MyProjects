@@ -448,7 +448,16 @@ namespace RealEstate.Data.Migrations
                     b.Property<int>("Size")
                         .HasColumnType("int");
 
+                    b.Property<int?>("TotalBathRooms")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TotalBedRooms")
+                        .HasColumnType("int");
+
                     b.Property<int?>("TotalFloors")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("TotalGarages")
                         .HasColumnType("int");
 
                     b.Property<string>("UserContactId")

@@ -45,6 +45,11 @@
             public const int TopNewest = 5;
 
             public const int TopMostExpensive = 3;
+
+            public const int MaxGarages = 20;
+            public const int MaxBedRooms = 20;
+            public const int MaxBathRooms = 20;
+            public const int MaxFloors = 150;
         }
 
         public static class Account

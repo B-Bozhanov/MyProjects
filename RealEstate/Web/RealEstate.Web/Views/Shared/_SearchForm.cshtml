@@ -1,0 +1,97 @@
+﻿@model SearchViewModel
+
+@*TODO: Partial view for Locations and populate places!*@
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-9 col-lg-6 col-sm-12 justify-content-center offset-md-2 offset-lg-3">
+            <form method="post" class="form-a" id="searchForm">
+                <div class="row">
+                    <div class="col-md-12 mb-2">
+                        <div class="form-group">
+                            <label asp-for="KeyWord" class="pb-2">Keyword</label>
+                            <input asp-for="KeyWord" class="form-control form-control-lg form-control-a" placeholder="Keyword">
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group mt-3">
+                            <label asp-for=LocationId class="pb-2"></label>
+                            <select asp-for=LocationId class="form-control form-select form-control-a" id="location">
+                                @foreach (var location in Model.Locations)
+                                {
+                                    <option value="@location.Id">@location.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group mt-3">
+                            <label asp-for="PopulatedPlaceId" class="pb-2" id="PopulatedPlaceIdLabel"></label>
+                            <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
+                                <option value="">Select Populated place</option>
+                            </select>
+                            <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group mt-3">
+                            <label asp-for=Type class="pb-2"></label>
+                            <select asp-for=Type class="form-control form-select form-control-a">
+                                <option value="@OptionType.All">@OptionType.All</option>
+                                <option value="@OptionType.ForSale">@OptionType.ForSale</option>
+                                <option value="@OptionType.ForRent">@OptionType.ForRent</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group mt-3">
+                            <label asp-for="BedRooms" class="pb-2"></label>
+                            <select asp-for="BedRooms" class="form-control form-select form-control-a" id="bedrooms">
+                                @for (int i = 0; i <= MaxBedRooms; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group mt-3">
+                            <label asp-for=Garages class="pb-2"></label>
+                            <select asp-for=Garages class="form-control form-select form-control-a" id="garages">
+                                @for (int i = 0; i <= MaxGarages; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group mt-3">
+                            <label asp-for=BathRooms class="pb-2"></label>
+                            <select asp-for=BathRooms class="form-control form-select form-control-a" id="bathrooms">
+                                @for (int i = 0; i <= MaxBathRooms; i++)
+                                {
+                                    <option value="@i">@i</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-2">
+                        <div class="form-group mt-3">
+                            <input asp-for="MinPrice" class="form-control" placeholder="Min price" />
+                        </div>
+                        <div class="form-group mt-3">
+                            <input asp-for="MaxPrice" class="form-control" placeholder="Max price" />
+                        </div>
+                        <br>
+                    </div>
+                    <br>
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-b" asp-controller="Property" asp-action="Search">Search Property</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

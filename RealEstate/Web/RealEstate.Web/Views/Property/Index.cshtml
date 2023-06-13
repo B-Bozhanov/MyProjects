@@ -1,48 +1,53 @@
-﻿@{
+﻿@model SearchViewModel
+
+@{
     ViewData["Title"] = "Property";
 }
-<br />
-<br />
-<br />
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-4">
             <a class="btn btn-outline-success" asp-controller="Property" asp-action="Add" role="button">Add</a>
-            <a class="btn btn-outline-success" asp-controller="Property" asp-action="Search" role="button">Search</a>
+            <button class="btn btn-outline-success" id="Search">Search</button>
         </div>
     </div>
 </div>
 
-<section class="intro-single">
-    <div class="container">
-        <div class="row">
-            <div class="col-md-12 col-lg-8">
-                <div class="title-single-box">
-                    <h1 class="title-single">Our Amazing Properties</h1>
-                    <span class="color-text-a">Grid Properties</span>
-                </div>
+<partial name="_SearchForm" id="test" />
+<br />
+<br />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 col-lg-8">
+            <div class="title-single-box">
+                <h1 class="title-single">Our Amazing Properties</h1>
+                <span class="color-text-a">Grid Properties</span>
             </div>
         </div>
     </div>
-</section>
+</div>
 
 <section class="property-grid grid">
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
                 <div class="grid-option">
-                    <a class="nav-link active" asp-controller="Home" asp-action="Index">Home</a>
-                    <form>
-                        <select class="custom-select">
-                            <option selected>All</option>
-                            <option value="1">New to Old</option>
-                            <option value="2">For Rent</option>
-                            <option value="3">For Sale</option>
+                    <form method="post">
+                        <select class="custom-select" id="optionTypes">
+                            <option value="@Model.CurrentOptioType">@Model.CurrentOptioType</option>
+                            @foreach (var option in Model.OptionTypeModels)
+                            {
+                                if (option.CompareTo(Model.CurrentOptioType) != 0)
+                                {
+                                    <option value="@((int)option)">@option</option>
+                                }
+                            }
                         </select>
                     </form>
                 </div>
             </div>
-            @foreach (var property in Model.All)
+            @foreach (var property in Model.AllProperties)
             {
                 <div class="col-md-4">
                     <div class="card-box-a card-shadow">
@@ -99,3 +104,9 @@
         </div>
     </div>
 </section>
+
+@section Scripts{
+    <script src="~/js/searchFormHider.js"></script>
+    <script src="~/js/propertySorter.js"></script>
+    <script src="~/js/jquery.poplatedPlacesGetter.js"></script>
+}

@@ -94,10 +94,5 @@
 
             return this.RedirectToHome();
         }
-
-        private IActionResult RedirectToHome()
-        {
-            return this.RedirectToAction("Index", "Home");
-        }
     }
 }

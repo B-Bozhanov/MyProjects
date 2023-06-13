@@ -8,15 +8,11 @@ namespace RealEstate.Web
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Identity;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
-    using RealEstate.Data;
+
     using RealEstate.Data;
     using RealEstate.Data.Common;
     using RealEstate.Data.Common.Repositories;
@@ -29,7 +25,6 @@ namespace RealEstate.Web
     using RealEstate.Services.LocationScraperService;
     using RealEstate.Services.Mapping;
     using RealEstate.Services.Messaging;
-    using RealEstate.Services.RegionScraperService;
     using RealEstate.Web.ViewModels;
 
     public class Program
@@ -45,8 +40,8 @@ namespace RealEstate.Web
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(
-                options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<ApplicationDbContext>(options 
+                => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>()
@@ -65,8 +60,7 @@ namespace RealEstate.Web
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
                 options.LoginPath = "/Account/Login";
-                // ReturnUrlParameter requires 
-                //using Microsoft.AspNetCore.Authentication.Cookies;
+                options.LogoutPath = "/Home/Index";
                 options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                 options.SlidingExpiration = true;
             });

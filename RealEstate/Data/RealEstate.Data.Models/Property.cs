@@ -31,6 +31,12 @@
 
         public string Description { get; set; }
 
+        public int? TotalBedRooms { get; set; }
+
+        public int? TotalBathRooms { get; set; }
+
+        public int? TotalGarages { get; set; }
+
         public int PopulatedPlaceId { get; set; }
 
         public virtual PopulatedPlace PopulatedPlace { get; set; }

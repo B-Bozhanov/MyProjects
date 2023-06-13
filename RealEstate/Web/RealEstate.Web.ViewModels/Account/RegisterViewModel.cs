@@ -19,6 +19,7 @@
         public string Password { get; init; }
 
         [Required]
+        [Display(Name = "Confirm Password")]
         [Compare(nameof(this.Password))]
         public string ConfirmPassword { get; init; }
 

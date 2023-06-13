@@ -1,0 +1,27 @@
+﻿@model AddPropertyInputModel
+
+@*Location*@
+<div class="form-group">
+    <h1 style="font-size:large"><label asp-for="LocationId"></label></h1>
+    <select asp-for="LocationId" class="form-select" id="location">
+        <option value="">Select location</option>
+        @foreach (var location in Model.Locations)
+        {
+            <optgroup>
+                <option value="@location.Id">@location.Name</option>
+            </optgroup>
+        }
+    </select>
+    <span asp-validation-for="LocationId" class="text-danger"></span>
+</div>
+<br />
+
+@*PopulatedPlace*@
+<div class="form-group">
+    <h1 style="font-size:large"><label asp-for="PopulatedPlaceId" id="PopulatedPlaceIdLabel"></label></h1>
+    <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
+        <option value="">Select Populated place</option>
+    </select>
+    <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
+</div>
+<br />

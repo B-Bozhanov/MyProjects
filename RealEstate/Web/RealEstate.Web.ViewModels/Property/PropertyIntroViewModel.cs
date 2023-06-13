@@ -9,7 +9,5 @@
         public IEnumerable<PropertyViewModel> Newest { get; init; }
 
         public IEnumerable<PropertyViewModel> MostExpensive { get; init; }
-
-        public IEnumerable<PropertyViewModel> All { get; set; }
     }
 }

@@ -60,6 +60,5 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\assets\img\Properties\" />
-    <Folder Include="wwwroot\seededData\" />
   </ItemGroup>
 </Project>

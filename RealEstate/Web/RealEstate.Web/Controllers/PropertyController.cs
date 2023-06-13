@@ -1,5 +1,8 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Security.Cryptography.Xml;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -13,6 +16,7 @@
     using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.Property;
     using RealEstate.Web.ViewModels.PropertyTypes;
+    using RealEstate.Web.ViewModels.Search;
 
     public class PropertyController : BaseController
     {
@@ -27,7 +31,7 @@
         public PropertyController(
             IPropertyService propertyService,
             IPropertyTypeService propertyTypeService,
-            ILocationService regionService,
+            ILocationService locationService,
             IBuildingTypeService buildingTypeService,
             IPopulatedPlaceService placeService,
             UserManager<ApplicationUser> userManager,
@@ -35,18 +39,25 @@
         {
             this.propertyService = propertyService;
             this.propertyTypeService = propertyTypeService;
-            this.locationService = regionService;
+            this.locationService = locationService;
             this.buildingTypeService = buildingTypeService;
             this.populatedPlaceService = placeService;
             this.userManager = userManager;
             this.signInManager = signInManager;
         }
 
-        public IActionResult Index()
-           => this.View(new PropertyIntroViewModel
-           {
-               All = this.propertyService.GetAll(),
-           });
+        public IActionResult Index(int optionId)
+        {
+            var searchModel = new SearchViewModel
+            {
+                AllProperties = this.propertyService.GetAllByOptionId(optionId),
+                Locations = this.locationService.Get<LocationViewModel>(),
+            };
+
+            searchModel.CurrentOptioType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
+
+            return this.View(searchModel);
+        }
 
         public IActionResult Add()
         {
@@ -76,6 +87,12 @@
             await this.propertyService.Add(property, user);
 
             return this.RedirectToAction(nameof(this.Success));
+        }
+
+        [HttpPost]
+        public IActionResult Search(SearchViewModel searchModel)
+        {
+            return this.View();
         }
 
         public IActionResult PropertySingle(int id)

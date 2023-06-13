@@ -10,5 +10,9 @@
     [Area("Administration")]
     public class AdministrationController : BaseController
     {
+        public IActionResult Indexx()
+        {
+            return this.RedirectToAction("Index", "Home");
+        }
     }
 }

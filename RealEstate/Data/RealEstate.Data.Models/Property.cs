@@ -1,6 +1,7 @@
 ﻿namespace RealEstate.Data.Models
 {
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using RealEstate.Data.Common.Models;
 
@@ -10,6 +11,7 @@
         {
             this.Tags = new HashSet<Tag>();
             this.Images = new HashSet<Image>();
+            this.Details = new HashSet<Detail>();
 
             this.ExpirationDays = 90; // By default
             this.Option = PropertyOption.Sale; // By default
@@ -29,7 +31,7 @@
 
         public int ExpirationDays { get; set; }
 
-        public string Description { get; set; }
+        public string? Description { get; set; }
 
         public int? TotalBedRooms { get; set; }
 
@@ -37,11 +39,11 @@
 
         public int? TotalGarages { get; set; }
 
+        public int? Year { get; set; }
+
         public int PopulatedPlaceId { get; set; }
 
         public virtual PopulatedPlace PopulatedPlace { get; set; }
-
-        public int Year { get; set; }
 
         public int PropertyTypeId { get; set; }
 
@@ -51,6 +53,18 @@
 
         public virtual BuildingType BuildingType { get; set; }
 
+        public int ConditionId { get; set; }
+
+        public virtual Condition Condition { get; set; }
+
+        public int EquipmentId { get; set; }
+
+        public virtual Equipment Equipment { get; set; }
+
+        public int HeatingId { get; set; }
+
+        public virtual Heating Heating { get; set; }
+
         public string UserContactId { get; set; }
 
         public virtual UserContact UserContact { get; set; }
@@ -58,6 +72,8 @@
         public string ApplicationUserId { get; set; }
 
         public virtual ApplicationUser ApplicationUser { get; set; }
+
+        public virtual ICollection<Detail> Details { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
 

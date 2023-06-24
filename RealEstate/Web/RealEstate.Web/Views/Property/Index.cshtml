@@ -35,10 +35,10 @@
                 <div class="grid-option">
                     <form method="post">
                         <select class="custom-select" id="optionTypes">
-                            <option value="@Model.CurrentOptioType">@Model.CurrentOptioType</option>
+                            <option value="@Model.CurrentOptionType">@Model.CurrentOptionType</option>
                             @foreach (var option in Model.OptionTypeModels)
                             {
-                                if (option.CompareTo(Model.CurrentOptioType) != 0)
+                                if (option.CompareTo(Model.CurrentOptionType) != 0)
                                 {
                                     <option value="@((int)option)">@option</option>
                                 }
@@ -60,7 +60,7 @@
                                     <h2 class="card-title-a">
                                         <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id">
                                             @property.PropertyTypeName
-                                            <br /> @property.PopulatedPlace.LocationName
+                                            <br /> @property.PopulatedPlace.Location.Name
                                         </a>
                                     </h2>
                                 </div>

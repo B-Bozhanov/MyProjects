@@ -165,7 +165,7 @@
     "DeletedOn": null,
     "Id": 0,
     "CreatedOn": "0001-01-01T00:00:00",
-    "ModifiedOn": null
+    "ModifiedOn": null,
   },
   {
     "PropertyCategoryTypeId": 2,
@@ -237,7 +237,7 @@
     "DeletedOn": null,
     "Id": 0,
     "CreatedOn": "0001-01-01T00:00:00",
-    "ModifiedOn": null
+    "ModifiedOn": null,
   },
   {
     "PropertyCategoryTypeId": 2,
@@ -249,7 +249,7 @@
     "DeletedOn": null,
     "Id": 0,
     "CreatedOn": "0001-01-01T00:00:00",
-    "ModifiedOn": null
+    "ModifiedOn": null,
   },
   {
     "PropertyCategoryTypeId": 2,

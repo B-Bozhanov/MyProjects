@@ -42,7 +42,7 @@
 
         public decimal? MaxPrice { get; init; }
 
-        public OptionType CurrentOptioType { get; set; }
+        public OptionType CurrentOptionType { get; set; }
 
         public IEnumerable<LocationViewModel> Locations { get; init; }
 

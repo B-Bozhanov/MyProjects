@@ -1,5 +1,7 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System.Security.Claims;
+
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -8,10 +10,20 @@
     {
         protected IActionResult RedirectToHome()
         {
-            var method = nameof(HomeController.Index);
-            var page = nameof(HomeController).Replace("Controller", string.Empty);
+            var action = nameof(HomeController.Index);
+            var controller = nameof(HomeController).Replace("Controller", string.Empty);
 
-            return this.RedirectToAction(method, page);
+            return this.RedirectToAction(action, controller);
         }
+
+        protected IActionResult RedirectToMyProperties()
+        {
+            var action = nameof(AccountController.UserProperty);
+            var controller = nameof(AccountController).Replace("Controller", string.Empty);
+
+            return this.RedirectToAction(action, controller);
+        }
+
+        protected string UserId => this.User.FindFirstValue(ClaimTypes.NameIdentifier);
     }
 }

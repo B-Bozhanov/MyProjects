@@ -3,7 +3,7 @@
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
 
-    public class BuildingTypeModel : IMapFrom<BuildingType>
+    public class BuildingTypeViewModel : IMapFrom<BuildingType>
     {
         public int Id { get; set; }
 

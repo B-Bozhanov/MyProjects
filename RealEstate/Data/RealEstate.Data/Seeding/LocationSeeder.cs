@@ -7,7 +7,7 @@
 
     using RealEstate.Data.Models;
 
-    public class LocationSeeder : DataSeeder, ISeeder
+    internal class LocationSeeder : DataSeeder, ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {

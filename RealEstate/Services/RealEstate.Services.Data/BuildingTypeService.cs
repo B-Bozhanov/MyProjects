@@ -17,13 +17,18 @@
             this.buildingTypeRepository = buildingTypeRepository;
         }
 
-        public IList<T> Get<T>()
-        {
-            return this.buildingTypeRepository
+        public IList<T> Get<T>() 
+            => this.buildingTypeRepository
                 .All()
                 .OrderBy(pt => pt.Name)
                 .To<T>()
                 .ToList();
-        }
+
+        public T GetByProperty<T>(int id)
+            => this.buildingTypeRepository
+            .All()
+            .Where(b => b.Id == id)
+            .To<T>()
+            .FirstOrDefault();
     }
 }

@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Services\RealEstate.Services.Mapping\RealEstate.Services.Mapping.csproj" />
     <ProjectReference Include="..\RealEstate.Data.Common\RealEstate.Data.Common.csproj" />
   </ItemGroup>
   

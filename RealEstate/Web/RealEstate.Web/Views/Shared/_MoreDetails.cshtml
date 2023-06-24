@@ -1,0 +1,57 @@
+﻿@model AddPropertyInputModel
+
+<h1 style="font-size:large">Condition</h1>
+<div class="row">
+    @for (int i = 0; i < Model.BuildingTypes.Count; i++)
+    {
+        <div class="col-4">
+            <input asp-for="Conditions[i].IsChecked" class="form-check-input" />
+            <input asp-for="Conditions[i].Id" type="hidden" />
+            <label class="form-check-label">@Model.Conditions[i].Name</label>
+        </div>
+    }
+    <br />
+    <br />
+</div>
+
+<h1 style="font-size:large">Equipments</h1>
+<div class="row">
+    @for (int i = 0; i < Model.Equipments.Count; i++)
+    {
+        <div class="col-4">
+            <input asp-for="Equipments[i].IsChecked" class="form-check-input" />
+            <input asp-for="Equipments[i].Id" type="hidden" />
+            <label class="form-check-label">@Model.Equipments[i].Name</label>
+        </div>
+    }
+    <br />
+    <br />
+</div>
+
+<h1 style="font-size:large">Heating</h1>
+<div class="row">
+    @for (int i = 0; i < Model.Heatings.Count; i++)
+    {
+        <div class="col-4">
+            <input asp-for="Heatings[i].IsChecked" class="form-check-input" />
+            <input asp-for="Heatings[i].Id" type="hidden" />
+            <label class="form-check-label">@Model.Heatings[i].Name</label>
+        </div>
+    }
+    <br />
+    <br />
+</div>
+
+<h1 style="font-size:large">Details</h1>
+<div class="row">
+    @for (int i = 0; i < Model.Details.Count; i++)
+    {
+        <div class="col-4">
+            <input asp-for="Details[i].IsChecked" class="form-check-input" />
+            <input asp-for="Details[i].Id" type="hidden" />
+            <label class="form-check-label">@Model.Details[i].Name</label>
+        </div>
+    }
+    <br />
+    <br />
+</div>

@@ -1,0 +1,88 @@
+﻿@model IEnumerable<PropertyViewModel>
+
+@{
+    ViewData["Title"] = "My Properties";
+}
+
+<div class="container text-center">
+    <div class="row">
+        <div class="title-single-box">
+            <h1 class="title-single">My Properties</h1>
+        </div>
+    </div>
+</div>
+<br>
+
+<section class="property-grid grid">
+    <div class="container">
+        <div class="row">
+            @foreach (var property in Model)
+            {
+                <div class="col-md-4">
+                    <div class="col-12">
+                            <button class="btn btn-link">
+                                <a asp-controller="Property" asp-action="Edit" asp-route-propertyId = "@property.Id"> 
+                                    <i class="bi bi-pencil link-primary col-3">Edit</i>
+                                </a>
+                            </button>
+
+                        <a asp-controller="Property" asp-action="Edit">
+                            <i class="bi bi-trash3 link-danger col-3"></i>
+                        </a>
+                    </div>
+                    <div class="col-4">
+                    </div>
+                    <br>
+                    <div class="card-box-a card-shadow">
+                        <div class="img-box-a">
+                            <img src="@ImagePath/@property.ImageName" alt="" class="img-a img-fluid">
+                        </div>
+                        <div class="card-overlay">
+                            <div class="card-overlay-a-content">
+                                <div class="card-header-a">
+                                    <h2 class="card-title-a">
+                                        <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id">
+                                            @property.PropertyTypeName
+                                            <br /> @property.PopulatedPlace.Location.Name
+                                        </a>
+                                    </h2>
+                                </div>
+                                <div class="card-body-a">
+                                    <div class="price-box d-flex">
+                                        <span class="price-a">@property.Option | @property.Price</span>
+                                    </div>
+                                    <div class="price-box d-flex">
+                                        <span class="price-a text-bg-danger">Expired after: </span>
+                                    </div>
+                                </div>
+                                <div class="card-footer-a">
+                                    <ul class="card-info d-flex justify-content-around">
+                                        <li>
+                                            <h4 class="card-info-title">Area</h4>
+                                            <span>
+                                                @property.Size<span>m</span>
+                                                <sup>2</sup>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Beds</h4>
+                                            <span>@property.TotalBedRooms</span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Baths</h4>
+                                            <span>@property.TotalBathRooms</span>
+                                        </li>
+                                        <li>
+                                            <h4 class="card-info-title">Garages</h4>
+                                            <span>@property.TotalGarages</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

@@ -1,11 +1,14 @@
 ﻿namespace RealEstate.Data.Seeding
 {
+    using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Threading.Tasks;
 
     using Newtonsoft.Json;
 
     using RealEstate.Common;
+    using RealEstate.Data.Models;
 
     public abstract class DataSeeder 
     {

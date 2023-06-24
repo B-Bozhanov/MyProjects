@@ -17,15 +17,18 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IAccountService accountService;
+        private readonly IPropertyService propertyService;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IAccountService accountService)
+            IAccountService accountService,
+            IPropertyService propertyService)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.accountService = accountService;
+            this.propertyService = propertyService;
         }
 
         [HttpGet]
@@ -94,5 +97,9 @@
 
             return this.RedirectToHome();
         }
+
+        [HttpGet]
+        public async Task<IActionResult> UserProperty()
+            => this.View(await this.propertyService.GetAllByUserId(this.UserId));
     }
 }

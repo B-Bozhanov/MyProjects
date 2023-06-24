@@ -2,6 +2,7 @@
 {
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
+    using RealEstate.Web.ViewModels.Locations;
 
     public class PopulatedPlaceViewModel : IMapFrom<PopulatedPlace>
     {
@@ -9,6 +10,6 @@
 
         public string Name { get; init; }
 
-        public string LocationName { get; init; }
+        public LocationViewModel Location { get; init; }
     }
 }

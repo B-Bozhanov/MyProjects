@@ -11,7 +11,10 @@
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Mapping;
+    using RealEstate.Web.ViewModels.BuildingTypeModel;
+    using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.Property;
+    using RealEstate.Web.ViewModels.PropertyTypes;
     using RealEstate.Web.ViewModels.Search;
 
     public class PropertyService : IPropertyService
@@ -21,6 +24,14 @@
         private readonly IDeletableEntityRepository<BuildingType> buildingTypeRepository;
         private readonly IDeletableEntityRepository<UserContact> userContactsRepository;
         private readonly IDeletableEntityRepository<PopulatedPlace> populatedPlaceRepository;
+        private readonly ILocationService locationService;
+        private readonly IBuildingTypeService buildingTypeService;
+        private readonly IPropertyTypeService propertyTypeService;
+        private readonly IPopulatedPlaceService placeService;
+        private readonly IConditionService conditionService;
+        private readonly IHeatingService heatingService;
+        private readonly IEquipmentService equipmentService;
+        private readonly IDetailService detailService;
         private readonly IImageService imageService;
 
         public PropertyService(
@@ -29,6 +40,14 @@
               IDeletableEntityRepository<BuildingType> buildingTypeRepository,
               IDeletableEntityRepository<UserContact> userContactsRepository,
               IDeletableEntityRepository<PopulatedPlace> populatedPlaceRepository,
+              ILocationService locationService,
+              IBuildingTypeService buildingTypeService,
+              IPropertyTypeService propertyTypeService,
+              IPopulatedPlaceService placeService,
+              IConditionService conditionService,
+              IHeatingService heatingService,
+              IEquipmentService equipmentService,
+              IDetailService detailService,
               IImageService imageService)
         {
             this.propertyRepository = propertyRepository;
@@ -36,6 +55,14 @@
             this.buildingTypeRepository = buildingTypeRepository;
             this.userContactsRepository = userContactsRepository;
             this.populatedPlaceRepository = populatedPlaceRepository;
+            this.locationService = locationService;
+            this.buildingTypeService = buildingTypeService;
+            this.propertyTypeService = propertyTypeService;
+            this.placeService = placeService;
+            this.conditionService = conditionService;
+            this.heatingService = heatingService;
+            this.equipmentService = equipmentService;
+            this.detailService = detailService;
             this.imageService = imageService;
         }
 
@@ -75,12 +102,19 @@
             await this.propertyRepository.SaveChangesAsync();
         }
 
-        public PropertyViewModel GetById(int id)
+        public T GetById<T>(int id)
             => this.propertyRepository
-                 .AllAsNoTracking()
+                 .All()
                  .Where(p => p.Id == id)
-                 .To<PropertyViewModel>()
-                 .First();
+                 .To<T>()
+                 .FirstOrDefault();
+
+        public T GetById<T>(int id, string userId)
+            => this.propertyRepository
+                 .All()
+                 .Where(p => p.Id == id && p.ApplicationUserId == userId)
+                 .To<T>()
+                 .FirstOrDefault();
 
         public IEnumerable<PropertyViewModel> GetTopNewest(int count)
             => this.propertyRepository
@@ -98,7 +132,7 @@
                  .To<PropertyViewModel>()
                  .ToArray();
 
-        public int GetAllCount() 
+        public int GetAllCount()
             => this.propertyRepository
                   .AllAsNoTracking()
                   .Count();
@@ -119,6 +153,47 @@
             return result
                 .To<PropertyViewModel>()
                 .ToArray();
+        }
+
+        public async Task<IEnumerable<PropertyViewModel>> GetAllByUserId(string id)
+            => await this.propertyRepository
+                  .All()
+                  .AsNoTracking()
+                  .Where(p => p.ApplicationUserId == id)
+                  .OrderByDescending(p => p.Id)
+                  .To<PropertyViewModel>()
+                  .ToListAsync();
+
+        public async Task Edit(EditViewModel editModel)
+        {
+            var dbProperty = await this.propertyRepository.All().FirstAsync(p => p.Id == editModel.Id);
+
+            dbProperty.Size = editModel.Size;
+            dbProperty.YardSize = editModel.YardSize;
+            dbProperty.Floor = editModel.Floor;
+            dbProperty.Price = editModel.Price;
+            dbProperty.ExpirationDays = editModel.ExpirationDays;
+            dbProperty.Description = editModel.Description;
+            dbProperty.TotalBedRooms = editModel.TotalBedRooms;
+            dbProperty.TotalBathRooms = editModel.TotalBathRooms;
+            dbProperty.TotalGarages = editModel.TotalGarages;
+            dbProperty.Year = editModel.Year;
+            dbProperty.Option = editModel.Option;
+
+            await this.propertyRepository.SaveChangesAsync();
+        }
+
+        public async Task<AddPropertyInputModel> SetCollectionsAsync(AddPropertyInputModel property)
+        {
+            property.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
+            property.Locations = this.locationService.Get<LocationViewModel>();
+            property.BuildingTypes = this.buildingTypeService.Get<BuildingTypeViewModel>();
+            property.Conditions = await this.conditionService.GetAllAsync();
+            property.Heatings = await this.heatingService.GetAllAsync();
+            property.Details = await this.detailService.GetAllAsync();
+            property.Equipments = await this.equipmentService.GetAllAsync();
+
+            return property;
         }
     }
 }

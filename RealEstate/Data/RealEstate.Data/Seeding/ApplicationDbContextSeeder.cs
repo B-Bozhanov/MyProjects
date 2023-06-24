@@ -33,6 +33,10 @@
                               new RolesSeeder(),
                               new UsersSeeder(),
                               new LocationSeeder(),
+                              new DetailSeeder(),
+                              new EquipmentSeeder(),
+                              new HeatingSeeder(),
+                              new ConditionSeeder(),
                           };
 
             foreach (var seeder in seeders)

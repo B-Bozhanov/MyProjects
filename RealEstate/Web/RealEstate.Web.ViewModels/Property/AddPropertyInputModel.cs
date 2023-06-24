@@ -11,11 +11,15 @@
     using RealEstate.Services.Mapping;
     using RealEstate.Web.Infrastructure.CustomAttributes;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
+    using RealEstate.Web.ViewModels.ConditionModel;
     using RealEstate.Web.ViewModels.ContactModel;
+    using RealEstate.Web.ViewModels.DetailModel;
+    using RealEstate.Web.ViewModels.EquipmentModel;
+    using RealEstate.Web.ViewModels.HeatingModel;
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PropertyTypes;
 
-    public class AddPropertyInputModel : IMapTo<Property>
+    public class AddPropertyInputModel : IMapFrom<Property>
     {
         [Range(0, double.MaxValue, ErrorMessage = "The price can not be negative")]
         public decimal Price { get; set; }
@@ -69,10 +73,18 @@
         [FileExtensions(Extensions = "jpeg, jpg")]
         public IFormFileCollection Images { get; set; }
 
-        public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; init; }
+        public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; set; }
 
-        public IList<BuildingTypeModel> BuildingTypes { get; set; }
+        public IEnumerable<LocationViewModel> Locations { get; set; }
 
-        public IEnumerable<LocationViewModel> Locations { get; init; }
+        public IList<BuildingTypeViewModel> BuildingTypes { get; set; }
+
+        public IList<ConditionViewModel> Conditions { get; set; }
+
+        public IList<EquipmentViewModel> Equipments { get; set; }
+
+        public IList<DetailViewModel> Details { get; set; }
+
+        public IList<HeatingViewModel> Heatings { get; set; }
     }
 }

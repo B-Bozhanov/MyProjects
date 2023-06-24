@@ -6,9 +6,24 @@
 
 <div class="text-center">Total properties : @Model.GetAllCount</div>
 <br />
+<div class="row">
+    <div class="col-md-12">
+        <div class="title-wrap d-flex justify-content-between">
+            <div class="title-box">
+                <h2 class="title-a">Newest Properties</h2>
+            </div>
+            <div class="title-link">
+                <a asp-controller="Property" asp-action="Index">
+                    All Property
+                    <span class="bi bi-chevron-right"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 <div class="intro intro-carousel swiper position-relative">
     <div class="swiper-wrapper">
-        @foreach (var property in Model.MostExpensive)
+        @foreach (var property in Model.Newest)
         {
             <div class="swiper-slide carousel-item-a intro-item bg-image" style="background-image: url(@ImagePath/@property.ImageName)">
                 <div class="overlay overlay-a"></div>
@@ -19,7 +34,7 @@
                                 <div class="col-lg-8">
                                     <div class="intro-body">
                                         <p class="intro-title-top">
-                                            @property.PopulatedPlace.Name, @property.PopulatedPlace.LocationName
+                                            @property.PopulatedPlace.Name, @property.PopulatedPlace.Location.Name
                                             <br> 78345
                                         </p>
                                         <h1 class="intro-title mb-4 ">
@@ -47,10 +62,10 @@
             <div class="col-md-12">
                 <div class="title-wrap d-flex justify-content-between">
                     <div class="title-box">
-                        <h2 class="title-a">Latest Properties</h2>
+                        <h2 class="title-a">Most Expensive Properties</h2>
                     </div>
                     <div class="title-link">
-                        <a href="property-grid.html">
+                        <a asp-controller="Property" asp-action="Index">
                             All Property
                             <span class="bi bi-chevron-right"></span>
                         </a>
@@ -61,7 +76,7 @@
 
         <div id="property-carousel" class="swiper">
             <div class="swiper-wrapper">
-                @foreach (var property in Model.Newest)
+                @foreach (var property in Model.MostExpensive)
                 {
                     <div class="carousel-item-b swiper-slide">
                         <div class="card-box-a card-shadow">
@@ -74,7 +89,7 @@
                                         <h2 class="card-title-a">
                                             <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id">
                                                 @property.PropertyTypeName
-                                                <br /> @property.PopulatedPlace.LocationName
+                                                <br /> @property.PopulatedPlace.Location.Name
                                             </a>
                                         </h2>
                                     </div>

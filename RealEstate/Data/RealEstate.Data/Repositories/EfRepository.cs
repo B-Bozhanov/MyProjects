@@ -23,7 +23,7 @@
 
         public virtual IQueryable<TEntity> All() => this.DbSet;
 
-        public virtual IQueryable<TEntity> AllAsNoTracking() => this.DbSet.AsNoTracking();
+        public virtual IQueryable<TEntity> AllAsNoTracking() => this.DbSet.AsTracking();
 
         public virtual Task AddAsync(TEntity entity) => this.DbSet.AddAsync(entity).AsTask();
 

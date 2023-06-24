@@ -55,90 +55,28 @@
                 <br />
 
                 @*Details*@
-                <h1 style="font-size:large">Detail info </h1>
-                <br />
-                <div class="row">
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="Size"></label></h1>
-                        <input asp-for="Size" class="form-control">
-                        <span asp-validation-for="Size" class="text-danger"></span>
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="Year"></label></h1>
-                        <input asp-for="Year" class="form-control">
-                        <span asp-validation-for="Year" class="text-danger"></span>
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="Floor"></label></h1>
-                        <select asp-for="Floor" class="form-select">
-                            @for (int i = 0; i <= 100; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="TotalFloors"></label></h1>
-                        <select asp-for="TotalFloors" class="form-select">
-                            @for (int i = 0; i <= 100; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="TotalBedRooms"></label></h1>
-                        <select asp-for="TotalBedRooms" class="form-select">
-                            @for (int i = 0; i <= 15; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="TotalBathRooms"></label></h1>
-                        <select asp-for="TotalBathRooms" class="form-select">
-                            @for (int i = 0; i <= 15; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="TotalGarages"></label></h1>
-                        <select asp-for="TotalGarages" class="form-select">
-                            @for (int i = 0; i <= 15; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                </div>
-
+                <partial name="_Details" model="Model" />
                 <br />
                 <br />
 
                 @*Building types*@
                 <h1 style="font-size:large">Building Type</h1>
                 <div class="row">
-                    @for (int i = 0; i < Model.BuildingTypes.Count(); i++)
+                    @for (int i = 0; i < Model.BuildingTypes.Count; i++)
                     {
                         <div class="col">
-                            <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
+                            <input asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
+                            <input asp-for="BuildingTypes[i].Id" type="hidden" />
                             <label class="form-check-label">@Model.BuildingTypes[i].Name</label>
-                            <input type="hidden" asp-for="BuildingTypes[i].Id" />
-                            <input type="hidden" asp-for="BuildingTypes[i].Name" />
-                            <input type="hidden" asp-for="BuildingTypes[i].IsChecked" />
                         </div>
                     }
                     <br />
                     <br />
                 </div>
+                <br />
+                <br />
+
+                <partial name="_MoreDetails" model="Model" />
                 <br />
                 <br />
 
@@ -208,7 +146,6 @@
                         <span asp-validation-for="ContactModel.PhoneNumber" class="text-danger"></span>
                     </div>
                 </div>
-
 
                 @*Buttons*@
                 <br />

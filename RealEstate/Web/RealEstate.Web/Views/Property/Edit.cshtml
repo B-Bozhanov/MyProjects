@@ -1,0 +1,265 @@
+﻿@model EditViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6 col-sm-12 offset-sm-3">
+            <form class="form-group" method="post" >
+                <div class="title-box-d offset-4">
+                    <h3 class="title-d"> @ViewData["Title"]</h3>
+                </div>
+                <div asp-validation-summary=All class="text-danger"></div>
+
+                @*Type*@
+                <div class="form-group">
+                    <h1 style="font-size:large"><label asp-for="PropertyTypeId" class="form-label"></label></h1>
+                    <select asp-for="PropertyTypeId" class="form-select">
+                        <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+                        @* <option value="@Model.PropertyTypeId"></option>*@
+                        @foreach (var type in Model.PropertyTypes)
+                        {
+                            <option value="@type.Id">@type.Name</option>
+                        }
+
+                    </select>
+                </div>
+                <br />
+
+                @*Location*@
+                <div class="form-group">
+                    <h1 style="font-size:large"><label asp-for="LocationId"></label></h1>
+                    <select asp-for="LocationId" class="form-select" id="location">
+                        <option value="@Model.LocationId">@Model.PopulatedPlace.Location.Name</option>
+                        @foreach (var location in Model.Locations)
+                        {
+                            <optgroup>
+                                <option value="@location.Id">@location.Name</option>
+                            </optgroup>
+                        }
+                    </select>
+                    <span asp-validation-for="LocationId" class="text-danger"></span>
+                </div>
+                <br />
+
+                @*PopulatedPlace*@
+                <div class="form-group">
+                    <h1 style="font-size:large"><label asp-for="PopulatedPlaceId" id="PopulatedPlaceIdLabel"></label></h1>
+                    <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
+                        @foreach (var place in Model.PopulatedPlace.Location.PopulatedPlaces)
+                        {
+                            <optgroup>
+                                <option value="@place.Id">@place.Name</option>
+                            </optgroup>
+                        }
+                    </select>
+                    <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
+                </div>
+                <br />
+
+                @*Details*@
+                <h1 style="font-size:large">Detail info </h1>
+                <br />
+                <div class="row">
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="Size"></label></h1>
+                        <input asp-for="Size" class="form-control">
+                        <span asp-validation-for="Size" class="text-danger"></span>
+                    </div>
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="Year"></label></h1>
+                        <input asp-for="Year" class="form-control">
+                        <span asp-validation-for="Year" class="text-danger"></span>
+                    </div>
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="Floor"></label></h1>
+                        <select asp-for="Floor" class="form-select">
+                            @for (int i = 0; i <= 100; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        <br />
+                    </div>
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="TotalFloors"></label></h1>
+                        <select asp-for="TotalFloors" class="form-select">
+                            @for (int i = 0; i <= 100; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        <br />
+                    </div>
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="TotalBedRooms"></label></h1>
+                        <select asp-for="TotalBedRooms" class="form-select">
+                            @for (int i = 0; i <= 15; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        <br />
+                    </div>
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="TotalBathRooms"></label></h1>
+                        <select asp-for="TotalBathRooms" class="form-select">
+                            @for (int i = 0; i <= 15; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        <br />
+                    </div>
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="TotalGarages"></label></h1>
+                        <select asp-for="TotalGarages" class="form-select">
+                            @for (int i = 0; i <= 15; i++)
+                            {
+                                <option value="@i">@i</option>
+                            }
+                        </select>
+                        <br />
+                    </div>
+                </div>
+
+                <br />
+                <br />
+
+                @*Building types*@
+                <h1 style="font-size:large">Building Type</h1>
+                <div class="row">
+                    @for (int i = 0; i < Model.BuildingTypes.Count(); i++)
+                    {
+                        <div class="col">
+                            <label class="form-check-label">@Model.BuildingTypes[i].Name</label>
+                            @*
+                                TODO: If clicked 2 building types then we havea bug!
+                            *@
+                            @if (Model.BuildingType != null)
+                            {
+                                if (Model.BuildingTypes[i].Id == Model.BuildingType.Id)
+                                {
+                                    <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" checked />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
+                                }
+                            }
+                            else
+                            {
+                                if (Model.BuildingTypes[i].IsChecked)
+                                {
+                                    <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" checked />
+                                }
+                                else
+                                {
+                                    <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
+                                }
+                            }
+                            <input type="hidden" asp-for="BuildingTypes[i].Id" />
+                            <input type="hidden" asp-for="BuildingTypes[i].Name" />
+                            <input type="hidden" asp-for="BuildingTypes[i].IsChecked" />
+                        </div>
+                    }
+                    <br />
+                    <br />
+                </div>
+                <br />
+                <br />
+
+                @*Description*@
+                <div class="form-group">
+                    <h1 style="font-size:large"><label asp-for="Description"></label></h1>
+                    <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
+                </div>
+                <br />
+                <br />
+                <div class="form-group">
+                    <h1 style="font-size:large"><label asp-for="Option"></label></h1>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
+                        <label class="form-check-label">Sale</label>
+                    </div>
+                    <div class="form-check-inline">
+                        <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
+                        <label class="form-check-label">Rent</label>
+                    </div>
+                </div>
+                <br />
+                <div class="col-3">
+
+                    @*Price*@
+                    <h1 style="font-size:large"><label asp-for="Price"></label></h1>
+                    <input asp-for="Price" class="form-control" placeholder="Set price" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <br />
+
+                @*Expiration Date*@
+                <div class="col-3">
+                    <h1 style="font-size:large"><label asp-for="ExpirationDays"></label></h1>
+                    <select class="form-select" asp-for="ExpirationDays">
+                        <option value="30">30 days</option>
+                        <option value="60">60 days</option>
+                        <option value="90">90 days</option>
+                    </select>
+                    <span asp-validation-for="ExpirationDays" class="text-danger"></span>
+                </div>
+                <br />
+
+                @*Buttons*@
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <input type="file" class="a" name="images" multiple />
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-md-12">
+                        <button asp-controller="Property" asp-action="Edit" type="submit" class="btn btn-b">Save</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script>
+        $('#location').change(function () {
+            var id = $(this).val();
+
+            $.ajax({
+                type: 'POST',
+                dataType: "JSON",
+                url: "/Property/GetPopulatedPlaces",
+                cors: true,
+                data: { id: id },
+                success:
+                    function (response) {
+                        var markup;
+
+                        for (var i = 0; i < response.data.length; i++) {
+
+                            markup += " <option value=" + response.data[i].id + ">" + response.data[i].name + "</option>";
+                        }
+
+                        $("#PopulatedPlaceId").prop("disabled", false);
+
+                        markup += "<br />";
+                        $("#PopulatedPlaceId").html(markup);
+                    },
+                error:
+                    function (response) {
+
+                    }
+            });
+        });
+
+    </script>
+}

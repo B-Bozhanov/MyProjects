@@ -28,6 +28,14 @@
 
         public DbSet<PropertyType> PropertyTypes { get; set; }
 
+        public DbSet<Condition> Condition { get; set; }
+
+        public DbSet<Equipment> Equipment { get; set; }
+
+        public DbSet<Heating> Heating { get; set; }
+
+        public DbSet<Detail> Details { get; set; }
+
         public DbSet<PropertyCategoryType> PropertyCategoryTypes { get; set; }
 
         public DbSet<Tag> Tags { get; set; }

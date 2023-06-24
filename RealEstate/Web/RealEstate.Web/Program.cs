@@ -75,23 +75,9 @@ namespace RealEstate.Web
 
             services.AddSingleton(configuration);
 
-            // Data repositories
-            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
-            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
-            services.AddScoped<IDbQueryRunner, DbQueryRunner>();
-
-            // Application services
-            services.AddTransient<IEmailSender, NullMessageSender>();
-            services.AddTransient<ISettingsService, SettingsService>();
-            services.AddTransient<IPropertyService, PropertyService>();
-            services.AddTransient<IImageService, ImageService>();
-            services.AddTransient<IRegionScraperService, LocationScraperService>();
-            services.AddTransient<ILocationService, LocationService>();
-            services.AddTransient<IPropertyTypeService, PropertyTypeService>();
-            services.AddTransient<IBuildingTypeService, BuildingTypeService>();
-            services.AddTransient<ILocationService, LocationService>();
-            services.AddTransient<IPopulatedPlaceService, PopulatedPlaceService>();
-            services.AddTransient<IAccountService, AccountService>();
+            ConfigureRepositorues(services);
+            ConfigureApplicationServices(services);
+           
         }
 
         private static void Configure(WebApplication app)
@@ -132,6 +118,32 @@ namespace RealEstate.Web
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+        }
+
+        private static void ConfigureRepositorues(IServiceCollection services)
+        {
+            services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
+            services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
+            services.AddScoped<IDbQueryRunner, DbQueryRunner>();
+        }
+
+        private static void ConfigureApplicationServices(IServiceCollection services)
+        {
+            services.AddScoped<IEmailSender, NullMessageSender>();
+            services.AddScoped<ISettingsService, SettingsService>();
+            services.AddScoped<IPropertyService, PropertyService>();
+            services.AddScoped<IImageService, ImageService>();
+            services.AddScoped<IRegionScraperService, LocationScraperService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IPropertyTypeService, PropertyTypeService>();
+            services.AddScoped<IBuildingTypeService, BuildingTypeService>();
+            services.AddScoped<ILocationService, LocationService>();
+            services.AddScoped<IPopulatedPlaceService, PopulatedPlaceService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<IConditionService, ConditionService>();
+            services.AddScoped<IEquipmentService, EquipmentService>();
+            services.AddScoped<IHeatingService, HeatingService>();
+            services.AddScoped<IDetailService, DetailService>();
         }
     }
 }

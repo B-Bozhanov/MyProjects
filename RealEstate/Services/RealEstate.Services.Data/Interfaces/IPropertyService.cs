@@ -13,12 +13,20 @@
 
         public Task Add(AddPropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!);
 
-        public PropertyViewModel GetById(int id);
+        public Task Edit(EditViewModel editModel);
+
+        public T GetById<T>(int id);
+
+        public T GetById<T>(int id, string userId);
+
+        public Task<IEnumerable<PropertyViewModel>> GetAllByUserId(string id);
 
         public IEnumerable<PropertyViewModel> GetAllByOptionId(int optionId);
 
         public IEnumerable<PropertyViewModel> GetTopNewest(int count);
 
         public IEnumerable<PropertyViewModel> GetTopMostExpensive(int count);
+
+        public Task<AddPropertyInputModel> SetCollectionsAsync(AddPropertyInputModel property);
     }
 }

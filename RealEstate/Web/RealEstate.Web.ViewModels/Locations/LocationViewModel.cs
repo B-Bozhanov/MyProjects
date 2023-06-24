@@ -12,6 +12,6 @@
 
         public string Name { get; set; }
 
-        public ICollection<PopulatedPlaceViewModel> Places { get; set; }
+        public ICollection<PopulatedPlaceViewModel> PopulatedPlaces { get; set; }
     }
 }

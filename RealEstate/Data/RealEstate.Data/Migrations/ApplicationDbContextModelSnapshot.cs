@@ -22,6 +22,21 @@ namespace RealEstate.Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("DetailProperty", b =>
+                {
+                    b.Property<int>("DetailsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PropertiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DetailsId", "PropertiesId");
+
+                    b.HasIndex("PropertiesId");
+
+                    b.ToTable("DetailProperty");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.Property<int>("Id")
@@ -294,6 +309,129 @@ namespace RealEstate.Data.Migrations
                     b.ToTable("BuildingTypes");
                 });
 
+            modelBuilder.Entity("RealEstate.Data.Models.Condition", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Condition");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Models.Detail", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Details");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Models.Equipment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Equipment");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Models.Heating", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("DeletedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime?>("ModifiedOn")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IsDeleted");
+
+                    b.ToTable("Heating");
+                });
+
             modelBuilder.Entity("RealEstate.Data.Models.Image", b =>
                 {
                     b.Property<int>("Id")
@@ -412,6 +550,9 @@ namespace RealEstate.Data.Migrations
                     b.Property<int>("BuildingTypeId")
                         .HasColumnType("int");
 
+                    b.Property<int>("ConditionId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
@@ -421,13 +562,22 @@ namespace RealEstate.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("EquipmentId")
+                        .HasColumnType("int");
+
                     b.Property<int>("ExpirationDays")
                         .HasColumnType("int");
 
                     b.Property<int?>("Floor")
                         .HasColumnType("int");
 
+                    b.Property<int>("HeatingId")
+                        .HasColumnType("int");
+
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsForLiving")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
@@ -466,7 +616,7 @@ namespace RealEstate.Data.Migrations
                     b.Property<int?>("YardSize")
                         .HasColumnType("int");
 
-                    b.Property<int>("Year")
+                    b.Property<int?>("Year")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -474,6 +624,12 @@ namespace RealEstate.Data.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("BuildingTypeId");
+
+                    b.HasIndex("ConditionId");
+
+                    b.HasIndex("EquipmentId");
+
+                    b.HasIndex("HeatingId");
 
                     b.HasIndex("IsDeleted");
 
@@ -639,6 +795,21 @@ namespace RealEstate.Data.Migrations
                     b.ToTable("UsersContacts");
                 });
 
+            modelBuilder.Entity("DetailProperty", b =>
+                {
+                    b.HasOne("RealEstate.Data.Models.Detail", null)
+                        .WithMany()
+                        .HasForeignKey("DetailsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RealEstate.Data.Models.Property", null)
+                        .WithMany()
+                        .HasForeignKey("PropertiesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("RealEstate.Data.Models.ApplicationRole", null)
@@ -739,6 +910,24 @@ namespace RealEstate.Data.Migrations
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("RealEstate.Data.Models.Condition", "Condition")
+                        .WithMany("Properties")
+                        .HasForeignKey("ConditionId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RealEstate.Data.Models.Equipment", "Equipment")
+                        .WithMany("Properties")
+                        .HasForeignKey("EquipmentId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RealEstate.Data.Models.Heating", "Heating")
+                        .WithMany("Properties")
+                        .HasForeignKey("HeatingId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("RealEstate.Data.Models.PopulatedPlace", "PopulatedPlace")
                         .WithMany("Properties")
                         .HasForeignKey("PopulatedPlaceId")
@@ -758,6 +947,12 @@ namespace RealEstate.Data.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("BuildingType");
+
+                    b.Navigation("Condition");
+
+                    b.Navigation("Equipment");
+
+                    b.Navigation("Heating");
 
                     b.Navigation("PopulatedPlace");
 
@@ -789,6 +984,21 @@ namespace RealEstate.Data.Migrations
                 });
 
             modelBuilder.Entity("RealEstate.Data.Models.BuildingType", b =>
+                {
+                    b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Models.Condition", b =>
+                {
+                    b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Models.Equipment", b =>
+                {
+                    b.Navigation("Properties");
+                });
+
+            modelBuilder.Entity("RealEstate.Data.Models.Heating", b =>
                 {
                     b.Navigation("Properties");
                 });

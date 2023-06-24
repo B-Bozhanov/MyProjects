@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using System.Threading.Tasks;
 
     using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
@@ -31,5 +32,12 @@
             .OrderBy(p => p.Name)
             .To<T>()
             .ToList();
+
+        public T GetPopulatedPlacesByProperty<T>(int propertyId)
+           => this.populatedPlaceRepository
+           .All()
+           .Where(p => p.Id == propertyId)
+           .To<T>()
+           .FirstOrDefault();
     }
 }

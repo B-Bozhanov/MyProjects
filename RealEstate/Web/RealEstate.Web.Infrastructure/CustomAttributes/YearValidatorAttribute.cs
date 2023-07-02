@@ -3,6 +3,8 @@
     using System;
     using System.ComponentModel.DataAnnotations;
 
+    using static RealEstate.Common.GlobalConstants.Properties;
+
     public class YearValidatorAttribute : ValidationAttribute
     {
         public YearValidatorAttribute()
@@ -13,16 +15,19 @@
         public YearValidatorAttribute(int minYear) 
             : this()
         {
-            this.MinYear = minYear;
+           MinYear = minYear;
         }
-
-        public int MinYear { get; init; } = 1800;
 
         public override bool IsValid(object value)
         {
+            if (value == null)
+            {
+                return true;
+            }
+
             if (value is int intValue)
             {
-                if (intValue >= 1800 && intValue <= DateTime.Now.Year)
+                if ((intValue >= MinYear && intValue <= DateTime.UtcNow.Year))
                 {
                     return true;
                 }

@@ -3,8 +3,11 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using Hangfire;
+
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Logging;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
@@ -28,6 +31,7 @@
         private readonly IDetailService detailService;
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly IBackgroundJobClient backgroundJobClient;
 
         public PropertyController(
             IPropertyService propertyService,
@@ -36,7 +40,7 @@
             IBuildingTypeService buildingTypeService,
             IPopulatedPlaceService placeService,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager, IBackgroundJobClient backgroundJobClient)
         {
             this.propertyService = propertyService;
             this.propertyTypeService = propertyTypeService;
@@ -45,6 +49,7 @@
             this.populatedPlaceService = placeService;
             this.userManager = userManager;
             this.signInManager = signInManager;
+            this.backgroundJobClient = backgroundJobClient;
         }
 
         [HttpGet]
@@ -63,10 +68,10 @@
 
         [HttpGet]
         public async Task<IActionResult> Add() 
-         => this.View(await this.propertyService.SetCollectionsAsync(new AddPropertyInputModel()));
-        
+            => this.View(await this.propertyService.SetCollectionsAsync(new PropertyInputModel()));
+
         [HttpPost]
-        public async Task<IActionResult> Add(AddPropertyInputModel property)
+        public async Task<IActionResult> Add(PropertyInputModel property)
         {
             this.PropertyValidator(property);
 
@@ -77,19 +82,20 @@
 
             var user = await this.userManager.GetUserAsync(this.User);
 
-            await this.propertyService.Add(property, user);
+            await this.propertyService.AddAsync(property, user);
 
             return this.RedirectToAction(nameof(this.Success));
         }
-
+        
         [HttpPost]
         public IActionResult Search(SearchViewModel searchModel)
         {
             return this.View();
         }
 
+        [HttpGet]
         public IActionResult PropertySingle(int id)
-            => this.View(this.propertyService.GetById<PropertyViewModel>(id));
+            => this.View(this.propertyService.GetByIdAsync<PropertyViewModel>(id));
 
         [HttpPost]
         public IActionResult GetPopulatedPlaces(int id)
@@ -107,11 +113,11 @@
         [HttpGet]
         public async Task<IActionResult> Edit(int propertyId)
         {
-            var editModel = this.propertyService.GetById<EditViewModel>(propertyId, this.UserId);
+            var editModel = await this.propertyService.GetByIdAsync<PropertyEditViewModel>(propertyId, this.UserId);
 
             if (editModel == null)
             {
-                return this.NotFound();
+                return this.NotFound(editModel);
             }
 
             editModel.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
@@ -124,15 +130,16 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(EditViewModel editModel)
+        public async Task<IActionResult> Edit(PropertyEditViewModel editModel)
         {
+            if (!await this.propertyService.IsUserProperty(editModel.Id, this.UserId))
+            {
+                return this.NotFound();
+            }
+
             if (editModel.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
             {
                 this.ModelState.AddModelError("", "Canot check more than one building type!");
-            }
-            if (editModel.BuildingTypes.All(b => !b.IsChecked))
-            {
-                this.ModelState.AddModelError("", "Building type is required!");
             }
 
             if (!this.ModelState.IsValid)
@@ -147,12 +154,17 @@
                 return this.View(editModel);
             }
 
+            if (editModel.ExpirationDays != 0)
+            {
+                editModel.IsExpirationDaysModified = true;
+            }
+
             await this.propertyService.Edit(editModel);
 
             return this.RedirectToMyProperties();
         }
 
-        private void PropertyValidator(AddPropertyInputModel property)
+        private void PropertyValidator(PropertyInputModel property)
         {
             if (property.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
             {
@@ -161,16 +173,6 @@
             else if (property.BuildingTypes.All(b => !b.IsChecked))
             {
                 this.ModelState.AddModelError("", "Building type is required!");
-            }
-
-            if (property.Conditions.Where(c => c.IsChecked).Count() > 2)
-            {
-                this.ModelState.AddModelError("", "Canot check more than one building type!");
-            }
-
-            if (property.Equipments.Where(e => e.IsChecked).Count() > 1)
-            {
-                this.ModelState.AddModelError("", "Canot check more than one building type!");
             }
         }
     }

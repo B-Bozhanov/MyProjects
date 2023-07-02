@@ -11,15 +11,11 @@
     {
         public int GetAllCount();
 
-        public Task Add(AddPropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!);
+        public Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!);
 
-        public Task Edit(EditViewModel editModel);
+        public Task Edit(PropertyEditViewModel editModel);
 
-        public T GetById<T>(int id);
-
-        public T GetById<T>(int id, string userId);
-
-        public Task<IEnumerable<PropertyViewModel>> GetAllByUserId(string id);
+        public Task<IEnumerable<PropertyViewModel>> GetPaginationByUserId(string id, int page);
 
         public IEnumerable<PropertyViewModel> GetAllByOptionId(int optionId);
 
@@ -27,6 +23,12 @@
 
         public IEnumerable<PropertyViewModel> GetTopMostExpensive(int count);
 
-        public Task<AddPropertyInputModel> SetCollectionsAsync(AddPropertyInputModel property);
+        public Task<T> GetByIdAsync<T>(int id);
+
+        public Task<T> GetByIdAsync<T>(int id, string userId);
+
+        public Task<bool> IsUserProperty(int propertyId, string userId);
+
+        public Task<PropertyInputModel> SetCollectionsAsync(PropertyInputModel property);
     }
 }

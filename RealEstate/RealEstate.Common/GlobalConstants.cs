@@ -1,5 +1,6 @@
 ﻿namespace RealEstate.Common
 {
+    using System;
     using System.Collections.Generic;
 
     public static class GlobalConstants
@@ -12,6 +13,7 @@
 
         public const string Layout = "_Theme1";
 
+        // TODO: Move administrators data to json in data folder
         public static List<Administrator> GetAdministrators()
         {
             var administrators = new List<Administrator>
@@ -35,7 +37,7 @@
 
         public static class Images
         {
-            public const string ImagePath = "/assets/img/Properties/";
+            public const string PropertyImagesPath = "/assets/img/Properties/";
             public const int Width = 1920;
             public const int Height = 1080;
         }
@@ -50,6 +52,16 @@
             public const int MaxBedRooms = 20;
             public const int MaxBathRooms = 20;
             public const int MaxFloors = 150;
+
+            public static int MinYear = 1800;
+
+            public const int PropertiesPerPage = 12;
+            //public const string YearErrorMessage = $"The must be in range {MinYear} and {DateTime.UtcNow.Year}";
+
+            public static class ErrorMessages
+            {
+                public const string Test = "Test";
+            }
         }
 
         public static class Account

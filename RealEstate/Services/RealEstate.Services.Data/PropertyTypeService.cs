@@ -20,7 +20,8 @@
         public IEnumerable<T> Get<T>()
             => this.propertyTypeRepository
                 .All()
-                .OrderBy(pt => pt.Name)
+                .OrderBy(pt => pt.PropertyCategoryTypeId)
+                .ThenBy(pt => pt.Name)
                 .To<T>()
                 .ToList();
     }

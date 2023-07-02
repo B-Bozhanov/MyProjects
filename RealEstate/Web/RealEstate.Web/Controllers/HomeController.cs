@@ -25,6 +25,7 @@
         [AllowAnonymous]
         public IActionResult Index()
         {
+            var Newest = this.propertyService.GetTopNewest(TopNewest);
             return this.View(new PropertyIntroViewModel
             {
                 GetAllCount = this.propertyService.GetAllCount(),

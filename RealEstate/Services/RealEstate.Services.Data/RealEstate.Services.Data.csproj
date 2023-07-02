@@ -18,6 +18,9 @@
 		<PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.435" PrivateAssets="all">
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
 		</PackageReference>
+		<PackageReference Include="Hangfire.Core" Version="1.8.*" />
+		<PackageReference Include="Hangfire.SqlServer" Version="1.8.*" />
+		<PackageReference Include="Hangfire.AspNetCore" Version="1.8.*" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -17,10 +17,25 @@ namespace RealEstate.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.5")
+                .HasAnnotation("ProductVersion", "7.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+
+            modelBuilder.Entity("ConditionProperty", b =>
+                {
+                    b.Property<int>("ConditionsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PropertiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ConditionsId", "PropertiesId");
+
+                    b.HasIndex("PropertiesId");
+
+                    b.ToTable("ConditionProperty");
+                });
 
             modelBuilder.Entity("DetailProperty", b =>
                 {
@@ -35,6 +50,36 @@ namespace RealEstate.Data.Migrations
                     b.HasIndex("PropertiesId");
 
                     b.ToTable("DetailProperty");
+                });
+
+            modelBuilder.Entity("EquipmentProperty", b =>
+                {
+                    b.Property<int>("EquipmentsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PropertiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("EquipmentsId", "PropertiesId");
+
+                    b.HasIndex("PropertiesId");
+
+                    b.ToTable("EquipmentProperty");
+                });
+
+            modelBuilder.Entity("HeatingProperty", b =>
+                {
+                    b.Property<int>("HeatingsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PropertiesId")
+                        .HasColumnType("int");
+
+                    b.HasKey("HeatingsId", "PropertiesId");
+
+                    b.HasIndex("PropertiesId");
+
+                    b.ToTable("HeatingProperty");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -434,11 +479,9 @@ namespace RealEstate.Data.Migrations
 
             modelBuilder.Entity("RealEstate.Data.Models.Image", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
@@ -452,13 +495,11 @@ namespace RealEstate.Data.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
@@ -545,12 +586,10 @@ namespace RealEstate.Data.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApplicationUserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("BuildingTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ConditionId")
+                    b.Property<int?>("BuildingTypeId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("CreatedOn")
@@ -562,22 +601,16 @@ namespace RealEstate.Data.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EquipmentId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ExpirationDays")
                         .HasColumnType("int");
 
                     b.Property<int?>("Floor")
                         .HasColumnType("int");
 
-                    b.Property<int>("HeatingId")
-                        .HasColumnType("int");
-
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsForLiving")
+                    b.Property<bool>("IsExpirationDaysModified")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")
@@ -611,6 +644,7 @@ namespace RealEstate.Data.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("UserContactId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int?>("YardSize")
@@ -624,12 +658,6 @@ namespace RealEstate.Data.Migrations
                     b.HasIndex("ApplicationUserId");
 
                     b.HasIndex("BuildingTypeId");
-
-                    b.HasIndex("ConditionId");
-
-                    b.HasIndex("EquipmentId");
-
-                    b.HasIndex("HeatingId");
 
                     b.HasIndex("IsDeleted");
 
@@ -795,11 +823,56 @@ namespace RealEstate.Data.Migrations
                     b.ToTable("UsersContacts");
                 });
 
+            modelBuilder.Entity("ConditionProperty", b =>
+                {
+                    b.HasOne("RealEstate.Data.Models.Condition", null)
+                        .WithMany()
+                        .HasForeignKey("ConditionsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RealEstate.Data.Models.Property", null)
+                        .WithMany()
+                        .HasForeignKey("PropertiesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("DetailProperty", b =>
                 {
                     b.HasOne("RealEstate.Data.Models.Detail", null)
                         .WithMany()
                         .HasForeignKey("DetailsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RealEstate.Data.Models.Property", null)
+                        .WithMany()
+                        .HasForeignKey("PropertiesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EquipmentProperty", b =>
+                {
+                    b.HasOne("RealEstate.Data.Models.Equipment", null)
+                        .WithMany()
+                        .HasForeignKey("EquipmentsId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("RealEstate.Data.Models.Property", null)
+                        .WithMany()
+                        .HasForeignKey("PropertiesId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("HeatingProperty", b =>
+                {
+                    b.HasOne("RealEstate.Data.Models.Heating", null)
+                        .WithMany()
+                        .HasForeignKey("HeatingsId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
@@ -902,31 +975,13 @@ namespace RealEstate.Data.Migrations
                 {
                     b.HasOne("RealEstate.Data.Models.ApplicationUser", "ApplicationUser")
                         .WithMany("Properties")
-                        .HasForeignKey("ApplicationUserId");
+                        .HasForeignKey("ApplicationUserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("RealEstate.Data.Models.BuildingType", "BuildingType")
                         .WithMany("Properties")
-                        .HasForeignKey("BuildingTypeId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("RealEstate.Data.Models.Condition", "Condition")
-                        .WithMany("Properties")
-                        .HasForeignKey("ConditionId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("RealEstate.Data.Models.Equipment", "Equipment")
-                        .WithMany("Properties")
-                        .HasForeignKey("EquipmentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("RealEstate.Data.Models.Heating", "Heating")
-                        .WithMany("Properties")
-                        .HasForeignKey("HeatingId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .HasForeignKey("BuildingTypeId");
 
                     b.HasOne("RealEstate.Data.Models.PopulatedPlace", "PopulatedPlace")
                         .WithMany("Properties")
@@ -942,17 +997,13 @@ namespace RealEstate.Data.Migrations
 
                     b.HasOne("RealEstate.Data.Models.UserContact", "UserContact")
                         .WithMany("Properties")
-                        .HasForeignKey("UserContactId");
+                        .HasForeignKey("UserContactId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("BuildingType");
-
-                    b.Navigation("Condition");
-
-                    b.Navigation("Equipment");
-
-                    b.Navigation("Heating");
 
                     b.Navigation("PopulatedPlace");
 
@@ -984,21 +1035,6 @@ namespace RealEstate.Data.Migrations
                 });
 
             modelBuilder.Entity("RealEstate.Data.Models.BuildingType", b =>
-                {
-                    b.Navigation("Properties");
-                });
-
-            modelBuilder.Entity("RealEstate.Data.Models.Condition", b =>
-                {
-                    b.Navigation("Properties");
-                });
-
-            modelBuilder.Entity("RealEstate.Data.Models.Equipment", b =>
-                {
-                    b.Navigation("Properties");
-                });
-
-            modelBuilder.Entity("RealEstate.Data.Models.Heating", b =>
                 {
                     b.Navigation("Properties");
                 });

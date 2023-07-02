@@ -5,6 +5,8 @@ namespace RealEstate.Web
     using System;
     using System.Reflection;
 
+    using Hangfire;
+
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Http;
@@ -33,15 +35,19 @@ namespace RealEstate.Web
         {
             var builder = WebApplication.CreateBuilder(args);
             ConfigureServices(builder.Services, builder.Configuration);
+
             var app = builder.Build();
             Configure(app);
+
             app.Run();
         }
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<ApplicationDbContext>(options 
-                => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            var sqlConnectionString = configuration.GetConnectionString("DefaultConnection");
+
+            services.AddDbContext<ApplicationDbContext>(options
+                => options.UseSqlServer(sqlConnectionString));
 
             services.AddDefaultIdentity<ApplicationUser>(IdentityOptionsProvider.GetIdentityOptions)
                 .AddRoles<ApplicationRole>()
@@ -68,16 +74,24 @@ namespace RealEstate.Web
             services.AddControllersWithViews(
                 options =>
                 {
-                   // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                    // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddSingleton(configuration);
 
+            services.AddHangfire(configuration => configuration
+               .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
+               .UseSimpleAssemblyNameTypeSerializer()
+               .UseRecommendedSerializerSettings(x => x.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
+               .UseSqlServerStorage(sqlConnectionString));
+
+            services.AddHangfireServer();
+
             ConfigureRepositorues(services);
             ConfigureApplicationServices(services);
-           
+
         }
 
         private static void Configure(WebApplication app)
@@ -110,10 +124,14 @@ namespace RealEstate.Web
             app.UseStaticFiles();
             app.UseCookiePolicy();
 
+            app.UseHangfireDashboard();
+
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.MapHangfireDashboard();
 
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");

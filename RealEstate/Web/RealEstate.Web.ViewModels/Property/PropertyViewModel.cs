@@ -1,18 +1,14 @@
 ﻿namespace RealEstate.Web.ViewModels.Property
 {
+    using System;
     using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-
-    using AutoMapper;
+    using System.Diagnostics;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
-    using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
-    using RealEstate.Web.ViewModels.PropertyTypes;
 
-    public class PropertyViewModel : IMapFrom<Property>, IHaveCustomMappings
+    public class PropertyViewModel : IMapFrom<Property>
     {
         public int Id { get; init; }
 
@@ -26,21 +22,52 @@
 
         public int Size { get; init; }
 
-        public string ImageName { get; init; }
-
         public int TotalBedRooms { get; init; }
 
         public int TotalBathRooms { get; init; }
 
         public int TotalGarages { get; init; }
 
-        public void CreateMappings(IProfileExpression configuration)
-        {
-            var cultureInfo = new CultureInfo("fr-Fr");
+        public int ExpirationDays { get; init; }
 
-            configuration.CreateMap<Property, PropertyViewModel>()
-                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => string.Format(cultureInfo, "{0:C2}", src.Price)))
-                .ForMember(dest => dest.ImageName, opt => opt.MapFrom(src => src.Images.FirstOrDefault().Name));
+        public DateTime CreatedOn { get; init; }
+
+        public DateTime ModifiedOn { get; init; }
+
+        // TODO: Math.Round or something for the days.
+        public bool IsExpired
+        {
+            get
+            {
+                var expiredAfter = 0;
+
+                if (this.IsExpirationDaysModified)
+                {
+                    expiredAfter = (int)(DateTime.UtcNow - this.ModifiedOn).TotalMinutes;
+                }
+                else
+                {
+                    expiredAfter = (int)(DateTime.UtcNow - this.CreatedOn).TotalMinutes;
+                }
+
+                this.ExpireAfter = this.ExpirationDays - expiredAfter;
+
+                if (this.ExpireAfter <= 0)
+                {
+                    return true;
+                }
+
+                return false;
+            }
         }
+
+        public bool IsExpirationDaysModified { get; set; }
+
+        public int ExpireAfter { get; private set; }
+
+        // TODO: Move to GlobalConstants
+        public string ExpireMessage { get; init; } = "Expired!";
+
+        public ICollection<ImageViewModel> Images { get; init; }
     }
 }

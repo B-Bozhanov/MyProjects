@@ -12,6 +12,9 @@
             this.Tags = new HashSet<Tag>();
             this.Images = new HashSet<Image>();
             this.Details = new HashSet<Detail>();
+            this.Conditions = new HashSet<Condition>();
+            this.Equipments = new HashSet<Equipment>();
+            this.Heatings = new HashSet<Heating>();
 
             this.ExpirationDays = 90; // By default
             this.Option = PropertyOption.Sale; // By default
@@ -31,6 +34,9 @@
 
         public int ExpirationDays { get; set; }
 
+        public bool IsExpirationDaysModified { get; set; }
+
+        #nullable enable
         public string? Description { get; set; }
 
         public int? TotalBedRooms { get; set; }
@@ -41,42 +47,47 @@
 
         public int? Year { get; set; }
 
+        [Required]
         public int PopulatedPlaceId { get; set; }
 
+        [Required]
         public virtual PopulatedPlace PopulatedPlace { get; set; }
 
+        [Required]
         public int PropertyTypeId { get; set; }
 
+        [Required]
         public virtual PropertyType PropertyType { get; set; }
 
-        public int BuildingTypeId { get; set; }
+        public int? BuildingTypeId { get; set; }
 
-        public virtual BuildingType BuildingType { get; set; }
+        #nullable enable
+        public virtual BuildingType? BuildingType { get; set; }
 
-        public int ConditionId { get; set; }
-
-        public virtual Condition Condition { get; set; }
-
-        public int EquipmentId { get; set; }
-
-        public virtual Equipment Equipment { get; set; }
-
-        public int HeatingId { get; set; }
-
-        public virtual Heating Heating { get; set; }
-
+        [Required]
         public string UserContactId { get; set; }
 
+        [Required]
         public virtual UserContact UserContact { get; set; }
 
+        [Required]
         public string ApplicationUserId { get; set; }
 
+        [Required]
         public virtual ApplicationUser ApplicationUser { get; set; }
-
-        public virtual ICollection<Detail> Details { get; set; }
 
         public virtual ICollection<Tag> Tags { get; set; }
 
+        [Required]
         public virtual ICollection<Image> Images { get; set; }
+
+        public virtual ICollection<Detail> Details { get; set; }
+
+        public virtual ICollection<Condition> Conditions { get; set; }
+
+        public virtual ICollection<Heating> Heatings { get; set; }
+
+        public virtual ICollection<Equipment> Equipments { get; set; }
+
     }
 }

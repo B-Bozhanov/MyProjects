@@ -1,4 +1,4 @@
-﻿@model AddPropertyInputModel
+﻿@model PropertyInputModel
 
 <h1 style="font-size:large">Detail info </h1>
 <br />
@@ -10,13 +10,13 @@
     </div>
     <div class="col-3">
         <h1 style="font-size:large"><label asp-for="Year"></label></h1>
-        <input asp-for="Year" class="form-control">
+        <input asp-for="Year" class="form-control" placeholder="@DateTime.UtcNow.Year">
         <span asp-validation-for="Year" class="text-danger"></span>
     </div>
     <div class="col-3">
         <h1 style="font-size:large"><label asp-for="Floor"></label></h1>
         <select asp-for="Floor" class="form-select">
-            @for (int i = 0; i <= 100; i++)
+            @for (int? i = 0; i <= 100; i++)
             {
                 <option value="@i">@i</option>
             }

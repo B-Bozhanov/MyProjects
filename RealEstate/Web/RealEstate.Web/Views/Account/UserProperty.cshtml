@@ -7,7 +7,7 @@
 <div class="container text-center">
     <div class="row">
         <div class="title-single-box">
-            <h1 class="title-single">My Properties</h1>
+            <h1 class="title-single">My Properties </h1>
         </div>
     </div>
 </div>
@@ -17,7 +17,7 @@
     <div class="container">
         <div class="row">
             @foreach (var property in Model)
-            {
+            {                
                 <div class="col-md-4">
                     <div class="col-12">
                             <button class="btn btn-link">
@@ -35,7 +35,7 @@
                     <br>
                     <div class="card-box-a card-shadow">
                         <div class="img-box-a">
-                            <img src="@ImagePath/@property.ImageName" alt="" class="img-a img-fluid">
+                            <img src="@PropertyImagesPath/@property.Images.FirstOrDefault().Url" alt="" class="img-a img-fluid">
                         </div>
                         <div class="card-overlay">
                             <div class="card-overlay-a-content">
@@ -52,7 +52,17 @@
                                         <span class="price-a">@property.Option | @property.Price</span>
                                     </div>
                                     <div class="price-box d-flex">
-                                        <span class="price-a text-bg-danger">Expired after: </span>
+                                        @if (property.ExpirationDays <= 0)
+                                        {
+                                            <span class="price-a text-bg-danger"> @property.ExpireMessage</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="price-a text-bg-danger">
+                                                Expired after: 
+                                                @property.ExpirationDays  
+                                            </span>
+                                        }
                                     </div>
                                 </div>
                                 <div class="card-footer-a">

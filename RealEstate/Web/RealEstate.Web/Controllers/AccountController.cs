@@ -99,7 +99,9 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> UserProperty()
-            => this.View(await this.propertyService.GetAllByUserId(this.UserId));
+        public async Task<IActionResult> UserProperty(int page = 1)
+        {
+           return this.View(await this.propertyService.GetPaginationByUserId(this.UserId, page));
+        }
     }
 }

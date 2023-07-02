@@ -1,4 +1,4 @@
-﻿@model EditViewModel
+﻿@model PropertyEditViewModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -13,6 +13,7 @@
                 </div>
                 <div asp-validation-summary=All class="text-danger"></div>
 
+                <input asp-for="Id" type="hidden"/>
                 @*Type*@
                 <div class="form-group">
                     <h1 style="font-size:large"><label asp-for="PropertyTypeId" class="form-label"></label></h1>
@@ -138,28 +139,14 @@
                             @*
                                 TODO: If clicked 2 building types then we havea bug!
                             *@
-                            @if (Model.BuildingType != null)
-                            {
-                                if (Model.BuildingTypes[i].Id == Model.BuildingType.Id)
+                                @if (Model.BuildingTypes[i].IsChecked)
                                 {
-                                    <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" checked />
+                                    <input asp-for="BuildingTypes[i].IsChecked" class="form-check-input" checked />
                                 }
                                 else
                                 {
                                     <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
                                 }
-                            }
-                            else
-                            {
-                                if (Model.BuildingTypes[i].IsChecked)
-                                {
-                                    <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" checked />
-                                }
-                                else
-                                {
-                                    <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
-                                }
-                            }
                             <input type="hidden" asp-for="BuildingTypes[i].Id" />
                             <input type="hidden" asp-for="BuildingTypes[i].Name" />
                             <input type="hidden" asp-for="BuildingTypes[i].IsChecked" />
@@ -203,9 +190,10 @@
                 <div class="col-3">
                     <h1 style="font-size:large"><label asp-for="ExpirationDays"></label></h1>
                     <select class="form-select" asp-for="ExpirationDays">
-                        <option value="30">30 days</option>
-                        <option value="60">60 days</option>
-                        <option value="90">90 days</option>
+                        <option value="0">+0 days</option>
+                        <option value="30">+30 days</option>
+                        <option value="60">+60 days</option>
+                        <option value="90">+90 days</option>
                     </select>
                     <span asp-validation-for="ExpirationDays" class="text-danger"></span>
                 </div>

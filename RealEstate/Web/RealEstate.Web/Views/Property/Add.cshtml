@@ -1,4 +1,4 @@
-﻿@model AddPropertyInputModel
+﻿@model PropertyInputModel
 
 @{
     ViewData["Title"] = "Add property";
@@ -15,15 +15,13 @@
 
                 @*Type*@
                 <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="TypeId" class="form-label"></label></h1>
-                    <select asp-for="TypeId" class="form-select">
-                        <span asp-validation-for="TypeId" class="text-danger"></span>
-
+                    <h1 style="font-size:large"><label asp-for="PropertyTypeId" class="form-label"></label></h1>
+                    <select asp-for="PropertyTypeId" class="form-select">
+                        <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
                         @foreach (var type in Model.PropertyTypes)
                         {
                             <option value="@type.Id">@type.Name</option>
                         }
-
                     </select>
                 </div>
                 <br />
@@ -102,8 +100,8 @@
                 <div class="col-3">
 
                     @*Price*@
-                    <h1 style="font-size:large"><label asp-for="Price"></label></h1>
-                    <input asp-for="Price" class="form-control" placeholder="Set price" />
+                    <h1 style="font-size:large"><label asp-for="Price "></label></h1>
+                    <input asp-for="Price" class="form-control" placeholder="Price in EUR" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <br />

@@ -251,7 +251,7 @@
         {
             property.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
             property.Locations = this.locationService.Get<LocationViewModel>();
-            property.BuildingTypes = this.buildingTypeService.Get<BuildingTypeViewModel>();
+            property.BuildingTypes = this.buildingTypeService.GetAll();
             property.Conditions = await this.conditionService.GetAllAsync();
             property.Heatings = await this.heatingService.GetAllAsync();
             property.Details = await this.detailService.GetAllAsync();

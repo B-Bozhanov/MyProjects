@@ -122,7 +122,7 @@
 
             editModel.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
             editModel.Locations = this.locationService.Get<LocationViewModel>();
-            editModel.BuildingTypes = this.buildingTypeService.Get<BuildingTypeViewModel>();
+            editModel.BuildingTypes = this.buildingTypeService.GetAll();
 
             editModel.LocationId = editModel.PopulatedPlace.Location.Id;
 
@@ -146,7 +146,7 @@
             {
                 editModel.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
                 editModel.Locations = this.locationService.Get<LocationViewModel>();
-                editModel.BuildingTypes = this.buildingTypeService.Get<BuildingTypeViewModel>();
+                editModel.BuildingTypes = this.buildingTypeService.GetAll();
 
                 editModel.PopulatedPlace = this.populatedPlaceService.GetPopulatedPlacesByProperty<PopulatedPlaceViewModel>(editModel.PopulatedPlaceId);
                 editModel.LocationId = editModel.PopulatedPlace.Location.Id;

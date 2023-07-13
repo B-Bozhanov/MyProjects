@@ -7,6 +7,7 @@
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Mapping;
+    using RealEstate.Web.ViewModels.BuildingTypeModel;
 
     public class BuildingTypeService : IBuildingTypeService
     {
@@ -17,18 +18,11 @@
             this.buildingTypeRepository = buildingTypeRepository;
         }
 
-        public IList<T> Get<T>() 
+        public IList<BuildingTypeViewModel> GetAll() 
             => this.buildingTypeRepository
                 .All()
                 .OrderBy(pt => pt.Name)
-                .To<T>()
+                .To<BuildingTypeViewModel>()
                 .ToList();
-
-        public T GetByProperty<T>(int id)
-            => this.buildingTypeRepository
-            .All()
-            .Where(b => b.Id == id)
-            .To<T>()
-            .FirstOrDefault();
     }
 }

@@ -1,11 +1,10 @@
 ﻿namespace RealEstate.Services.Data.Interfaces
 {
     using System.Collections.Generic;
+    using RealEstate.Web.ViewModels.BuildingTypeModel;
 
     public interface IBuildingTypeService
     {
-        public IList<T> Get<T>();
-
-        public T GetByProperty<T>(int id);
+        public IList<BuildingTypeViewModel> GetAll();
     }
 }

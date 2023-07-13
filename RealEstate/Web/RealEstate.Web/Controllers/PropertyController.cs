@@ -68,7 +68,7 @@
 
         [HttpGet]
         public async Task<IActionResult> Add() 
-            => this.View(await this.propertyService.SetCollectionsAsync(new PropertyInputModel()));
+            => this.View(await this.SetCollectionsAsync(new PropertyInputModel()));
 
         [HttpPost]
         public async Task<IActionResult> Add(PropertyInputModel property)
@@ -77,7 +77,7 @@
 
             if (!this.ModelState.IsValid)
             {
-                return this.View(await this.propertyService.SetCollectionsAsync(property));
+                return this.View(await this.SetCollectionsAsync(property));
             }
 
             var user = await this.userManager.GetUserAsync(this.User);
@@ -174,6 +174,19 @@
             {
                 this.ModelState.AddModelError("", "Building type is required!");
             }
+        }
+
+        private async Task<PropertyInputModel> SetCollectionsAsync(PropertyInputModel property)
+        {
+            property.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
+            property.Locations = this.locationService.Get<LocationViewModel>();
+            property.BuildingTypes = this.buildingTypeService.GetAll();
+            property.Conditions = await this.conditionService.GetAllAsync();
+            property.Heatings = await this.heatingService.GetAllAsync();
+            property.Details = await this.detailService.GetAllAsync();
+            property.Equipments = await this.equipmentService.GetAllAsync();
+
+            return property;
         }
     }
 }

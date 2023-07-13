@@ -4,14 +4,10 @@
     using System.Linq;
     using System.Reflection;
 
-    using Microsoft.EntityFrameworkCore;
-
     using Moq;
 
-    using RealEstate.Data;
     using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
-    using RealEstate.Data.Repositories;
     using RealEstate.Services.Mapping;
     using RealEstate.Web.ViewModels;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
@@ -58,6 +54,30 @@
             var result = service.GetAll();
 
             Assert.Equal(typeof(BuildingTypeViewModel), result.First().GetType());
+        }
+
+        [Fact]
+        public void GetAllShouldReturnBuildingTypeModelWithCorectData()
+        {
+            var repository = new Mock<IDeletableEntityRepository<BuildingType>>();
+
+            repository.Setup(x => x.All()).Returns(new List<BuildingType>
+                                                   {
+                                                       new BuildingType
+                                                       {
+                                                           Id = 1,
+                                                           Name = "Test",
+                                                       },
+                                                   }.AsQueryable());
+
+            var service = new BuildingTypeService(repository.Object);
+
+            AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
+
+            var model = service.GetAll().First();
+
+            Assert.Equal(1, model.Id);
+            Assert.Equal("Test", model.Name);
         }
     }
 }

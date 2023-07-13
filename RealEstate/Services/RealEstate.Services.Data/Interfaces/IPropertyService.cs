@@ -28,7 +28,5 @@
         public Task<T> GetByIdAsync<T>(int id, string userId);
 
         public Task<bool> IsUserProperty(int propertyId, string userId);
-
-        public Task<PropertyInputModel> SetCollectionsAsync(PropertyInputModel property);
     }
 }

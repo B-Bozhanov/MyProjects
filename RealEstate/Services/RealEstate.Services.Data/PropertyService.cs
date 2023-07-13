@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Drawing;
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
@@ -35,14 +36,6 @@
         private readonly IDeletableEntityRepository<Detail> detailRepository;
         private readonly IDeletableEntityRepository<Equipment> equipmentRepository;
         private readonly IDeletableEntityRepository<Heating> heatingRepository;
-        private readonly ILocationService locationService;
-        private readonly IBuildingTypeService buildingTypeService;
-        private readonly IPropertyTypeService propertyTypeService;
-        private readonly IPopulatedPlaceService placeService;
-        private readonly IConditionService conditionService;
-        private readonly IHeatingService heatingService;
-        private readonly IEquipmentService equipmentService;
-        private readonly IDetailService detailService;
         private readonly IImageService imageService;
         private readonly IBackgroundJobClient backgroundJobClient;
 
@@ -58,14 +51,6 @@
               IDeletableEntityRepository<Detail> detailRepository,
               IDeletableEntityRepository<Equipment> equipmentRepository,
               IDeletableEntityRepository<Heating> heatingRepository,
-              ILocationService locationService,
-              IBuildingTypeService buildingTypeService,
-              IPropertyTypeService propertyTypeService,
-              IPopulatedPlaceService placeService,
-              IConditionService conditionService,
-              IHeatingService heatingService,
-              IEquipmentService equipmentService,
-              IDetailService detailService,
               IImageService imageService,
               IBackgroundJobClient backgroundJobClient)
         {
@@ -78,37 +63,42 @@
             this.detailRepository = detailRepository;
             this.equipmentRepository = equipmentRepository;
             this.heatingRepository = heatingRepository;
-            this.locationService = locationService;
-            this.buildingTypeService = buildingTypeService;
-            this.propertyTypeService = propertyTypeService;
-            this.placeService = placeService;
-            this.conditionService = conditionService;
-            this.heatingService = heatingService;
-            this.equipmentService = equipmentService;
-            this.detailService = detailService;
             this.imageService = imageService;
             this.backgroundJobClient = backgroundJobClient;
         }
 
         public async Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!)
         {
-            var property = new Property
-            {
-                Size = propertyModel.Size,
-                YardSize = propertyModel.YardSize,
-                Floor = propertyModel.Floor,
-                TotalFloors = propertyModel.TotalFloors,
-                TotalBathRooms = propertyModel.TotalBathRooms,
-                TotalBedRooms = propertyModel.TotalBedRooms,
-                TotalGarages = propertyModel.TotalGarages,
-                Year = propertyModel.Year,
-                Price = propertyModel.Price,
-                Description = propertyModel.Description,
-                ExpirationDays = propertyModel.ExpirationDays,
-                Option = propertyModel.Option,
-                PropertyType = this.propertyTypeRepository.All().First(pt => pt.Id == propertyModel.PropertyTypeId),
-            };
+            var property = new Property();
+            //{
+            //    Size = propertyModel.Size,
+            //    YardSize = propertyModel.YardSize,
+            //    Floor = propertyModel.Floor,
+            //    TotalFloors = propertyModel.TotalFloors,
+            //    TotalBathRooms = propertyModel.TotalBathRooms,
+            //    TotalBedRooms = propertyModel.TotalBedRooms,
+            //    TotalGarages = propertyModel.TotalGarages,
+            //    Year = propertyModel.Year,
+            //    Price = propertyModel.Price,
+            //    Description = propertyModel.Description,
+            //    ExpirationDays = propertyModel.ExpirationDays,
+            //    Option = propertyModel.Option,
+            //    PropertyType = this.propertyTypeRepository.All().First(pt => pt.Id == propertyModel.PropertyTypeId),
+            //};
 
+            property.Size = propertyModel.Size;
+            property.YardSize = propertyModel.YardSize;
+            property.Floor = propertyModel.Floor;
+            property.TotalFloors = propertyModel.TotalFloors;
+            property.TotalBathRooms = propertyModel.TotalBathRooms;
+            property.TotalBedRooms = propertyModel.TotalBedRooms;
+            property.TotalGarages = propertyModel.TotalGarages;
+            property.Year = propertyModel.Year;
+            property.Price = propertyModel.Price;
+            property.Description = propertyModel.Description;
+            property.ExpirationDays = propertyModel.ExpirationDays;
+            property.Option = propertyModel.Option;
+            property.PropertyType = this.propertyTypeRepository.All().First(pt => pt.Id == propertyModel.PropertyTypeId);
             var populatedPlace = this.populatedPlaceRepository.All().FirstOrDefault(p => p.Id == propertyModel.PopulatedPlaceId);
 
             property.PopulatedPlace = populatedPlace;
@@ -247,61 +237,60 @@
                   .To<PropertyViewModel>()
                   .ToListAsync();
 
-        public async Task<PropertyInputModel> SetCollectionsAsync(PropertyInputModel property)
-        {
-            property.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
-            property.Locations = this.locationService.Get<LocationViewModel>();
-            property.BuildingTypes = this.buildingTypeService.GetAll();
-            property.Conditions = await this.conditionService.GetAllAsync();
-            property.Heatings = await this.heatingService.GetAllAsync();
-            property.Details = await this.detailService.GetAllAsync();
-            property.Equipments = await this.equipmentService.GetAllAsync();
-
-            return property;
-        }
-
         private async Task<Property> AddMoreDetailsAsync(PropertyInputModel propertyModel, Property property)
         {
-            foreach (var condition in propertyModel.Conditions)
+            if (propertyModel.Conditions != null)
             {
-                if (condition.IsChecked)
+                foreach (var condition in propertyModel.Conditions)
                 {
-                    var dbCondition = await this.conditionRepository.All().FirstAsync(c => c.Id == condition.Id);
+                    if (condition.IsChecked)
+                    {
+                        var dbCondition = await this.conditionRepository.All().FirstAsync(c => c.Id == condition.Id);
 
-                    property.Conditions.Add(dbCondition);
+                        property.Conditions.Add(dbCondition);
+                    }
                 }
             }
 
-            foreach (var equipment in propertyModel.Equipments)
+            if (propertyModel.Equipments != null)
             {
-                if (equipment.IsChecked)
+                foreach (var equipment in propertyModel.Equipments)
                 {
-                    var dbEquipment = await this.equipmentRepository.All().FirstAsync(e => e.Id == equipment.Id);
+                    if (equipment.IsChecked)
+                    {
+                        var dbEquipment = await this.equipmentRepository.All().FirstAsync(e => e.Id == equipment.Id);
 
-                    property.Equipments.Add(dbEquipment);
+                        property.Equipments.Add(dbEquipment);
+                    }
                 }
             }
 
-            foreach (var detail in propertyModel.Details)
+            if (propertyModel.Details != null)
             {
-                if (detail.IsChecked)
+                foreach (var detail in propertyModel.Details)
                 {
-                    var dbDetail = await this.detailRepository.All().FirstAsync(d => d.Id == detail.Id);
+                    if (detail.IsChecked)
+                    {
+                        var dbDetail = await this.detailRepository.All().FirstAsync(d => d.Id == detail.Id);
 
-                    property.Details.Add(dbDetail);
+                        property.Details.Add(dbDetail);
+                    }
                 }
             }
 
-            foreach (var heating in propertyModel.Heatings)
+            if (propertyModel.Heatings != null)
             {
-                if (heating.IsChecked)
+                foreach (var heating in propertyModel.Heatings)
                 {
-                    var dbHeating = await this.heatingRepository.All().FirstAsync(h => h.Id == heating.Id);
+                    if (heating.IsChecked)
+                    {
+                        var dbHeating = await this.heatingRepository.All().FirstAsync(h => h.Id == heating.Id);
 
-                    property.Heatings.Add(dbHeating);
+                        property.Heatings.Add(dbHeating);
+                    }
                 }
             }
-
+           
             return property;
         }
 

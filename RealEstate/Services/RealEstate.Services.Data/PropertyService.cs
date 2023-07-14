@@ -69,36 +69,23 @@
 
         public async Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!)
         {
-            var property = new Property();
-            //{
-            //    Size = propertyModel.Size,
-            //    YardSize = propertyModel.YardSize,
-            //    Floor = propertyModel.Floor,
-            //    TotalFloors = propertyModel.TotalFloors,
-            //    TotalBathRooms = propertyModel.TotalBathRooms,
-            //    TotalBedRooms = propertyModel.TotalBedRooms,
-            //    TotalGarages = propertyModel.TotalGarages,
-            //    Year = propertyModel.Year,
-            //    Price = propertyModel.Price,
-            //    Description = propertyModel.Description,
-            //    ExpirationDays = propertyModel.ExpirationDays,
-            //    Option = propertyModel.Option,
-            //    PropertyType = this.propertyTypeRepository.All().First(pt => pt.Id == propertyModel.PropertyTypeId),
-            //};
+            var property = new Property()
+            {
+                Size = propertyModel.Size,
+                YardSize = propertyModel.YardSize,
+                Floor = propertyModel.Floor,
+                TotalFloors = propertyModel.TotalFloors,
+                TotalBathRooms = propertyModel.TotalBathRooms,
+                TotalBedRooms = propertyModel.TotalBedRooms,
+                TotalGarages = propertyModel.TotalGarages,
+                Year = propertyModel.Year,
+                Price = propertyModel.Price,
+                Description = propertyModel.Description,
+                ExpirationDays = propertyModel.ExpirationDays,
+                Option = propertyModel.Option,
+                PropertyType = this.propertyTypeRepository.All().First(pt => pt.Id == propertyModel.PropertyTypeId),
+            };
 
-            property.Size = propertyModel.Size;
-            property.YardSize = propertyModel.YardSize;
-            property.Floor = propertyModel.Floor;
-            property.TotalFloors = propertyModel.TotalFloors;
-            property.TotalBathRooms = propertyModel.TotalBathRooms;
-            property.TotalBedRooms = propertyModel.TotalBedRooms;
-            property.TotalGarages = propertyModel.TotalGarages;
-            property.Year = propertyModel.Year;
-            property.Price = propertyModel.Price;
-            property.Description = propertyModel.Description;
-            property.ExpirationDays = propertyModel.ExpirationDays;
-            property.Option = propertyModel.Option;
-            property.PropertyType = this.propertyTypeRepository.All().First(pt => pt.Id == propertyModel.PropertyTypeId);
             var populatedPlace = this.populatedPlaceRepository.All().FirstOrDefault(p => p.Id == propertyModel.PopulatedPlaceId);
 
             property.PopulatedPlace = populatedPlace;
@@ -125,8 +112,8 @@
             await this.propertyRepository.AddAsync(property);
             await this.propertyRepository.SaveChangesAsync();
 
-            this.backgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
-            RecurringJob.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
+           // this.backgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
+           // RecurringJob.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
         }
 
         public async Task ExpirationDaysDecreeser(int propertyId, PerformContext performContext)

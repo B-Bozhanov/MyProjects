@@ -17,14 +17,14 @@
     <div class="container">
         <div class="row">
             @foreach (var property in Model)
-            {                
+            {
                 <div class="col-md-4">
                     <div class="col-12">
-                            <button class="btn btn-link">
-                                <a asp-controller="Property" asp-action="Edit" asp-route-propertyId = "@property.Id"> 
-                                    <i class="bi bi-pencil link-primary col-3">Edit</i>
-                                </a>
-                            </button>
+                        <button class="btn btn-link">
+                            <a asp-controller="Property" asp-action="Edit" asp-route-propertyId="@property.Id">
+                                <i class="bi bi-pencil link-primary col-3">Edit</i>
+                            </a>
+                        </button>
 
                         <a asp-controller="Property" asp-action="Edit">
                             <i class="bi bi-trash3 link-danger col-3"></i>
@@ -59,8 +59,8 @@
                                         else
                                         {
                                             <span class="price-a text-bg-danger">
-                                                Expired after: 
-                                                @property.ExpirationDays  
+                                                Expired after:
+                                                @property.ExpirationDays
                                             </span>
                                         }
                                     </div>
@@ -93,6 +93,21 @@
                     </div>
                 </div>
             }
+            <nav aria-label="...">
+                <ul class="pagination">
+                    <li class="page-item disabled">
+                        <a class="page-link" href="#" tabindex="-1">Previous</a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item active">
+                        <a class="page-link" href="#">2 <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">Next</a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </div>
 </section>

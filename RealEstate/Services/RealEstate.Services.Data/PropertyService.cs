@@ -2,7 +2,6 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.Drawing;
     using System.Linq;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
@@ -12,16 +11,12 @@
 
     using Microsoft.EntityFrameworkCore;
 
-    using RealEstate.Data;
     using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Interfaces;
     using RealEstate.Services.Mapping;
-    using RealEstate.Web.ViewModels.BuildingTypeModel;
-    using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.Property;
-    using RealEstate.Web.ViewModels.PropertyTypes;
     using RealEstate.Web.ViewModels.Search;
 
     using static RealEstate.Common.GlobalConstants.Properties;

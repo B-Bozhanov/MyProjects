@@ -9,7 +9,7 @@
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
-    using RealEstate.Web.Infrastructure.CustomAttributes;
+   // using RealEstate.Web.Infrastructure.CustomAttributes;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.ConditionModel;
     using RealEstate.Web.ViewModels.ContactModel;
@@ -54,7 +54,7 @@
         [Required]
         public string Description { get; set; }
 
-        [YearValidator(ErrorMessage = "Test")]
+       // [YearValidator(ErrorMessage = "Test")]
         public int? Year { get; set; }
 
         [Required]

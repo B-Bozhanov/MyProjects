@@ -2,7 +2,8 @@
 {
     using System.Collections.Generic;
 
-    public interface IPropertyTypeService : IService
+    public interface IPropertyTypeService 
     {
+        public IEnumerable<T> Get<T>();
     }
 }

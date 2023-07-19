@@ -8,7 +8,7 @@
 
     using RealEstate.Services.Interfaces;
 
-    public class PropertyScraper : IPropertyScraper
+    public class PropertyScraperService : IPropertyScraperService
     {
         public async Task<string> GetAsJson(string url)
         {

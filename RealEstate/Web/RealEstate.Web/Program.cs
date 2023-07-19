@@ -13,6 +13,7 @@ namespace RealEstate.Web
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Hosting;
 
     using RealEstate.Data;
@@ -23,6 +24,7 @@ namespace RealEstate.Web
     using RealEstate.Data.Seeding;
     using RealEstate.Services.Data;
     using RealEstate.Services.Data.Interfaces;
+    using RealEstate.Services.HangFireWrapper;
     using RealEstate.Services.Interfaces;
     using RealEstate.Services.LocationScraperService;
     using RealEstate.Services.Mapping;
@@ -44,7 +46,7 @@ namespace RealEstate.Web
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            var sqlConnectionString = configuration.GetConnectionString("DefaultConnection");
+            var sqlConnectionString = configuration.GetConnectionString("ApplicationDbContextConnection");
 
             services.AddDbContext<ApplicationDbContext>(options
                 => options.UseSqlServer(sqlConnectionString));
@@ -89,8 +91,10 @@ namespace RealEstate.Web
 
             services.AddHangfireServer();
 
+            services.AddServices(new Type[] { typeof(IPropertyService), typeof(IHangfireWrapperService)});
+
             ConfigureRepositorues(services);
-            ConfigureApplicationServices(services);
+           // ConfigureApplicationServices(services);
 
         }
 
@@ -145,23 +149,24 @@ namespace RealEstate.Web
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
         }
 
-        private static void ConfigureApplicationServices(IServiceCollection services)
-        {
-            services.AddScoped<IEmailSender, NullMessageSender>();
-            services.AddScoped<ISettingsService, SettingsService>();
-            services.AddScoped<IPropertyService, PropertyService>();
-            services.AddScoped<IImageService, ImageService>();
-            services.AddScoped<IRegionScraperService, LocationScraperService>();
-            services.AddScoped<ILocationService, LocationService>();
-            services.AddScoped<IPropertyTypeService, PropertyTypeService>();
-            services.AddScoped<IBuildingTypeService, BuildingTypeService>();
-            services.AddScoped<ILocationService, LocationService>();
-            services.AddScoped<IPopulatedPlaceService, PopulatedPlaceService>();
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<IConditionService, ConditionService>();
-            services.AddScoped<IEquipmentService, EquipmentService>();
-            services.AddScoped<IHeatingService, HeatingService>();
-            services.AddScoped<IDetailService, DetailService>();
-        }
+        //private static void ConfigureApplicationServices(IServiceCollection services)
+        //{
+        //    services.AddScoped<IEmailSender, NullMessageSender>();
+        //    services.AddScoped<ISettingsService, SettingsService>();
+        //    services.AddScoped<IPropertyService, PropertyService>();
+        //    services.AddScoped<IImageService, ImageService>();
+        //    services.AddScoped<IRegionScraperService, LocationScraperService>();
+        //    services.AddScoped<ILocationService, LocationService>();
+        //    services.AddScoped<IPropertyTypeService, PropertyTypeService>();
+        //    services.AddScoped<IBuildingTypeService, BuildingTypeService>();
+        //    services.AddScoped<ILocationService, LocationService>();
+        //    services.AddScoped<IPopulatedPlaceService, PopulatedPlaceService>();
+        //    services.AddScoped<IAccountService, AccountService>();
+        //    services.AddScoped<IConditionService, ConditionService>();
+        //    services.AddScoped<IEquipmentService, EquipmentService>();
+        //    services.AddScoped<IHeatingService, HeatingService>();
+        //    services.AddScoped<IDetailService, DetailService>();
+        //    services.AddScoped<IHangfireWrapper, HangfireWrapper>();
+        //}
     }
 }

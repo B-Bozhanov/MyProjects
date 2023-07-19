@@ -14,7 +14,7 @@
 
     using RestSharp;
 
-    public class LocationScraperService : IRegionScraperService
+    public class LocationScraperService : ILocationScraperService
     {
         public async Task<string> GetAllAsJason()
         {

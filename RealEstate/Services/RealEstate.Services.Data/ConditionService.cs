@@ -18,7 +18,6 @@
         public ConditionService(IDeletableEntityRepository<Condition> conditionRepository)
         => this.conditionRepository = conditionRepository;
         
-
         public async Task<IList<ConditionViewModel>> GetAllAsync()
             => await this.conditionRepository
             .All()

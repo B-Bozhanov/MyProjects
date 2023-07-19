@@ -10,6 +10,7 @@
 
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.DependencyInjection;
 
     using Moq;
 
@@ -17,6 +18,7 @@
     using RealEstate.Data.Models;
     using RealEstate.Data.Repositories;
     using RealEstate.Services.Data.Interfaces;
+    using RealEstate.Services.Interfaces;
     using RealEstate.Services.Mapping;
     using RealEstate.Web.ViewModels;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
@@ -107,10 +109,11 @@
             var test = new Mock<IWebHostEnvironment>();
 
             var imageService = new ImageService(test.Object, imageRepository);
+            var services = new Mock<IServiceCollection>();
 
-            var backgroundJobClient = new Mock<IBackgroundJobClient>();
-            backgroundJobClient.Setup(x => x.Create(It.Is<Job>(job => job.Method.Name == "AutoRemoveById"), It.IsAny<EnqueuedState>())).Returns("");
-
+            var hangfireWrapper = new Mock<IHangfireWrapperService>();
+            hangfireWrapper.Setup(x => x.BackgroundJobClient.Create(It.IsAny<Job>(), It.IsAny<EnqueuedState>()));
+                        
             await populatedPlaceRepository.AddAsync(new PopulatedPlace { Id = 1, Name = "Test1" });
             await propertyTypeRepository.AddAsync(new PropertyType { Id = 1, Name = "Type" });
             await buildingTypeRepository.AddAsync(new BuildingType { Id = 1, Name = "BuildingType" });
@@ -129,7 +132,7 @@
                 conditionRepository,
                 detailRepository,
                 equipmentRepository,
-                heatingRepository, imageService, backgroundJobClient.Object);
+                heatingRepository, imageService, hangfireWrapper.Object);
 
             return propertyService;
         }

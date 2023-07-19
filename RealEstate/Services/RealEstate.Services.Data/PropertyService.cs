@@ -16,6 +16,7 @@
     using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
+    using RealEstate.Services.Interfaces;
     using RealEstate.Services.Mapping;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.Locations;
@@ -38,7 +39,7 @@
         private readonly IDeletableEntityRepository<Heating> heatingRepository;
         private readonly IImageService imageService;
         private readonly IBackgroundJobClient backgroundJobClient;
-
+        private readonly IHangfireWrapperService hangfireWrapper;
         private string jobId;
 
         public PropertyService(
@@ -52,7 +53,7 @@
               IDeletableEntityRepository<Equipment> equipmentRepository,
               IDeletableEntityRepository<Heating> heatingRepository,
               IImageService imageService,
-              IBackgroundJobClient backgroundJobClient)
+              IHangfireWrapperService hangfireWrapper)
         {
             this.propertyRepository = propertyRepository;
             this.propertyTypeRepository = propertyTypeRepository;
@@ -64,7 +65,7 @@
             this.equipmentRepository = equipmentRepository;
             this.heatingRepository = heatingRepository;
             this.imageService = imageService;
-            this.backgroundJobClient = backgroundJobClient;
+            this.hangfireWrapper = hangfireWrapper;
         }
 
         public async Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!)
@@ -111,9 +112,10 @@
             await this.imageService.AddAsync(propertyModel.Images, property);
             await this.propertyRepository.AddAsync(property);
             await this.propertyRepository.SaveChangesAsync();
-
-           // this.backgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
-           // RecurringJob.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
+           
+            this.hangfireWrapper.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
+            this.hangfireWrapper.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
+            //RecurringJob.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
         }
 
         public async Task ExpirationDaysDecreeser(int propertyId, PerformContext performContext)

@@ -7,11 +7,9 @@
 
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
-    using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.Property;
@@ -39,6 +37,10 @@
             ILocationService locationService,
             IBuildingTypeService buildingTypeService,
             IPopulatedPlaceService placeService,
+            IHeatingService heatingService,
+            IConditionService conditionService,
+            IDetailService detailService,
+            IEquipmentService equipmentService,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager, IBackgroundJobClient backgroundJobClient)
         {
@@ -47,6 +49,10 @@
             this.locationService = locationService;
             this.buildingTypeService = buildingTypeService;
             this.populatedPlaceService = placeService;
+            this.heatingService = heatingService;
+            this.conditionService = conditionService;
+            this.equipmentService = equipmentService;
+            this.detailService = detailService;
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.backgroundJobClient = backgroundJobClient;
@@ -181,10 +187,10 @@
             property.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
             property.Locations = this.locationService.Get<LocationViewModel>();
             property.BuildingTypes = this.buildingTypeService.GetAll();
-            property.Conditions = await this.conditionService.GetAllAsync();
             property.Heatings = await this.heatingService.GetAllAsync();
             property.Details = await this.detailService.GetAllAsync();
             property.Equipments = await this.equipmentService.GetAllAsync();
+            property.Conditions = await this.conditionService.GetAllAsync();
 
             return property;
         }

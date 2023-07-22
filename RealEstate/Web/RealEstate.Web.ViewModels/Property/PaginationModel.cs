@@ -26,6 +26,8 @@
             }
         }
 
+        public int FirstPage { get; set; } = 1;
+
         public int PreviousPage => this.CurrentPage - 1; 
 
         public int CurrentPage { get; set; }

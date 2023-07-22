@@ -110,7 +110,7 @@
            
             this.hangfireWrapper.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
             this.hangfireWrapper.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
-            //RecurringJob.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
+            RecurringJob.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
         }
 
         public async Task ExpirationDaysDecreeser(int propertyId, PerformContext performContext)
@@ -188,8 +188,9 @@
 
         public int GetAllCount()
             => this.propertyRepository
-                  .AllAsNoTracking()
-                  .Count();
+                  .All()
+                  .ToArray()
+                  .Length;
 
         public IEnumerable<PropertyViewModel> GetAllByOptionId(int optionId)
         {

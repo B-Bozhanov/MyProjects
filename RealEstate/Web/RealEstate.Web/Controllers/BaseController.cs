@@ -18,7 +18,7 @@
 
         protected IActionResult RedirectToMyProperties()
         {
-            var action = nameof(AccountController.UserProperty);
+            var action = nameof(AccountController.UserProperties);
             var controller = nameof(AccountController).Replace("Controller", string.Empty);
 
             return this.RedirectToAction(action, controller);

@@ -46,7 +46,7 @@ namespace RealEstate.Web
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            var sqlConnectionString = configuration.GetConnectionString("ApplicationDbContextConnection");
+            var sqlConnectionString = configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<ApplicationDbContext>(options
                 => options.UseSqlServer(sqlConnectionString));

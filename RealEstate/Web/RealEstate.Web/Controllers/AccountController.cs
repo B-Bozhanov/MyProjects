@@ -1,5 +1,6 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -9,8 +10,10 @@
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Web.ViewModels.Account;
+    using RealEstate.Web.ViewModels.Property;
 
     using static RealEstate.Common.GlobalConstants.Account.ErrorMessages;
+    using static RealEstate.Common.GlobalConstants.Properties;
 
     public class AccountController : BaseController
     {
@@ -99,9 +102,14 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> UserProperty(int page = 1)
+        public async Task<IActionResult> UserProperties(int page = 1)
         {
-           return this.View(await this.propertyService.GetPaginationByUserId(this.UserId, page));
+            var propertiesCount = this.propertyService.GetAllCount();
+            var paginationModel = new PaginationModel(propertiesCount, page);
+            var currentProperties = await this.propertyService.GetPaginationByUserId(this.UserId, paginationModel.CurrentPage);
+
+            this.ViewBag.Pager = paginationModel;
+            return this.View(currentProperties);
         }
     }
 }

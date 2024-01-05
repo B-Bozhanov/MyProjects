@@ -16,19 +16,21 @@
         {
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-            var administratorsNames = GlobalConstants.GetAdministrators();
+            var administrators = GlobalConstants.GetAdministrators();
 
-            foreach (var administratorUserName in administratorsNames)
+            foreach (var administrator in administrators)
             {
-                if (!dbContext.Users.Any(u => u.UserName == administratorUserName.UserName))
+                if (!dbContext.Users.Any(u => u.UserName == administrator.UserName))
                 {
                     ApplicationUser user = new()
                     {
-                        UserName = administratorUserName.UserName,
-                        Email = administratorUserName.Email,
+                        FirstName = administrator.FirstName,
+                        LastName = administrator.LastName,
+                        UserName = administrator.UserName,
+                        Email = administrator.Email,
                     };
 
-                    await userManager.CreateAsync(user, administratorUserName.Password);
+                    await userManager.CreateAsync(user, administrator.Password);
 
                     await userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
                 }

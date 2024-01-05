@@ -2,13 +2,15 @@
 
 @{
     ViewData["Title"] = "Property";
+    PaginationModel paginationModel;
+    paginationModel = this.ViewBag.Pager;
 }
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-4">
-            <a class="btn btn-outline-success" asp-controller="Property" asp-action="Add" role="button">Add</a>
-            <button class="btn btn-outline-success" id="Search">Search</button>
+            <a class="btn btn-outline-success" asp-controller="Property" asp-action="Add" role="button">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Add))</a>
+            <button class="btn btn-outline-success" id="Search">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Search))</button>
         </div>
     </div>
 </div>
@@ -66,7 +68,7 @@
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex">
-                                        <span class="price-a">@property.Option | @property.Price</span>
+                                        <span class="price-a">@property.Option | €@property.Price</span>
                                     </div>
                                     <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id" class="link-a">
                                         Click here to view
@@ -103,6 +105,7 @@
             }
         </div>
     </div>
+    <partial name="_PaginationPartial" model="@paginationModel"/>
 </section>
 
 @section Scripts{

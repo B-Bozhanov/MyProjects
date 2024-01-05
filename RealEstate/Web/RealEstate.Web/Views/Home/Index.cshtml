@@ -1,21 +1,25 @@
-﻿@model PropertyIntroViewModel
+﻿@using System.Globalization;
+@using RealEstate.Services.Interfaces;
+@using RealEstate.Services.TranslateService.Models;
+@inject ITranslateService translateService;
+@model PropertyIntroViewModel
 
 @{
     ViewData["Title"] = "Home";
     var imagePath = string.Empty;
 }
 
-<div class="text-center">Total properties : @Model.GetAllCount</div>
+<div class="text-center">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalPropertiesCount)): @Model.GetAllCount</div>
 <br />
 <div class="row">
     <div class="col-md-12">
         <div class="title-wrap d-flex justify-content-between">
             <div class="title-box">
-                <h2 class="title-a">Newest Properties</h2>
+                <h2 class="title-a">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.NewestProperties))</h2>
             </div>
             <div class="title-link">
                 <a asp-controller="Property" asp-action="Index">
-                    All Property
+                    @translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.AllProperties))
                     <span class="bi bi-chevron-right"></span>
                 </a>
             </div>
@@ -46,7 +50,7 @@
                                             <span class="color-b">@property.PropertyTypeName </span>
                                         </h1>
                                         <p class="intro-subtitle intro-price">
-                                            <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id"><span class="price-a">@property.Option | @property.Price</span></a>
+                                            <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id"><span class="price-a">@property.Option | €@property.Price</span></a>
                                         </p>
                                     </div>
                                 </div>
@@ -67,11 +71,10 @@
             <div class="col-md-12">
                 <div class="title-wrap d-flex justify-content-between">
                     <div class="title-box">
-                        <h2 class="title-a">Most Expensive Properties</h2>
+                        <h2 class="title-a">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MostExpensiveProperties))</h2>
                     </div>
                     <div class="title-link">
-                        <a asp-controller="Property" asp-action="Index">
-                            All Property
+                        <a asp-controller="Property" asp-action="Index"> @translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.AllProperties))
                             <span class="bi bi-chevron-right"></span>
                         </a>
                     </div>
@@ -100,7 +103,7 @@
                                     </div>
                                     <div class="card-body-a">
                                         <div class="price-box d-flex">
-                                            <span class="price-a">@property.Option | @property.Price</span>
+                                            <span class="price-a">@property.Option | €@property.Price)</span>
                                         </div>
                                         <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id" class="link-a">
                                             Click here to view

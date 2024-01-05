@@ -4,7 +4,6 @@
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.Logging;
 
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Web.ViewModels;

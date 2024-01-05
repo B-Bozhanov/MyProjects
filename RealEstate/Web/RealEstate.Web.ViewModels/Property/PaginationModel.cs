@@ -35,5 +35,9 @@
         public int NextPage => this.CurrentPage + 1;
 
         public int LastPage { get; set; }
+
+        public string ControllerName { get; set; }
+
+        public string ActionName { get; set; }
     }
 }

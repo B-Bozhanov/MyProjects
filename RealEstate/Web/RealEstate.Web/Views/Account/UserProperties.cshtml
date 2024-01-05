@@ -7,13 +7,38 @@
     paginationModel = this.ViewBag.Pager;
 }
 
-<div class="container text-center">
+<div class="container">
     <div class="row">
         <div class="title-single-box">
-            <h1 class="title-single">My Properties </h1>
+            @if (Model.Count() == 0)
+            {
+                <h1 class="title-single text-danger text-center">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.YouHaveNotAddedProperties)) </h1>
+            }
+            else if (Model.Any(p => p.IsExpired))
+            {
+                <h1 class="title-single text-danger text-center">Expired Properties </h1>
+                <br />
+                <a class="btn btn-outline-success" asp-controller="Account" asp-action="UserProperties" role="button">Active</a>
+            }
+            else
+            {
+                <h1 class="title-single text-center">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MyProperties)) </h1>
+            }
         </div>
     </div>
 </div>
+<br>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-4">
+            @if (!Model.Any(p => p.IsExpired))
+            {
+                <a class="btn btn-outline-danger" asp-controller="Account" asp-action="Expired" role="button">Expired</a>
+            }
+        </div>
+    </div>
+</div>
+<br>
 <br>
 
 <section class="property-grid grid">
@@ -29,9 +54,11 @@
                             </a>
                         </button>
 
-                        <a asp-controller="Property" asp-action="Edit">
-                            <i class="bi bi-trash3 link-danger col-3"></i>
-                        </a>
+                        <div class="btn btn-link color-d">
+                            <a onclick="Confirm('@property.Id')">
+                                <i class="bi bi-trash3 link-danger col-3">Remove</i>
+                            </a>
+                        </div>
                     </div>
                     <div class="col-4">
                     </div>
@@ -98,5 +125,35 @@
             }
         </div>
     </div>
-    <partial name="_PaginationPartial" model="@paginationModel"/>
+    <partial name="_PaginationPartial" model="@paginationModel" />
 </section>
+
+@section Scripts{
+    <script>
+        function Confirm(value) {
+            let message = "Are you sure?";
+
+            if (confirm(message)) {
+                console.log(value);
+                var propertyId = value;
+                $.ajax({
+                    type: 'POST',
+                    dataType: "JSON",
+                    url: "/Account/RemoveUserProperty",
+                    cors: true,
+                    data: { propertyId: propertyId },
+                    success:
+                        function (response) {
+                            if (response.data) {
+                                console.log("Redirected");
+                                window.location.href = "/Account/UserProperties";
+                            }
+                        }
+                });
+            }
+        }
+    </script>
+    <script src="~/js/searchFormHider.js"></script>
+    <script src="~/js/propertySorter.js"></script>
+    <script src="~/js/jquery.poplatedPlacesGetter.js"></script>
+}

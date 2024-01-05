@@ -5,6 +5,7 @@
 
     using Hangfire;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
 
@@ -58,22 +59,30 @@
             this.backgroundJobClient = backgroundJobClient;
         }
 
+        // Index do not work corectly combine with pagination and jQuery
         [HttpGet]
-        public IActionResult Index(int optionId)
+        public IActionResult Index(int optionId, int page)
         {
+            var allPropertiesCount = this.propertyService.GetAllCount();
+            var paginationModel = new PaginationModel(allPropertiesCount, page);
             var searchModel = new SearchViewModel
             {
-                AllProperties = this.propertyService.GetAllByOptionId(optionId),
+                AllProperties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
                 Locations = this.locationService.Get<LocationViewModel>(),
             };
 
             searchModel.CurrentOptionType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
 
+            paginationModel.ControllerName = this.ControllerName(nameof(PropertyController));
+            paginationModel.ActionName = nameof(this.Index);
+
+            this.ViewBag.Pager = paginationModel;
+
             return this.View(searchModel);
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add() 
+        public async Task<IActionResult> Add()
             => this.View(await this.SetCollectionsAsync(new PropertyInputModel()));
 
         [HttpPost]
@@ -92,16 +101,37 @@
 
             return this.RedirectToAction(nameof(this.Success));
         }
-        
+
         [HttpPost]
-        public IActionResult Search(SearchViewModel searchModel)
+        public async Task<IActionResult> Search(SearchViewModel searchModel, int page)
         {
-            return this.View();
+            try
+            {
+                var properties = await this.propertyService.SearchAsync(searchModel);
+
+                var paginationModel = new PaginationModel(properties.Count(), page);
+
+                paginationModel.ControllerName = this.ControllerName(nameof(PropertyController));
+                paginationModel.ActionName = nameof(this.Search);
+
+                this.ViewBag.Pager = paginationModel;
+                return View(properties);
+            }
+            catch (System.Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return this.View(searchModel);
+            }
         }
 
         [HttpGet]
-        public IActionResult PropertySingle(int id)
-            => this.View(this.propertyService.GetByIdAsync<PropertyViewModel>(id));
+        [AllowAnonymous]
+        [Route("/Property/Single")]
+        public async Task<IActionResult> PropertySingle(int id)
+        {
+            var propertyModel = await this.propertyService.GetByIdAsync<PropertyViewModel>(id);
+            return this.View(propertyModel);
+        }
 
         [HttpPost]
         public IActionResult GetPopulatedPlaces(int id)
@@ -119,16 +149,25 @@
         [HttpGet]
         public async Task<IActionResult> Edit(int propertyId)
         {
-            var editModel = await this.propertyService.GetByIdAsync<PropertyEditViewModel>(propertyId, this.UserId);
+            var editModel = await this.propertyService.GetByIdWithExpiredAsync<PropertyEditViewModel>(propertyId, this.UserId);
 
             if (editModel == null)
             {
                 return this.NotFound(editModel);
             }
 
+            editModel.BuildingType.IsChecked = true;
             editModel.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
             editModel.Locations = this.locationService.Get<LocationViewModel>();
             editModel.BuildingTypes = this.buildingTypeService.GetAll();
+
+            foreach (var buildingType in editModel.BuildingTypes)
+            {
+                if (buildingType.Id == editModel.BuildingType.Id)
+                {
+                    buildingType.IsChecked = true;
+                }
+            }
 
             editModel.LocationId = editModel.PopulatedPlace.Location.Id;
 
@@ -163,9 +202,18 @@
             if (editModel.ExpirationDays != 0)
             {
                 editModel.IsExpirationDaysModified = true;
+                editModel.IsExpired = false;
+                await this.propertyService.EditAsync(editModel);
+
+                var isAnyExpiredProperty = await this.propertyService.IsAnyExpiredProperties(this.UserId);
+
+                if (isAnyExpiredProperty)
+                {
+                    return this.RedirectToMyExpiredProperties();
+                }
             }
 
-            await this.propertyService.Edit(editModel);
+            await this.propertyService.EditAsync(editModel);
 
             return this.RedirectToMyProperties();
         }

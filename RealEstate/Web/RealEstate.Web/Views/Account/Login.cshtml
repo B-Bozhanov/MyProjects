@@ -23,7 +23,9 @@
                                 </div>
 
                                 <div class="form-outline mb-4">
-                                    <label asp-for="Password" class="form-label"></label>
+                                    <label class="form-label">
+                                        @translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Password))
+                                    </label>
                                     <input type="password" asp-for="Password" class="form-control form-control-lg" />
                                     <span asp-validation-for="Password" class="text-danger"></span>
                                 </div>

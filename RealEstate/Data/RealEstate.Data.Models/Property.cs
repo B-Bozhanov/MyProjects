@@ -36,7 +36,9 @@
 
         public bool IsExpirationDaysModified { get; set; }
 
-        #nullable enable
+        public bool IsExpired { get; set; }
+
+#nullable enable
         public string? Description { get; set; }
 
         public int? TotalBedRooms { get; set; }

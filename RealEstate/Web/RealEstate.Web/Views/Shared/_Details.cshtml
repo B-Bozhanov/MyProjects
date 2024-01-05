@@ -1,20 +1,20 @@
 ﻿@model PropertyInputModel
 
-<h1 style="font-size:large">Detail info </h1>
+<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.DetailInfo)) </h1>
 <br />
 <div class="row">
     <div class="col-3">
-        <h1 style="font-size:large"><label asp-for="Size"></label></h1>
+        <h1 style="font-size:large"><label>@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Size))</label></h1>
         <input asp-for="Size" class="form-control">
         <span asp-validation-for="Size" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <h1 style="font-size:large"><label asp-for="Year"></label></h1>
+        <h1 style="font-size:large"><label>@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Year))</label></h1>
         <input asp-for="Year" class="form-control" placeholder="@DateTime.UtcNow.Year">
         <span asp-validation-for="Year" class="text-danger"></span>
     </div>
     <div class="col-3">
-        <h1 style="font-size:large"><label asp-for="Floor"></label></h1>
+        <h1 style="font-size:large"><label>@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Floor))</label></h1>
         <select asp-for="Floor" class="form-select">
             @for (int? i = 0; i <= 100; i++)
             {
@@ -24,7 +24,7 @@
         <br />
     </div>
     <div class="col-3">
-        <h1 style="font-size:large"><label asp-for="TotalFloors"></label></h1>
+        <h1 style="font-size:large"><label>@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalFloors))</label></h1>
         <select asp-for="TotalFloors" class="form-select">
             @for (int i = 0; i <= 100; i++)
             {
@@ -34,7 +34,7 @@
         <br />
     </div>
     <div class="col-3">
-        <h1 style="font-size:large"><label asp-for="TotalBedRooms"></label></h1>
+        <h1 style="font-size:large"><label>@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalBedRooms))</label></h1>
         <select asp-for="TotalBedRooms" class="form-select">
             @for (int i = 0; i <= 15; i++)
             {
@@ -44,7 +44,7 @@
         <br />
     </div>
     <div class="col-3">
-        <h1 style="font-size:large"><label asp-for="TotalBathRooms"></label></h1>
+        <h1 style="font-size:large"><label>@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalBathRooms))</label></h1>
         <select asp-for="TotalBathRooms" class="form-select">
             @for (int i = 0; i <= 15; i++)
             {
@@ -54,7 +54,7 @@
         <br />
     </div>
     <div class="col-3">
-        <h1 style="font-size:large"><label asp-for="TotalGarages"></label></h1>
+        <h1 style="font-size:large"><label>@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalGarages))</label></h1>
         <select asp-for="TotalGarages" class="form-select">
             @for (int i = 0; i <= 15; i++)
             {

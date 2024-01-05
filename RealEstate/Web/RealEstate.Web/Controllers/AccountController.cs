@@ -1,11 +1,14 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+
+    using Newtonsoft.Json.Linq;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
@@ -102,14 +105,39 @@
         }
 
         [HttpGet]
+        [Route("/Account/Properties")]
         public async Task<IActionResult> UserProperties(int page = 1)
         {
-            var propertiesCount = this.propertyService.GetAllCount();
+            var propertiesCount = this.propertyService.GetAllActiveUserPropertiesCount(this.UserId);
             var paginationModel = new PaginationModel(propertiesCount, page);
-            var currentProperties = await this.propertyService.GetPaginationByUserId(this.UserId, paginationModel.CurrentPage);
+            var currentProperties = await this.propertyService.GetActiveUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
+
+            paginationModel.ControllerName = this.ControllerName(nameof(AccountController));
+            paginationModel.ActionName = nameof(this.UserProperties);
 
             this.ViewBag.Pager = paginationModel;
             return this.View(currentProperties);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Expired(int page = 1)
+        {
+            var propertiesCount = this.propertyService.GetAllExpiredUserPropertiesCount(this.UserId);
+            var paginationModel = new PaginationModel(propertiesCount, page);
+            var currentProperties = await this.propertyService.GetExpiredUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
+
+            paginationModel.ControllerName = this.ControllerName(nameof(AccountController));
+            paginationModel.ActionName = nameof(this.Expired);
+
+            this.ViewBag.Pager = paginationModel;
+            return this.View(nameof(this.UserProperties), currentProperties);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveUserProperty(int propertyId)
+        {
+            await this.propertyService.RemoveByIdAsync(propertyId);
+            return this.Json(new {data = true});
         }
     }
 }

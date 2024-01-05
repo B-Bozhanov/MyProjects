@@ -1,7 +1,7 @@
 ﻿@model PropertyInputModel
 
 @{
-    ViewData["Title"] = "Add property";
+    ViewData["Title"] = this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Title));
 }
 
 <div class="container-fluid">
@@ -15,7 +15,11 @@
 
                 @*Type*@
                 <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="PropertyTypeId" class="form-label"></label></h1>
+                    <h1 style="font-size:large">
+                        <label class="form-label">
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.PropertyType))
+                        </label>
+                    </h1>
                     <select asp-for="PropertyTypeId" class="form-select">
                         <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
                         @foreach (var type in Model.PropertyTypes)
@@ -28,9 +32,13 @@
 
                 @*Location*@
                 <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="LocationId"></label></h1>
+                    <h1 style="font-size:large">
+                        <label>
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Location))
+                        </label>
+                    </h1>
                     <select asp-for="LocationId" class="form-select" id="location">
-                        <option value="">Select location</option>
+                        <option value=""> @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.SelectLocation))</option>
                         @foreach (var location in Model.Locations)
                         {
                             <optgroup>
@@ -44,9 +52,13 @@
 
                 @*PopulatedPlace*@
                 <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="PopulatedPlaceId" id="PopulatedPlaceIdLabel"></label></h1>
+                    <h1 style="font-size:large">
+                        <label id="PopulatedPlaceIdLabel">
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.PopulatedPlace))
+                        </label>
+                    </h1>
                     <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
-                        <option value="">Select Populated place</option>
+                        <option value="">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.SelectPopulatedPlace))</option>
                     </select>
                     <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
                 </div>
@@ -58,7 +70,7 @@
                 <br />
 
                 @*Building types*@
-                <h1 style="font-size:large">Building Type</h1>
+                <h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.BuildingType))</h1>
                 <div class="row">
                     @for (int i = 0; i < Model.BuildingTypes.Count; i++)
                     {
@@ -80,35 +92,58 @@
 
                 @*Description*@
                 <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="Description"></label></h1>
-                    <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
+                    <h1 style="font-size:large">
+                        <label>
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Description))
+                        </label>
+                    </h1>
+                    <textarea class="form-control" asp-for="Description" rows="4"
+                              placeholder=" @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MoreInfo))">
+                </textarea>
                 </div>
                 <br />
                 <br />
                 <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="Option"></label></h1>
+                    <h1 style="font-size:large">
+                        <label>
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Options))
+                        </label>
+                    </h1>
                     <div class="form-check-inline">
                         <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
-                        <label class="form-check-label">Sale</label>
+                        <label class="form-check-label">
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Sale))
+                        </label>
                     </div>
                     <div class="form-check-inline">
                         <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
-                        <label class="form-check-label">Rent</label>
+                        <label class="form-check-label">
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Rent))
+                        </label>
                     </div>
                 </div>
                 <br />
                 <div class="col-3">
 
                     @*Price*@
-                    <h1 style="font-size:large"><label asp-for="Price "></label></h1>
-                    <input asp-for="Price" class="form-control" placeholder="Price in EUR" />
+                    <h1 style="font-size:large">
+                        <label>
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Price))
+                        </label>
+                    </h1>
+                    <input asp-for="Price" class="form-control"
+                           placeholder="@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.PriceInEUR))" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <br />
 
                 @*Expiration Date*@
                 <div class="col-3">
-                    <h1 style="font-size:large"><label asp-for="ExpirationDays"></label></h1>
+                    <h1 style="font-size:large">
+                        <label>
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.ExpirationDays))
+                        </label>
+                    </h1>
                     <select class="form-select" asp-for="ExpirationDays">
                         <option value="30">30 days</option>
                         <option value="60">60 days</option>
@@ -120,7 +155,11 @@
 
                 @*Contacts*@
 
-                <h1 style="font-size:large"><label asp-for="ContactModel"></label></h1>
+                <h1 style="font-size:large">
+                    <label>
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.ContactModel))
+                    </label>
+                </h1>
                 <div class="property-contact">
                     <div class="row">
                         <div class="col-md-12 mb-1">
@@ -147,6 +186,11 @@
 
                 @*Buttons*@
                 <br />
+                <h1 style="font-size:large">
+                    <label>
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.ChooseImage))
+                    </label>
+                </h1>
                 <div class="row">
                     <div class="col-md-12">
                         <input type="file" class="a" name="images" multiple />
@@ -155,7 +199,7 @@
                 <br />
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-b">Add</button>
+                        <button type="submit" class="btn btn-b">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Add))</button>
                     </div>
                 </div>
             </form>

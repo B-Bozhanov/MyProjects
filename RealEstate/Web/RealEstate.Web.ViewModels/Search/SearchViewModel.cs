@@ -3,10 +3,11 @@
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
+    using RealEstate.Services.Mapping;
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.Property;
 
-    public class SearchViewModel
+    public class SearchViewModel : IMapFrom<RealEstate.Data.Models.Property>
     {
         public SearchViewModel()
         {
@@ -25,12 +26,12 @@
         public string KeyWord { get; init; }
 
         [Display(Name = "Location")]
-        public int LocationId { get; init; }
+        public int? LocationId { get; init; }
 
         [Display(Name = "Populated place")]
-        public int PopulatedPlaceId { get; init; }
+        public int? PopulatedPlaceId { get; init; }
 
-        public OptionType Type { get; init; }
+        public OptionType? Type { get; init; }
 
         public int? BedRooms { get; init; }
 

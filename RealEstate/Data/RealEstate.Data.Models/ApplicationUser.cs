@@ -3,6 +3,7 @@ namespace RealEstate.Data.Models
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
 
     using Microsoft.AspNetCore.Identity;
 
@@ -18,6 +19,14 @@ namespace RealEstate.Data.Models
             this.Logins = new HashSet<IdentityUserLogin<string>>();
             this.Properties = new HashSet<Property>();
         }
+
+        [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+
+        public string Description { get; set; }
 
         // Audit info
         public DateTime CreatedOn { get; set; }

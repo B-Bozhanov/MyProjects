@@ -6,7 +6,7 @@
         @if (Model.PreviousPage < 1)
         {
             <li class="page-item disabled">
-                <a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.FirstPage" tabindex="-1">First</a>
+                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.FirstPage" tabindex="-1">First</a>
             </li>
             <li class="page-item disabled">
                 <a class="page-link" href="#" tabindex="-1">Previous</a>
@@ -15,12 +15,12 @@
         else
         {
             <li class="page-item">
-                <a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.FirstPage" tabindex="-1">First</a>
+                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.FirstPage" tabindex="-1">First</a>
             </li>
             <li class="page-item enabled">
-                <a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.PreviousPage" tabindex="-1">Previous</a>
+                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.PreviousPage" tabindex="-1">Previous</a>
             </li>
-            <li class="page-item"><a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.PreviousPage">@Model.PreviousPage</a></li>
+            <li class="page-item"><a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.PreviousPage">@Model.PreviousPage</a></li>
         }
 
         <li class="page-item active">
@@ -29,22 +29,22 @@
 
         @if (Model.LastPage == Model.CurrentPage)
         {
-            <li class="page-item disabled"><a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.NextPage">@Model.NextPage</a></li>
+            <li class="page-item disabled"><a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">@Model.NextPage</a></li>
             <li class="page-item disabled">
-                <a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.NextPage">Next</a>
+                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">Next</a>
             </li>
             <li class="page-item disabled">
-                <a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.LastPage" tabindex="-1">Last</a>
+                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.LastPage" tabindex="-1">Last</a>
             </li>
         }
         else
         {
-            <li class="page-item"><a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.NextPage">@Model.NextPage</a></li>
+            <li class="page-item"><a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">@Model.NextPage</a></li>
             <li class="page-item">
-                <a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.NextPage">Next</a>
+                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">Next</a>
             </li>
             <li class="page-item">
-                <a class="page-link" asp-controller="Account" asp-action="UserProperties" asp-route-page="@Model.LastPage" tabindex="-1">Last</a>
+                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.LastPage" tabindex="-1">Last</a>
             </li>
         }
     </ul>

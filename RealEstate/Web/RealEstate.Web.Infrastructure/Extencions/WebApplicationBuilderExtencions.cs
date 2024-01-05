@@ -6,9 +6,6 @@
 
     using DependencyInjection;
 
-    using RealEstate.Services.Data;
-    using RealEstate.Services.Data.Interfaces;
-
     public static class WebApplicationBuilderExtencions
     {
         public static void AddServices(this IServiceCollection services, Type[] serviceTypes)
@@ -29,6 +26,10 @@
 
                 foreach (var implementationType in currentServiceTypes)
                 {
+                    //if (implementationType.Name == "SupportLanguageService")
+                    //{
+                    //    continue;
+                    //}
                     var interfaceType = implementationType.GetInterface($"I{implementationType.Name}");
 
                     if (interfaceType == null)

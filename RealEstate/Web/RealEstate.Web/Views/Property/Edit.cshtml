@@ -7,13 +7,13 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6 col-sm-12 offset-sm-3">
-            <form class="form-group" method="post" >
+            <form class="form-group" method="post">
                 <div class="title-box-d offset-4">
                     <h3 class="title-d"> @ViewData["Title"]</h3>
                 </div>
                 <div asp-validation-summary=All class="text-danger"></div>
 
-                <input asp-for="Id" type="hidden"/>
+                <input asp-for="Id" type="hidden" />
                 @*Type*@
                 <div class="form-group">
                     <h1 style="font-size:large"><label asp-for="PropertyTypeId" class="form-label"></label></h1>
@@ -137,19 +137,18 @@
                         <div class="col">
                             <label class="form-check-label">@Model.BuildingTypes[i].Name</label>
                             @*
-                                TODO: If clicked 2 building types then we havea bug!
-                            *@
-                                @if (Model.BuildingTypes[i].IsChecked)
-                                {
-                                    <input asp-for="BuildingTypes[i].IsChecked" class="form-check-input" checked />
-                                }
-                                else
-                                {
-                                    <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
-                                }
+                        TODO: If clicked 2 building types then we havea bug!
+                        *@
+                            @if (Model.BuildingTypes[i].IsChecked)
+                            {
+                                <input asp-for="BuildingTypes[i].IsChecked" class="form-check-input" checked />
+                            }
+                            else
+                            {
+                                <input type="checkbox" asp-for="BuildingTypes[i].IsChecked" class="form-check-input" />
+                            }
                             <input type="hidden" asp-for="BuildingTypes[i].Id" />
                             <input type="hidden" asp-for="BuildingTypes[i].Name" />
-                            <input type="hidden" asp-for="BuildingTypes[i].IsChecked" />
                         </div>
                     }
                     <br />
@@ -165,16 +164,32 @@
                 </div>
                 <br />
                 <br />
+
                 <div class="form-group">
                     <h1 style="font-size:large"><label asp-for="Option"></label></h1>
-                    <div class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
-                        <label class="form-check-label">Sale</label>
-                    </div>
-                    <div class="form-check-inline">
-                        <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
-                        <label class="form-check-label">Rent</label>
-                    </div>
+                    @if (Model.Option == RealEstate.Data.Models.PropertyOption.Sale)
+                    {
+                        <div class="form-check-inline">
+                            <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
+                            <label class="form-check-label">Sale</label>
+                        </div>
+                        <div class="form-check-inline">
+                            <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
+                            <label class="form-check-label">Rent</label>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="form-check-inline">
+                            <input class="form-check-input" type="radio" name="Option" id="Option" value="sale">
+                            <label class="form-check-label">Sale</label>
+                        </div>
+                        <div class="form-check-inline">
+                            <input class="form-check-input" type="radio" name="Option" id="Option" value="rent" checked>
+                            <label class="form-check-label">Rent</label>
+                        </div>
+                    }
+
                 </div>
                 <br />
                 <div class="col-3">
@@ -187,16 +202,32 @@
                 <br />
 
                 @*Expiration Date*@
-                <div class="col-3">
-                    <h1 style="font-size:large"><label asp-for="ExpirationDays"></label></h1>
-                    <select class="form-select" asp-for="ExpirationDays">
-                        <option value="0">+0 days</option>
-                        <option value="30">+30 days</option>
-                        <option value="60">+60 days</option>
-                        <option value="90">+90 days</option>
-                    </select>
-                    <span asp-validation-for="ExpirationDays" class="text-danger"></span>
-                </div>
+                @if (Model.IsExpired)
+                {
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label>Activate for</label></h1>
+                        <select class="form-select" asp-for="ExpirationDays">
+                            <option value="30">0 days</option>
+                            <option value="30">30 days</option>
+                            <option value="60">60 days</option>
+                            <option value="90">90 days</option>
+                        </select>
+                        <span asp-validation-for="ExpirationDays" class="text-danger"></span>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-3">
+                        <h1 style="font-size:large"><label asp-for="ExpirationDays"></label></h1>
+                        <select class="form-select" asp-for="ExpirationDays">
+                            <option value="0">+0 days</option>
+                            <option value="30">+30 days</option>
+                            <option value="60">+60 days</option>
+                            <option value="90">+90 days</option>
+                        </select>
+                        <span asp-validation-for="ExpirationDays" class="text-danger"></span>
+                    </div>
+                }
                 <br />
 
                 @*Buttons*@
@@ -241,10 +272,6 @@
 
                         markup += "<br />";
                         $("#PopulatedPlaceId").html(markup);
-                    },
-                error:
-                    function (response) {
-
                     }
             });
         });

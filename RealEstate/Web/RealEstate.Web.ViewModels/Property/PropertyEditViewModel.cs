@@ -33,6 +33,8 @@
 
         public bool IsExpirationDaysModified { get; set; }
 
+        public bool IsExpired { get; set; }
+
         [Display(Name = "Options")]
         public PropertyOption Option { get; init; }
 

@@ -262,6 +262,9 @@ namespace RealEstate.Data.Migrations
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Email")
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
@@ -269,8 +272,16 @@ namespace RealEstate.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -611,6 +622,9 @@ namespace RealEstate.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("IsExpirationDaysModified")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsExpired")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("ModifiedOn")

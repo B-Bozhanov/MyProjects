@@ -7,11 +7,14 @@
     {
         public const string SystemName = "RealEstate";
 
+        public const string CurrentSystemLanguage = "Bulgarian";
+
         public const string SeedDataPath = @$"../../Data/{SystemName}.Data/Seeding/DataToSeed/";
 
         public const string AdministratorRoleName = "Administrator";
 
         public const string Layout = "_Theme1";
+
 
         // TODO: Move administrators data to json in data folder
         public static List<Administrator> GetAdministrators()
@@ -20,12 +23,16 @@
             {
                 new Administrator
                 {
+                    FirstName = "Bozhan",
+                    LastName = "Bozhanov",
                     UserName = "DareDeviL88",
                     Password = "123456",
                     Email = "bojanilkov88@gmail.com",
                 },
                 new Administrator
                 {
+                    FirstName = "Iliyan",
+                    LastName = "Bozhanov",
                     UserName = "Ribkata",
                     Password = "123456789",
                     Email = "iliyan.bojanov@ka1.bg",
@@ -38,6 +45,7 @@
         public static class Images
         {
             public const string PropertyImagesPath = "/assets/img/Properties/";
+            public const string AgentImagesPath = "/assets/img/Agents/";
             public const int Width = 1920;
             public const int Height = 1080;
         }

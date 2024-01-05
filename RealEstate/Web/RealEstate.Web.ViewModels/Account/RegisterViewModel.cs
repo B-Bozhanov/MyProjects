@@ -6,6 +6,14 @@
 
     public class RegisterViewModel
     {
+        public string AgencyName { get; set; }
+
+        [Required]
+        public string FirstName { get; set; }
+
+        [Required]
+        public string LastName { get; set; }
+
         [Required]
         [MinLength(UsernameMinLength)]
         [MaxLength(UsernameMaxLength)]
@@ -25,5 +33,7 @@
 
         [Required]
         public bool IsTermsClicked { get; set; }
+
+        public bool IsAgent { get; set; }
     }
 }

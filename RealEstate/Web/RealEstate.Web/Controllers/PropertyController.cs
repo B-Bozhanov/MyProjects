@@ -12,11 +12,14 @@
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
+    using RealEstate.Services.Interfaces;
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.Property;
     using RealEstate.Web.ViewModels.PropertyTypes;
     using RealEstate.Web.ViewModels.Search;
+
+    using static RealEstate.Common.GlobalConstants.Properties;
 
     public class PropertyController : BaseController
     {
@@ -32,6 +35,7 @@
         private readonly UserManager<ApplicationUser> userManager;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IBackgroundJobClient backgroundJobClient;
+        private readonly IPaginationService paginationService;
 
         public PropertyController(
             IPropertyService propertyService,
@@ -44,7 +48,8 @@
             IDetailService detailService,
             IEquipmentService equipmentService,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager, IBackgroundJobClient backgroundJobClient)
+            SignInManager<ApplicationUser> signInManager, IBackgroundJobClient backgroundJobClient,
+            IPaginationService paginationService)
         {
             this.propertyService = propertyService;
             this.propertyTypeService = propertyTypeService;
@@ -58,14 +63,15 @@
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.backgroundJobClient = backgroundJobClient;
+            this.paginationService = paginationService;
         }
 
-        // Index do not work corectly combine with pagination and jQuery
         [HttpGet]
-        public IActionResult Index(int optionId, int page)
+        [AllowAnonymous]
+        public IActionResult Index(int optionId, int page = 1)
         {
             var allPropertiesCount = this.propertyService.GetAllActiveCount();
-            var paginationModel = new PaginationModel(allPropertiesCount, page);
+            var paginationModel = this.paginationService.CreatePagination(allPropertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Index));
             var searchModel = new SearchViewModel
             {
                 AllProperties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
@@ -73,9 +79,6 @@
             };
 
             searchModel.CurrentOptionType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
-
-            paginationModel.ControllerName = this.ControllerName(nameof(PropertyController));
-            paginationModel.ActionName = nameof(this.Index);
 
             this.ViewBag.Pager = paginationModel;
 
@@ -104,16 +107,14 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Search(SearchViewModel searchModel, int page)
+        [AllowAnonymous]
+        public async Task<IActionResult> Search(SearchViewModel searchModel, int page = 1)
         {
             try
             {
                 var properties = await this.propertyService.SearchAsync(searchModel);
 
-                var paginationModel = new PaginationModel(properties.Count(), page);
-
-                paginationModel.ControllerName = this.ControllerName(nameof(PropertyController));
-                paginationModel.ActionName = nameof(this.Search);
+                var paginationModel = this.paginationService.CreatePagination(properties.Count(), PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Search));
 
                 this.ViewBag.Pager = paginationModel;
                 return View(properties);
@@ -199,20 +200,6 @@
 
                 return this.View(editModel);
             }
-
-            //if (editModel.ExpirationDays != 0)
-            //{
-            //    editModel.IsExpirationDaysModified = true;
-            //    editModel.IsExpired = false;
-            //    await this.propertyService.EditAsync(editModel);
-
-            //    var isAnyExpiredProperty = await this.propertyService.IsAnyExpiredProperties(this.UserId);
-
-            //    if (isAnyExpiredProperty)
-            //    {
-            //        return this.RedirectToMyExpiredProperties();
-            //    }
-            //}
 
             await this.propertyService.EditAsync(editModel);
 

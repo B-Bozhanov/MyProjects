@@ -125,18 +125,18 @@
             await buildingTypeRepository.SaveChangesAsync();
 
 
-            var propertyService = new PropertyService(
-                propertyRepository,
-                propertyTypeRepository,
-                buildingTypeRepository,
-                userContactsRepository,
-                populatedPlaceRepository,
-                conditionRepository,
-                detailRepository,
-                equipmentRepository,
-                heatingRepository, imageService, hangfireWrapper.Object);
+            //var propertyService = new PropertyService(
+            //    propertyRepository,
+            //    propertyTypeRepository,
+            //    buildingTypeRepository,
+            //    userContactsRepository,
+            //    populatedPlaceRepository,
+            //    conditionRepository,
+            //    detailRepository,
+            //    equipmentRepository,
+            //    heatingRepository, imageService, hangfireWrapper.Object);
 
-            return propertyService;
+            return null;
         }
     }
 }

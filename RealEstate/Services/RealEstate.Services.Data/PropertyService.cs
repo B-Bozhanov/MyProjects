@@ -38,6 +38,7 @@
         private readonly IImageService imageService;
         private readonly IBackgroundJobClient backgroundJobClient;
         private readonly IHangfireWrapperService hangfireWrapper;
+        private readonly IPaginationService paginationService;
 
         public PropertyService(
               IDeletableEntityRepository<Property> propertyRepository,
@@ -50,7 +51,8 @@
               IDeletableEntityRepository<Equipment> equipmentRepository,
               IDeletableEntityRepository<Heating> heatingRepository,
               IImageService imageService,
-              IHangfireWrapperService hangfireWrapper)
+              IHangfireWrapperService hangfireWrapper,
+              IPaginationService paginationService)
         {
             this.propertyRepository = propertyRepository;
             this.propertyTypeRepository = propertyTypeRepository;
@@ -63,6 +65,7 @@
             this.heatingRepository = heatingRepository;
             this.imageService = imageService;
             this.hangfireWrapper = hangfireWrapper;
+            this.paginationService = paginationService;
         }
 
         public async Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!)
@@ -291,7 +294,8 @@
                  .To<PropertyViewModel>()
                  .ToListAsync();
 
-            return this.Pager(activeProperties, page);
+            var test = this.paginationService.Pager<PropertyViewModel>(activeProperties, page, PropertiesPerPage);
+            return test;
         }
 
         public async Task<IEnumerable<PropertyViewModel>> GetExpiredUserPropertiesPerPageAsync(string id, int page)

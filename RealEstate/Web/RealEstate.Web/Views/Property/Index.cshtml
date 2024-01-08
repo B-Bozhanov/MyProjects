@@ -68,7 +68,7 @@
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex">
-                                        <span class="price-a">@property.Option | €@property.Price</span>
+                                        <span class="price-a">@property.Option | @property.PriceFormat()</span>
                                     </div>
                                     <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id" class="link-a">
                                         Click here to view

@@ -209,17 +209,17 @@
         }
 
         //TODO: Remove this it is already in propertyService:
-        private void PropertyValidator(PropertyInputModel property)
-        {
-            if (property.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
-            {
-                this.ModelState.AddModelError("", "Canot check more than one building type!");
-            }
-            else if (property.BuildingTypes.All(b => !b.IsChecked))
-            {
-                this.ModelState.AddModelError("", "Building type is required!");
-            }
-        }
+        //private void PropertyValidator(PropertyInputModel property)
+        //{
+        //    if (property.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
+        //    {
+        //        this.ModelState.AddModelError("", "Canot check more than one building type!");
+        //    }
+        //    else if (property.BuildingTypes.All(b => !b.IsChecked))
+        //    {
+        //        this.ModelState.AddModelError("", "Building type is required!");
+        //    }
+        //}
 
         private void AddModelStateErrors(Dictionary<string, List<string>> errors)
         {

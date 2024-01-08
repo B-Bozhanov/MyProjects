@@ -89,6 +89,8 @@ namespace RealEstate.Web
                .UseRecommendedSerializerSettings(x => x.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore)
                .UseSqlServerStorage(sqlConnectionString));
 
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
             services.AddHangfireServer();
 
             services.AddServices(new Type[] { typeof(IPropertyService), typeof(IHangfireWrapperService)});

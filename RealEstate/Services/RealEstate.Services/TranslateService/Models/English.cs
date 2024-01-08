@@ -7,9 +7,15 @@
         public override string Name => nameof(English);
 
         public override string NewestProperties => "Newst Properties";
+
         public override string Username => "Username";
+
         public override string Password => "Password";
+
         public override string YouHaveNotAddedProperties => "You have not added properties yet";
+
+        public override string YouHaveNotUnactiveProperties => "You have not unactive properties";
+        public override string ExpiredProperties => "Expired Properties";
 
         public override string AllProperties => "";
 
@@ -29,7 +35,7 @@
 
         public override string Login => "";
 
-        public override string MyProperties => "";
+        public override string MyActiveProperties => "";
 
         public override string IamAAgent => "";
 

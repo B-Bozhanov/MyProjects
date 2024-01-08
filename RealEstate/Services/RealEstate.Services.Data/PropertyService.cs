@@ -118,17 +118,22 @@
         {
             var property = await this.GetByIdAsync(propertyId);
 
+            if (property == null)
+            {
+                return;
+            }
+
             var jobId = performContext.BackgroundJob.Id;
 
             if (property.ExpirationDays <= 0)
             {
-                property.IsExpired = true;
+                property.IsDeleted = true;
                 this.propertyRepository.Update(property);
                 await this.propertyRepository.SaveChangesAsync();
                 return;
             }
 
-            this.backgroundJobClient.Reschedule(jobId, TimeSpan.FromMinutes(property.ExpirationDays));
+            this.hangfireWrapper.BackgroundJobClient.Reschedule(jobId, TimeSpan.FromMinutes(property.ExpirationDays));
         }
 
         public async Task EditAsync(PropertyEditViewModel editModel)
@@ -161,9 +166,9 @@
             {
                 property.ExpirationDays += editModel.ExpirationDays;
 
-                if (property.IsExpired)
+                if (property.IsDeleted)
                 {
-                    property.IsExpired = false;
+                    property.IsDeleted = false;
                     this.hangfireWrapper.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
                     this.hangfireWrapper.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
                 }
@@ -189,7 +194,7 @@
         {
             var property = await this.GetByIdAsync(propertyId);
 
-            if (property.ExpirationDays <= 0)
+            if (property == null || property.ExpirationDays <= 0)
             {
                 var jobId = performContext.BackgroundJob.Id;
                 this.hangfireWrapper.RecurringJobManager.RemoveIfExists(jobId);
@@ -256,8 +261,8 @@
 
         public int GetAllExpiredUserPropertiesCount(string userId)
             => this.propertyRepository
-            .All()
-            .Where(p => p.ApplicationUserId == userId && p.IsExpired)
+            .AllWithDeleted()
+            .Where(p => p.ApplicationUserId == userId && p.IsDeleted)
             .OrderByDescending(p => p.DeletedOn)
             .ToArray()
             .Length;
@@ -297,13 +302,25 @@
         public async Task<IEnumerable<PropertyViewModel>> GetExpiredUserPropertiesPerPageAsync(string id, int page)
         {
             var expiredProperties = await this.propertyRepository
-                 .All()
-                 .Where(p => p.ApplicationUserId == id && p.IsExpired)
+                 .AllWithDeleted()
+                 .Where(p => p.ApplicationUserId == id && p.IsDeleted)
                  .OrderByDescending(p => p.DeletedOn)
                  .To<PropertyViewModel>()
                  .ToListAsync();
 
             return this.Pager(expiredProperties, page);
+        }
+
+        public async Task<IEnumerable<PropertyViewModel>> GetAllWithExpiredUserPropertiesPerPage(string id, int page)
+        {
+            var allProperties = await this.propertyRepository
+                 .AllWithDeleted()
+                 .Where(p => p.ApplicationUserId == id)
+                 .OrderByDescending(p => p.DeletedOn)
+                 .To<PropertyViewModel>()
+                 .ToListAsync();
+
+            return this.Pager(allProperties, page);
         }
 
         public async Task<bool> IsAnyExpiredProperties(string userId)
@@ -313,81 +330,23 @@
 
         public async Task<bool> IsUserProperty(int propertyId, string userId)
             => await this.propertyRepository
-            .All()
+            .AllWithDeleted()
             .AnyAsync(p => p.ApplicationUserId == userId);
 
-        public async Task RemoveByIdAsync(int id)
+        public async Task<bool> RemoveByIdAsync(int id)
         {
             var property = await this.GetByIdAsync(id);
-            this.propertyRepository.Delete(property);
-            await this.propertyRepository.SaveChangesAsync();
-        }
 
-        //TODO: Remove this!!!
-        private async Task<Property> GetByIdAsync(int id)
-            => await this.propertyRepository
-            .All()
-            .FirstAsync(p => p.Id == id);
-
-        public async Task<IEnumerable<PropertyViewModel>> SearchAsync(SearchViewModel searchModel)
-        {
-            var result = new List<PropertyViewModel>();
-
-            if (searchModel.KeyWord == null && searchModel.Type == null
-                && searchModel.BathRooms == null && searchModel.BedRooms == null
-                && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
-                && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
+            if (property == null)
             {
-                throw new InvalidOperationException("Select at least one criteria");
+                return false;
             }
 
-            //if (searchModel.KeyWord != null && searchModel.Type == null
-            //  && searchModel.BathRooms == null && searchModel.BedRooms == null
-            //  && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
-            //  && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
-            //{
-            //    result = this.propertyRepository
-            //        .AllAsNoTracking()
-            //        .ToList()
-            //        .Where(p => p.GetType()
-            //              .GetProperties()
-            //              .Any(x => x.GetValue().Contains(searchModel.KeyWord)))
-            //        .Select(x => new PropertyViewModel
-            //        {
-            //            ExpirationDays = x.ExpirationDays,
-            //            Id = x.Id,
-            //            IsExpirationDaysModified = x.IsExpirationDaysModified,
-            //            IsExpired = x.IsExpired,
-            //            Option = x.Option.ToString(),
-            //            PopulatedPlace = new PopulatedPlaceViewModel
-            //            {
-            //                Id = x.PopulatedPlace.Id,
-            //                Location = new LocationViewModel
-            //                {
-            //                    Id = x.PopulatedPlace.LocationId,
-            //                    Name = x.PopulatedPlace.Location.Name,
-            //                },
-            //                Name = x.PopulatedPlace.Name,
-            //            },
-            //            PropertyTypeName = x.PropertyType.Name,
-            //            TotalBathRooms = x.TotalBathRooms,
-            //            TotalBedRooms = x.TotalBedRooms,
-            //            Size = x.Size,
-            //            TotalGarages = x.TotalGarages,
-            //            Price = x.Price.ToString(),
-
-            //        }).ToList();
-            //}
-
-
-                return result;
+            property.ExpirationDays = default;
+            this.propertyRepository.Delete(property);
+            await this.propertyRepository.SaveChangesAsync();
+            return true;
         }
-
-        private IEnumerable<PropertyViewModel> Pager(IEnumerable<PropertyViewModel> properties, int page)
-            => properties
-                .Skip((page - 1) * PropertiesPerPage)
-                .Take(PropertiesPerPage)
-                .ToList();
 
         private async Task<Property> AddMoreDetailsAsync(PropertyInputModel propertyModel, Property property)
         {
@@ -446,5 +405,70 @@
             return property;
         }
 
+        //TODO: Remove this!!!
+        private async Task<Property> GetByIdAsync(int id)
+            => await this.propertyRepository
+            .All()
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        public async Task<IEnumerable<PropertyViewModel>> SearchAsync(SearchViewModel searchModel)
+        {
+            var result = new List<PropertyViewModel>();
+
+            if (searchModel.KeyWord == null && searchModel.Type == null
+                && searchModel.BathRooms == null && searchModel.BedRooms == null
+                && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+                && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
+            {
+                throw new InvalidOperationException("Select at least one criteria");
+            }
+
+            //if (searchModel.KeyWord != null && searchModel.Type == null
+            //  && searchModel.BathRooms == null && searchModel.BedRooms == null
+            //  && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+            //  && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
+            //{
+            //    result = this.propertyRepository
+            //        .AllAsNoTracking()
+            //        .ToList()
+            //        .Where(p => p.GetType()
+            //              .GetProperties()
+            //              .Any(x => x.GetValue().Contains(searchModel.KeyWord)))
+            //        .Select(x => new PropertyViewModel
+            //        {
+            //            ExpirationDays = x.ExpirationDays,
+            //            Id = x.Id,
+            //            IsExpirationDaysModified = x.IsExpirationDaysModified,
+            //            IsExpired = x.IsExpired,
+            //            Option = x.Option.ToString(),
+            //            PopulatedPlace = new PopulatedPlaceViewModel
+            //            {
+            //                Id = x.PopulatedPlace.Id,
+            //                Location = new LocationViewModel
+            //                {
+            //                    Id = x.PopulatedPlace.LocationId,
+            //                    Name = x.PopulatedPlace.Location.Name,
+            //                },
+            //                Name = x.PopulatedPlace.Name,
+            //            },
+            //            PropertyTypeName = x.PropertyType.Name,
+            //            TotalBathRooms = x.TotalBathRooms,
+            //            TotalBedRooms = x.TotalBedRooms,
+            //            Size = x.Size,
+            //            TotalGarages = x.TotalGarages,
+            //            Price = x.Price.ToString(),
+
+            //        }).ToList();
+            //}
+
+
+            return result;
+        }
+
+        private IEnumerable<PropertyViewModel> Pager(IEnumerable<PropertyViewModel> properties, int page)
+            => properties
+                .Skip((page - 1) * PropertiesPerPage)
+                .Take(PropertiesPerPage)
+                .ToList();
     }
 }

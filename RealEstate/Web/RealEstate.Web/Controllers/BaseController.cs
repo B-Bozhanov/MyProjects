@@ -16,9 +16,9 @@
             return this.RedirectToAction(action, controller);
         }
 
-        protected IActionResult RedirectToMyProperties()
+        protected IActionResult RedirectToMyActiveProperties()
         {
-            var action = nameof(AccountController.UserProperties);
+            var action = nameof(AccountController.ActiveProperties);
             var controller = nameof(AccountController).Replace("Controller", string.Empty);
 
             return this.RedirectToAction(action, controller);
@@ -26,7 +26,7 @@
 
         protected IActionResult RedirectToMyExpiredProperties()
         {
-            var action = nameof(AccountController.Expired);
+            var action = nameof(AccountController.ExpiredProperties);
             var controller = nameof(AccountController).Replace("Controller", string.Empty);
 
             return this.RedirectToAction(action, controller);

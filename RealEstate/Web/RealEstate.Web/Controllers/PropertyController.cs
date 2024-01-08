@@ -1,6 +1,7 @@
 ﻿namespace RealEstate.Web.Controllers
 {
     using System.Linq;
+    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
     using Hangfire;
@@ -215,7 +216,14 @@
 
             await this.propertyService.EditAsync(editModel);
 
-            return this.RedirectToMyProperties();
+            var returnUrlCookieValue = this.Request.Cookies["ReturnUrl"];
+
+            if (returnUrlCookieValue == null || this.propertyService.GetAllExpiredUserPropertiesCount(this.UserId) == 0)
+            {
+                return this.RedirectToMyActiveProperties();
+            }
+
+            return this.Redirect(returnUrlCookieValue);
         }
 
         private void PropertyValidator(PropertyInputModel property)

@@ -35,6 +35,8 @@
 
         public bool IsExpired { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         [Display(Name = "Options")]
         public PropertyOption Option { get; init; }
 

@@ -50,7 +50,8 @@
                                             <span class="color-b">@property.PropertyTypeName </span>
                                         </h1>
                                         <p class="intro-subtitle intro-price">
-                                            <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id"><span class="price-a">@property.Option | €@property.Price</span></a>
+                                            <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id">
+                                                <span class="price-a">@property.Option | @property.PriceFormat()</span></a>
                                         </p>
                                     </div>
                                 </div>

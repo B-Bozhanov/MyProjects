@@ -1,12 +1,20 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
+    using System.Net;
+    using System.Net.Http;
     using System.Threading.Tasks;
+    using System.Web;
 
     using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.DataProtection;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Net.Http.Headers;
 
     using Newtonsoft.Json.Linq;
 
@@ -24,17 +32,21 @@
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IAccountService accountService;
         private readonly IPropertyService propertyService;
+        private Cookie cookie;
+        private CookieOptions cookieOptions;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IAccountService accountService,
-            IPropertyService propertyService)
+            IPropertyService propertyService) 
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.accountService = accountService;
             this.propertyService = propertyService;
+
+            this.CreateReturnUrlCookie("ReturnUrl");
         }
 
         [HttpGet]
@@ -93,7 +105,7 @@
                 return this.View(loginModel);
             }
 
-            return this.RedirectToHome();
+            return this.RedirectToAction(nameof(this.ActiveProperties));
         }
 
         [HttpPost]
@@ -105,12 +117,12 @@
         }
 
         [HttpGet]
-        [Route("/Account/Properties")]
+        [Route("/Account/PropertiesAll")]
         public async Task<IActionResult> UserProperties(int page = 1)
         {
             var propertiesCount = this.propertyService.GetAllActiveUserPropertiesCount(this.UserId);
             var paginationModel = new PaginationModel(propertiesCount, page);
-            var currentProperties = await this.propertyService.GetActiveUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
+            var currentProperties = await this.propertyService.GetAllWithExpiredUserPropertiesPerPage(this.UserId, paginationModel.CurrentPage);
 
             paginationModel.ControllerName = this.ControllerName(nameof(AccountController));
             paginationModel.ActionName = nameof(this.UserProperties);
@@ -120,24 +132,77 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Expired(int page = 1)
+        [Route("/Account/ActiveProperties")]
+        public async Task<IActionResult> ActiveProperties(int page = 1)
+        {
+            var propertiesCount = this.propertyService.GetAllActiveUserPropertiesCount(this.UserId);
+            var paginationModel = new PaginationModel(propertiesCount, page);
+            var currentProperties = await this.propertyService.GetActiveUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
+
+            paginationModel.ControllerName = this.ControllerName(nameof(AccountController));
+            paginationModel.ActionName = nameof(this.ExpiredProperties);
+
+            this.ViewBag.Pager = paginationModel;
+            this.ViewBag.IsFromExpired = false;
+            this.cookie.Value = "/Account/ActiveProperties";
+
+            this.SetCookie(this.cookie.Name, this.cookie.Value, this.cookieOptions);
+            return this.View(nameof(this.UserProperties), currentProperties);
+        }
+
+        [HttpGet]
+        [Route("/Account/ExpiredProperties")]
+        public async Task<IActionResult> ExpiredProperties(int page = 1)
         {
             var propertiesCount = this.propertyService.GetAllExpiredUserPropertiesCount(this.UserId);
             var paginationModel = new PaginationModel(propertiesCount, page);
             var currentProperties = await this.propertyService.GetExpiredUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
 
             paginationModel.ControllerName = this.ControllerName(nameof(AccountController));
-            paginationModel.ActionName = nameof(this.Expired);
+            paginationModel.ActionName = nameof(this.ExpiredProperties);
 
             this.ViewBag.Pager = paginationModel;
+            this.ViewBag.IsFromExpired = true;
+            this.cookie.Value = "/Account/ExpiredProperties";
+            
+            this.SetCookie(this.cookie.Name, this.cookie.Value, this.cookieOptions);
+
             return this.View(nameof(this.UserProperties), currentProperties);
         }
 
         [HttpPost]
         public async Task<IActionResult> RemoveUserProperty(int propertyId)
         {
-            await this.propertyService.RemoveByIdAsync(propertyId);
-            return this.Json(new {data = true});
+            var isRemoved = await this.propertyService.RemoveByIdAsync(propertyId);
+
+            if (isRemoved)
+            {
+                return this.Json(new { data = true });
+            }
+
+            return null; //TODO: Redirect to correct page;
+        }
+
+        private void CreateReturnUrlCookie(string name)
+        {
+            this.cookie = new Cookie
+            {
+                Path = "/",
+                Name = name,
+                Version = 1,
+            };
+
+            this.cookieOptions = new CookieOptions
+            {
+                Expires = DateTime.UtcNow.AddSeconds(30),
+                Secure = true,
+                Path = "/",
+            };
+        }
+
+        private void SetCookie(string cookieName, string cookieValue, CookieOptions cookieOptions)
+        {
+            this.HttpContext.Response.Cookies.Append(cookieName, cookieValue, cookieOptions);
         }
     }
 }

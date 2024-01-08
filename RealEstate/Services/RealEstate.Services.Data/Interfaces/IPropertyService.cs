@@ -3,6 +3,7 @@
     using System.Collections.Generic;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
+    using Hangfire.Server;
 
     using RealEstate.Data.Models;
     using RealEstate.Web.ViewModels.Property;
@@ -19,6 +20,8 @@
         public Task<IEnumerable<PropertyViewModel>> GetActiveUserPropertiesPerPageAsync(string id, int page);
 
         public Task<IEnumerable<PropertyViewModel>> GetExpiredUserPropertiesPerPageAsync(string id, int page);
+
+        public Task<IEnumerable<PropertyViewModel>> GetAllWithExpiredUserPropertiesPerPage(string id, int page);
 
         public Task<bool> IsAnyExpiredProperties(string userId);
 
@@ -40,7 +43,7 @@
 
         public Task<bool> IsUserProperty(int propertyId, string userId);
 
-        public Task RemoveByIdAsync(int id);
+        public Task<bool> RemoveByIdAsync(int id);
 
         public Task<IEnumerable<PropertyViewModel>> SearchAsync(SearchViewModel searchModel);
     }

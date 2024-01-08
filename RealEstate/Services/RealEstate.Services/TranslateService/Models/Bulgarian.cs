@@ -11,7 +11,12 @@
         public override string AllProperties { get => "Всички обяви"; }
 
         public override string HomePage { get => "Начало"; }
-        public override string YouHaveNotAddedProperties { get => "Нямате добавени обяви"; }
+
+        public override string YouHaveNotAddedProperties { get => "Нямате активни обяви!"; }
+
+        public override string YouHaveNotUnactiveProperties { get => "Нямате неактивни обяви!"; }
+
+        public override string ExpiredProperties { get => "Изтекли Обяви"; }
 
         public override string About { get => "За нас"; }
 
@@ -27,7 +32,7 @@
 
         public override string Login { get => "Вход"; }
 
-        public override string MyProperties { get => "Моите Обяви"; }
+        public override string MyActiveProperties { get => "Моите Активни Обяви"; }
 
         public override string IamAAgent { get => "Аз съм Агенция"; }
 

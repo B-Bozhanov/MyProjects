@@ -2,8 +2,13 @@
 {
     using System.Collections.Generic;
     using System.Globalization;
+    using System.Runtime.CompilerServices;
 
     using AutoMapper;
+
+    using Hangfire.Storage;
+
+    using Microsoft.AspNetCore.Routing.Constraints;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
@@ -23,7 +28,7 @@
 
         public string PropertyTypeName { get; set; }
 
-        public string Price { get; init; }
+        public decimal Price { get; init; }
 
         public int Size { get; init; }
 
@@ -32,6 +37,8 @@
         public int? TotalBathRooms { get; init; }
 
         public int? TotalGarages { get; init; }
+
+        public bool IsDeleted { get; set; }
 
         public int ExpirationDays { get; init; }
 
@@ -46,5 +53,10 @@
         public string ExpireMessage { get; init; } = $"Expired!";
 
         public ICollection<ImageViewModel> Images { get; init; }
+
+        public string PriceFormat()
+        {
+            return this.Price.ToString("C", CultureInfo.GetCultureInfo("fr-FR"));
+        }
     }
 }

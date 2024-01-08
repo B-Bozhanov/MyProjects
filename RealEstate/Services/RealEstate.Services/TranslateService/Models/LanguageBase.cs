@@ -20,7 +20,7 @@
                 {nameof(Contact), this.Contact},
                 {nameof(Register), this.Register},
                 {nameof(Login), this.Login},
-                {nameof(MyProperties), this.MyProperties},
+                {nameof(MyActiveProperties), this.MyActiveProperties},
                 {nameof(IamAAgent), this.IamAAgent},
                 {nameof(Admin), this.Admin},
                 {nameof(Profile), this.Profile},
@@ -70,6 +70,8 @@
                 {nameof(Username), this.Username},
                 {nameof(Password), this.Password},
                 {nameof(YouHaveNotAddedProperties), this.YouHaveNotAddedProperties},
+                {nameof(YouHaveNotUnactiveProperties), this.YouHaveNotUnactiveProperties},
+                {nameof(ExpiredProperties), this.ExpiredProperties},
             };
         }
 
@@ -79,6 +81,8 @@
 
         public abstract string NewestProperties { get; }
         public abstract string YouHaveNotAddedProperties { get; }
+        public abstract string YouHaveNotUnactiveProperties { get; }
+        public abstract string ExpiredProperties { get; }
         public abstract string Username { get; }
         public abstract string Password { get; }
         public abstract string ChooseImage { get; }
@@ -113,7 +117,7 @@
 
         public abstract string Login { get; }
 
-        public abstract string MyProperties { get; }
+        public abstract string MyActiveProperties { get; }
 
         public abstract string IamAAgent { get; }
 

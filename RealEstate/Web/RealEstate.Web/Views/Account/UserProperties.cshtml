@@ -1,10 +1,12 @@
-﻿@model IEnumerable<PropertyViewModel>
+﻿@using System.Globalization;
+@model IEnumerable<PropertyViewModel>
 
 @{
     ViewData["Title"] = "My Properties";
 
     PaginationModel paginationModel;
     paginationModel = this.ViewBag.Pager;
+    var isFromExpired = this.ViewBag.IsFromExpired;
 }
 
 <div class="container">
@@ -12,32 +14,41 @@
         <div class="title-single-box">
             @if (Model.Count() == 0)
             {
-                <h1 class="title-single text-danger text-center">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.YouHaveNotAddedProperties)) </h1>
-            }
-            else if (Model.Any(p => p.IsExpired))
-            {
-                <h1 class="title-single text-danger text-center">Expired Properties </h1>
-                <br />
-                <a class="btn btn-outline-success" asp-controller="Account" asp-action="UserProperties" role="button">Active</a>
+                if (isFromExpired)
+                {
+                    <h1 class="title-single font-monospace text-danger text-center">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.YouHaveNotUnactiveProperties)) </h1>
+                    <a class="btn btn-outline-success" asp-controller="Account" asp-action="ActiveProperties" role="button">Active</a>
+                }
+                else
+                {
+                    <h1 class="title-single font-monospace text-danger text-center">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.YouHaveNotAddedProperties)) </h1>
+
+                    <a class="btn btn-outline-success align-center" asp-controller="Property" asp-action="Add" role="button">
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Add))
+                    </a>
+                    <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">Expired</a>
+                }
             }
             else
             {
-                <h1 class="title-single text-center">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MyProperties)) </h1>
+                if (Model.Any(p => !p.IsDeleted))
+                {
+                    <h1 class="title-single font-monospace text-center">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MyActiveProperties)) </h1>
+
+                    <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">Expired</a>
+
+                }
+                else
+                {
+                    <h1 class="title-single font-monospace text-danger text-center">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.ExpiredProperties)) </h1>
+                    <br />
+                    <a class="btn btn-outline-success" asp-controller="Account" asp-action="ActiveProperties" role="button">Active</a>
+                }
             }
         </div>
     </div>
 </div>
 <br>
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-4">
-            @if (!Model.Any(p => p.IsExpired))
-            {
-                <a class="btn btn-outline-danger" asp-controller="Account" asp-action="Expired" role="button">Expired</a>
-            }
-        </div>
-    </div>
-</div>
 <br>
 <br>
 
@@ -79,7 +90,9 @@
                                 </div>
                                 <div class="card-body-a">
                                     <div class="price-box d-flex">
-                                        <span class="price-a">@property.Option | @property.Price</span>
+                                        <p class="intro-subtitle intro-price">
+                                            <span class="price-a">@property.Option | @property.PriceFormat())</span>
+                                        </p>
                                     </div>
                                     <div class="price-box d-flex">
                                         @if (property.ExpirationDays <= 0)
@@ -125,7 +138,10 @@
             }
         </div>
     </div>
-    <partial name="_PaginationPartial" model="@paginationModel" />
+    @if (Model.Count() > PropertiesPerPage)
+    {
+        <partial name="_PaginationPartial" model="@paginationModel" />
+    }
 </section>
 
 @section Scripts{
@@ -146,7 +162,7 @@
                         function (response) {
                             if (response.data) {
                                 console.log("Redirected");
-                                window.location.href = "/Account/UserProperties";
+                                window.location.href = "/Account/ActiveProperties";
                             }
                         }
                 });

@@ -200,19 +200,19 @@
                 return this.View(editModel);
             }
 
-            if (editModel.ExpirationDays != 0)
-            {
-                editModel.IsExpirationDaysModified = true;
-                editModel.IsExpired = false;
-                await this.propertyService.EditAsync(editModel);
+            //if (editModel.ExpirationDays != 0)
+            //{
+            //    editModel.IsExpirationDaysModified = true;
+            //    editModel.IsExpired = false;
+            //    await this.propertyService.EditAsync(editModel);
 
-                var isAnyExpiredProperty = await this.propertyService.IsAnyExpiredProperties(this.UserId);
+            //    var isAnyExpiredProperty = await this.propertyService.IsAnyExpiredProperties(this.UserId);
 
-                if (isAnyExpiredProperty)
-                {
-                    return this.RedirectToMyExpiredProperties();
-                }
-            }
+            //    if (isAnyExpiredProperty)
+            //    {
+            //        return this.RedirectToMyExpiredProperties();
+            //    }
+            //}
 
             await this.propertyService.EditAsync(editModel);
 

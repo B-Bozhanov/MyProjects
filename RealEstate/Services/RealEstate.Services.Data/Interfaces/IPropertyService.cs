@@ -25,7 +25,7 @@
 
         public Task<bool> IsAnyExpiredProperties(string userId);
 
-        public Task<int> GetAllExpiredProperties();
+        public Task<int> GetAllExpiredPropertiesCount();
 
         public int GetAllActiveUserPropertiesCount(string userId);
 

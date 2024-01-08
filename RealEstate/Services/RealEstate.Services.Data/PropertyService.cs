@@ -127,6 +127,7 @@
 
             if (property.ExpirationDays <= 0)
             {
+                //property.IsDeleted = true;
                 property.IsDeleted = true;
                 this.propertyRepository.Update(property);
                 await this.propertyRepository.SaveChangesAsync();
@@ -145,7 +146,7 @@
             property.Floor = editModel.Floor;
             property.Price = editModel.Price;
             property.IsExpirationDaysModified = editModel.IsExpirationDaysModified;
-            property.IsExpired = editModel.IsExpired;
+            //property.IsExpired = editModel.IsExpired;
             property.Description = editModel.Description;
             property.TotalBedRooms = editModel.TotalBedRooms;
             property.TotalBathRooms = editModel.TotalBathRooms;
@@ -166,9 +167,9 @@
             {
                 property.ExpirationDays += editModel.ExpirationDays;
 
-                if (property.IsDeleted)
+                if (property.IsExpired)
                 {
-                    property.IsDeleted = false;
+                    property.IsExpired = false;
                     this.hangfireWrapper.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
                     this.hangfireWrapper.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
                 }
@@ -207,11 +208,11 @@
             await this.propertyRepository.SaveChangesAsync();
         }
 
-        public async Task<int> GetAllExpiredProperties()
+        public async Task<int> GetAllExpiredPropertiesCount()
         {
             return this.propertyRepository
                 .All()
-                .Where(p => p.IsDeleted)
+                .Where(p => p.IsExpired)
                 .Count();
         }
 
@@ -224,7 +225,7 @@
 
         public async Task<T> GetByIdWithExpiredAsync<T>(int id, string userId)
             => await this.propertyRepository
-                 .AllWithDeleted()
+                 .All()
                  .Where(p => p.Id == id && p.ApplicationUserId == userId)
                  .To<T>()
                  .FirstOrDefaultAsync();
@@ -261,9 +262,9 @@
 
         public int GetAllExpiredUserPropertiesCount(string userId)
             => this.propertyRepository
-            .AllWithDeleted()
-            .Where(p => p.ApplicationUserId == userId && p.IsDeleted)
-            .OrderByDescending(p => p.DeletedOn)
+            .All()
+            .Where(p => p.ApplicationUserId == userId && p.IsExpired)
+            .OrderByDescending(p => p.Id)
             .ToArray()
             .Length;
 
@@ -302,9 +303,9 @@
         public async Task<IEnumerable<PropertyViewModel>> GetExpiredUserPropertiesPerPageAsync(string id, int page)
         {
             var expiredProperties = await this.propertyRepository
-                 .AllWithDeleted()
-                 .Where(p => p.ApplicationUserId == id && p.IsDeleted)
-                 .OrderByDescending(p => p.DeletedOn)
+                 .All()
+                 .Where(p => p.ApplicationUserId == id && p.IsExpired)
+                 .OrderByDescending(p => p.Id)
                  .To<PropertyViewModel>()
                  .ToListAsync();
 
@@ -314,7 +315,7 @@
         public async Task<IEnumerable<PropertyViewModel>> GetAllWithExpiredUserPropertiesPerPage(string id, int page)
         {
             var allProperties = await this.propertyRepository
-                 .AllWithDeleted()
+                 .All()
                  .Where(p => p.ApplicationUserId == id)
                  .OrderByDescending(p => p.DeletedOn)
                  .To<PropertyViewModel>()
@@ -341,9 +342,13 @@
             {
                 return false;
             }
+            if (property.IsExpired)
+            {
+                this.propertyRepository.Delete(property);
+            }
 
             property.ExpirationDays = default;
-            this.propertyRepository.Delete(property);
+            property.IsExpired = true;
             await this.propertyRepository.SaveChangesAsync();
             return true;
         }

@@ -31,9 +31,9 @@
             }
             else
             {
-                if (Model.Any(p => !p.IsDeleted))
+                if (Model.Any(p => !p.IsExpired))
                 {
-                    <h1 class="title-single font-monospace text-center">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MyActiveProperties)) </h1>
+                    <h1 class="title-single font-monospace text-center text-success">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MyActiveProperties)) </h1>
 
                     <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">Expired</a>
 

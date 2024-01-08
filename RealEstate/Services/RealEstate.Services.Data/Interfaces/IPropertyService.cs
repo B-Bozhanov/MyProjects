@@ -43,6 +43,8 @@
 
         public Task<bool> IsUserProperty(int propertyId, string userId);
 
+        public Dictionary<string, List<string>> PropertyValidator(PropertyInputModel property);
+
         public Task<bool> RemoveByIdAsync(int id);
 
         public Task<IEnumerable<PropertyViewModel>> SearchAsync(SearchViewModel searchModel);

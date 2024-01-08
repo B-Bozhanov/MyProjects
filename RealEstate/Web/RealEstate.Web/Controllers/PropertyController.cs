@@ -1,7 +1,7 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System.Collections.Generic;
     using System.Linq;
-    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
     using Hangfire;
@@ -9,6 +9,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.AspNetCore.Mvc.ModelBinding;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
@@ -23,47 +24,39 @@
 
     public class PropertyController : BaseController
     {
-        private readonly IPropertyService propertyService;
-        private readonly IPropertyTypeService propertyTypeService;
-        private readonly ILocationService locationService;
-        private readonly IBuildingTypeService buildingTypeService;
-        private readonly IPopulatedPlaceService populatedPlaceService;
-        private readonly IConditionService conditionService;
-        private readonly IHeatingService heatingService;
-        private readonly IEquipmentService equipmentService;
-        private readonly IDetailService detailService;
-        private readonly UserManager<ApplicationUser> userManager;
-        private readonly SignInManager<ApplicationUser> signInManager;
         private readonly IBackgroundJobClient backgroundJobClient;
+        private readonly IBuildingTypeService buildingTypeService;
+        private readonly IConditionService conditionService;
+        private readonly IDetailService detailService;
+        private readonly IEquipmentService equipmentService;
+        private readonly IHeatingService heatingService;
+        private readonly ILocationService locationService;
         private readonly IPaginationService paginationService;
+        private readonly IPropertyService propertyService;
+        private readonly IPopulatedPlaceService populatedPlaceService;
+        private readonly IPropertyTypeService propertyTypeService;
+        private readonly SignInManager<ApplicationUser> signInManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public PropertyController(
-            IPropertyService propertyService,
-            IPropertyTypeService propertyTypeService,
-            ILocationService locationService,
-            IBuildingTypeService buildingTypeService,
-            IPopulatedPlaceService placeService,
-            IHeatingService heatingService,
-            IConditionService conditionService,
-            IDetailService detailService,
-            IEquipmentService equipmentService,
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager, IBackgroundJobClient backgroundJobClient,
-            IPaginationService paginationService)
+        public PropertyController(IBackgroundJobClient backgroundJobClient, IBuildingTypeService buildingTypeService, 
+            IConditionService conditionService, IDetailService detailService, IEquipmentService equipmentService, 
+            IHeatingService heatingService, ILocationService locationService, IPaginationService paginationService, 
+            IPropertyService propertyService, IPopulatedPlaceService populatedPlaceService, IPropertyTypeService propertyTypeService,
+            SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
-            this.propertyService = propertyService;
-            this.propertyTypeService = propertyTypeService;
-            this.locationService = locationService;
-            this.buildingTypeService = buildingTypeService;
-            this.populatedPlaceService = placeService;
-            this.heatingService = heatingService;
-            this.conditionService = conditionService;
-            this.equipmentService = equipmentService;
-            this.detailService = detailService;
-            this.userManager = userManager;
-            this.signInManager = signInManager;
             this.backgroundJobClient = backgroundJobClient;
+            this.buildingTypeService = buildingTypeService;
+            this.conditionService = conditionService;
+            this.detailService = detailService;
+            this.equipmentService = equipmentService;
+            this.heatingService = heatingService;
+            this.locationService = locationService;
             this.paginationService = paginationService;
+            this.propertyService = propertyService;
+            this.populatedPlaceService = populatedPlaceService;
+            this.propertyTypeService = propertyTypeService;
+            this.signInManager = signInManager;
+            this.userManager = userManager;
         }
 
         [HttpGet]
@@ -86,13 +79,13 @@
         }
 
         [HttpGet]
-        public async Task<IActionResult> Add()
-            => this.View(await this.SetCollectionsAsync(new PropertyInputModel()));
+        public async Task<IActionResult> Add() => this.View(await this.SetCollectionsAsync(new PropertyInputModel()));
 
         [HttpPost]
         public async Task<IActionResult> Add(PropertyInputModel property)
         {
-            this.PropertyValidator(property);
+            var errors = this.propertyService.PropertyValidator(property);
+            this.AddModelStateErrors(errors);
 
             if (!this.ModelState.IsValid)
             {
@@ -155,7 +148,8 @@
 
             if (editModel == null)
             {
-                return this.NotFound(editModel);
+                //TODO: Not found call administrator!
+                return this.NotFound("Not found from EditGet");
             }
 
             editModel.BuildingType.IsChecked = true;
@@ -181,7 +175,8 @@
         {
             if (!await this.propertyService.IsUserProperty(editModel.Id, this.UserId))
             {
-                return this.NotFound();
+                //TODO: Not found call administrator!
+                return this.NotFound("This is not your Property");
             }
 
             if (editModel.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
@@ -213,6 +208,7 @@
             return this.Redirect(returnUrlCookieValue);
         }
 
+        //TODO: Remove this it is already in propertyService:
         private void PropertyValidator(PropertyInputModel property)
         {
             if (property.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
@@ -222,6 +218,17 @@
             else if (property.BuildingTypes.All(b => !b.IsChecked))
             {
                 this.ModelState.AddModelError("", "Building type is required!");
+            }
+        }
+
+        private void AddModelStateErrors(Dictionary<string, List<string>> errors)
+        {
+            foreach (var error in errors)
+            {
+                foreach (var item in error.Value)
+                {
+                    this.ModelState.AddModelError($"{error.Key}", item);
+                }
             }
         }
 

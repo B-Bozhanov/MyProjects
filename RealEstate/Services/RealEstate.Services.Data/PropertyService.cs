@@ -429,12 +429,40 @@
             return result;
         }
 
+        private IQueryable<Property> GetAllWithoutExpired() => this.propertyRepository.AllAsNoTracking().Where(x => !x.IsExpired);
+
         private IEnumerable<PropertyViewModel> Pager(IEnumerable<PropertyViewModel> properties, int page)
             => properties
                 .Skip((page - 1) * PropertiesPerPage)
                 .Take(PropertiesPerPage)
                 .ToList();
 
-        private IQueryable<Property> GetAllWithoutExpired() => this.propertyRepository.AllAsNoTracking().Where(x => !x.IsExpired);
+        public Dictionary<string, List<string>> PropertyValidator(PropertyInputModel property)
+        {
+            var errors = new Dictionary<string, List<string>>();
+
+            if (property.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
+            {
+                if (!errors.ContainsKey("AddPropertyErrors"))
+                {
+                    errors["AddPropertyErrors"] = new List<string>();
+                }
+
+                errors["AddPropertyErrors"].Add("Canot check more than one building type!");
+                //this.ModelState.AddModelError("", "Canot check more than one building type!");
+            }
+            if (property.BuildingTypes.All(b => !b.IsChecked))
+            {
+                if (!errors.ContainsKey("AddPropertyErrors"))
+                {
+                    errors["AddPropertyErrors"] = new List<string>();
+                }
+
+                errors["AddPropertyErrors"].Add("Building type is required!");
+                //this.ModelState.AddModelError("", "Building type is required!");
+            }
+
+            return errors;
+        }
     }
 }

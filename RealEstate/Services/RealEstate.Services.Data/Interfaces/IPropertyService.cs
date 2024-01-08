@@ -11,7 +11,7 @@
 
     public interface IPropertyService
     {
-        public int GetAllCount();
+        public int GetAllActiveCount();
 
         public Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!);
 

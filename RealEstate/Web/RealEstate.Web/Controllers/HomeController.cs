@@ -27,7 +27,7 @@
             var Newest = this.propertyService.GetTopNewest(TopNewest);
             return this.View(new PropertyIntroViewModel
             {
-                GetAllCount = this.propertyService.GetAllCount(),
+                GetAllCount = this.propertyService.GetAllActiveCount(),
                 Newest = this.propertyService.GetTopNewest(TopNewest),
                 MostExpensive = this.propertyService.GetTopMostExpensive(TopMostExpensive),
             });

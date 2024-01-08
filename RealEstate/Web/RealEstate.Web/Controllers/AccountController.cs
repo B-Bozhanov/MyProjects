@@ -140,7 +140,7 @@
             var currentProperties = await this.propertyService.GetActiveUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
 
             paginationModel.ControllerName = this.ControllerName(nameof(AccountController));
-            paginationModel.ActionName = nameof(this.ExpiredProperties);
+            paginationModel.ActionName = nameof(this.ActiveProperties);
 
             this.ViewBag.Pager = paginationModel;
             this.ViewBag.IsFromExpired = false;

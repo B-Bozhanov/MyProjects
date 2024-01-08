@@ -64,7 +64,7 @@
         [HttpGet]
         public IActionResult Index(int optionId, int page)
         {
-            var allPropertiesCount = this.propertyService.GetAllCount();
+            var allPropertiesCount = this.propertyService.GetAllActiveCount();
             var paginationModel = new PaginationModel(allPropertiesCount, page);
             var searchModel = new SearchViewModel
             {

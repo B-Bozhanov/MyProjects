@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Reflection;
     using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
@@ -127,8 +128,7 @@
 
             if (property.ExpirationDays <= 0)
             {
-                //property.IsDeleted = true;
-                property.IsDeleted = true;
+                property.IsExpired = true;
                 this.propertyRepository.Update(property);
                 await this.propertyRepository.SaveChangesAsync();
                 return;
@@ -217,8 +217,7 @@
         }
 
         public async Task<T> GetByIdAsync<T>(int id)
-            => await this.propertyRepository
-                 .All()
+            => await this.GetAllWithoutExpired()
                  .Where(p => p.Id == id)
                  .To<T>()
                  .FirstOrDefaultAsync();
@@ -231,31 +230,27 @@
                  .FirstOrDefaultAsync();
 
         public IEnumerable<PropertyViewModel> GetTopNewest(int count)
-            => this.propertyRepository
-                 .AllAsNoTracking()
+            => this.GetAllWithoutExpired()
                  .OrderByDescending(p => p.Id)
                  .Take(count)
                  .To<PropertyViewModel>()
                  .ToArray();
 
         public IEnumerable<PropertyViewModel> GetTopMostExpensive(int count)
-            => this.propertyRepository
-                 .AllAsNoTracking()
+            => this.GetAllWithoutExpired()
                  .OrderByDescending(p => p.Price)
                  .Take(count)
                  .To<PropertyViewModel>()
                  .ToArray();
 
-        public int GetAllCount()
-            => this.propertyRepository
-                  .All()
+        public int GetAllActiveCount()
+            => this.GetAllWithoutExpired()
                   .ToArray()
                   .Length;
 
         public int GetAllActiveUserPropertiesCount(string userId)
-            => this.propertyRepository
-            .All()
-            .Where(p => p.ApplicationUserId == userId && !p.IsExpired)
+            => this.GetAllWithoutExpired()
+            .Where(p => p.ApplicationUserId == userId)
             .OrderByDescending(p => p.Id)
             .ToArray()
             .Length;
@@ -272,13 +267,13 @@
         {
             var result = optionId switch
             {
-                (int)OptionType.NewToOld => this.propertyRepository.AllAsNoTracking().OrderByDescending(p => p.Id),
-                (int)OptionType.OldToNew => this.propertyRepository.AllAsNoTracking().OrderBy(p => p.Id),
-                (int)OptionType.ForSale => this.propertyRepository.AllAsNoTracking().Where(p => p.Option == PropertyOption.Sale).OrderByDescending(p => p.Id),
-                (int)OptionType.ForRent => this.propertyRepository.AllAsNoTracking().Where(p => p.Option == PropertyOption.Rent).OrderByDescending(p => p.Id),
-                (int)OptionType.PriceDesc => this.propertyRepository.AllAsNoTracking().OrderByDescending(p => p.Price),
-                (int)OptionType.PriceAsc => this.propertyRepository.AllAsNoTracking().OrderBy(p => p.Price),
-                _ => this.propertyRepository.All().AsNoTracking().OrderByDescending(p => p.Id),
+                (int)OptionType.NewToOld => this.GetAllWithoutExpired().OrderByDescending(p => p.Id),
+                (int)OptionType.OldToNew => this.GetAllWithoutExpired().OrderBy(p => p.Id),
+                (int)OptionType.ForSale => this.GetAllWithoutExpired().Where(p => p.Option == PropertyOption.Sale).OrderByDescending(p => p.Id),
+                (int)OptionType.ForRent => this.GetAllWithoutExpired().Where(p => p.Option == PropertyOption.Rent).OrderByDescending(p => p.Id),
+                (int)OptionType.PriceDesc => this.GetAllWithoutExpired().OrderByDescending(p => p.Price),
+                (int)OptionType.PriceAsc => this.GetAllWithoutExpired().OrderBy(p => p.Price),
+                _ => this.GetAllWithoutExpired().OrderByDescending(p => p.Id),
             };
 
             return result
@@ -290,9 +285,8 @@
 
         public async Task<IEnumerable<PropertyViewModel>> GetActiveUserPropertiesPerPageAsync(string id, int page)
         {
-            var activeProperties = await this.propertyRepository
-                 .All()
-                 .Where(p => p.ApplicationUserId == id && !p.IsExpired)
+            var activeProperties = await this.GetAllWithoutExpired()
+                 .Where(p => p.ApplicationUserId == id)
                  .OrderByDescending(p => p.Id)
                  .To<PropertyViewModel>()
                  .ToListAsync();
@@ -428,45 +422,6 @@
                 throw new InvalidOperationException("Select at least one criteria");
             }
 
-            //if (searchModel.KeyWord != null && searchModel.Type == null
-            //  && searchModel.BathRooms == null && searchModel.BedRooms == null
-            //  && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
-            //  && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
-            //{
-            //    result = this.propertyRepository
-            //        .AllAsNoTracking()
-            //        .ToList()
-            //        .Where(p => p.GetType()
-            //              .GetProperties()
-            //              .Any(x => x.GetValue().Contains(searchModel.KeyWord)))
-            //        .Select(x => new PropertyViewModel
-            //        {
-            //            ExpirationDays = x.ExpirationDays,
-            //            Id = x.Id,
-            //            IsExpirationDaysModified = x.IsExpirationDaysModified,
-            //            IsExpired = x.IsExpired,
-            //            Option = x.Option.ToString(),
-            //            PopulatedPlace = new PopulatedPlaceViewModel
-            //            {
-            //                Id = x.PopulatedPlace.Id,
-            //                Location = new LocationViewModel
-            //                {
-            //                    Id = x.PopulatedPlace.LocationId,
-            //                    Name = x.PopulatedPlace.Location.Name,
-            //                },
-            //                Name = x.PopulatedPlace.Name,
-            //            },
-            //            PropertyTypeName = x.PropertyType.Name,
-            //            TotalBathRooms = x.TotalBathRooms,
-            //            TotalBedRooms = x.TotalBedRooms,
-            //            Size = x.Size,
-            //            TotalGarages = x.TotalGarages,
-            //            Price = x.Price.ToString(),
-
-            //        }).ToList();
-            //}
-
-
             return result;
         }
 
@@ -475,5 +430,7 @@
                 .Skip((page - 1) * PropertiesPerPage)
                 .Take(PropertiesPerPage)
                 .ToList();
+
+        private IQueryable<Property> GetAllWithoutExpired() => this.propertyRepository.AllAsNoTracking().Where(x => !x.IsExpired);
     }
 }

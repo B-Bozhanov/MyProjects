@@ -23,7 +23,7 @@
             };
         }
 
-        public string KeyWord { get; init; }
+        public string? KeyWord { get; init; }
 
         [Display(Name = "Location")]
         public int? LocationId { get; init; }
@@ -43,7 +43,7 @@
 
         public decimal? MaxPrice { get; init; }
 
-        public OptionType CurrentOptionType { get; set; }
+        public OptionType? CurrentOptionType { get; set; }
 
         public IEnumerable<LocationViewModel> Locations { get; init; }
 

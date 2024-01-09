@@ -9,23 +9,15 @@
     var imagePath = string.Empty;
 }
 
-<div class="text-center">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalPropertiesCount)): @Model.GetAllCount</div>
+<div class="text-center text-info font-monospace">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalPropertiesCount)): @Model.GetAllCount</div>
 <br />
-<div class="row">
     <div class="col-md-12">
-        <div class="title-wrap d-flex justify-content-between">
+        <div class="title-wrap d-flex justify-content-center">
             <div class="title-box">
-                <h2 class="title-a">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.NewestProperties))</h2>
-            </div>
-            <div class="title-link">
-                <a asp-controller="Property" asp-action="Index">
-                    @translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.AllProperties))
-                    <span class="bi bi-chevron-right"></span>
-                </a>
+                <h2 class="title-a ">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.NewestProperties))</h2>
             </div>
         </div>
     </div>
-</div>
 <div class="intro intro-carousel swiper position-relative">
     <div class="swiper-wrapper">
         @foreach (var property in Model.Newest)
@@ -38,7 +30,7 @@
                 <div class="overlay overlay-a"></div>
                 <div class="intro-content display-table">
                     <div class="table-cell">
-                        <div class="container">
+                        <div class="container-fluid">
                             <div class="row">
                                 <div class="col-lg-8">
                                     <div class="intro-body">

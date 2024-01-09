@@ -64,7 +64,7 @@
             public static int MinYear = 1800;
 
             public const int DefaultStartPage = 1;
-            public const int PropertiesPerPage = 4;
+            public const int PropertiesPerPage = 16;
             //public const string YearErrorMessage = $"The must be in range {MinYear} and {DateTime.UtcNow.Year}";
 
             public static class ErrorMessages

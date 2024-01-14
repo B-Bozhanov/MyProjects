@@ -10,6 +10,7 @@
     using Hangfire;
     using Hangfire.Server;
 
+    using Microsoft.AspNetCore.Server.IIS.Core;
     using Microsoft.EntityFrameworkCore;
 
     using RealEstate.Data.Common.Repositories;
@@ -156,6 +157,11 @@
         {
             var property = await this.propertyRepository.AllWithDeleted().FirstOrDefaultAsync(p => p.Id == editModel.Id);
 
+            if (property == null)
+            {
+                throw new InvalidOperationException();
+            }
+
             property.Size = editModel.Size;
             property.YardSize = editModel.YardSize;
             property.Floor = editModel.Floor;
@@ -164,6 +170,7 @@
             property.Description = editModel.Description;
             property.TotalBedRooms = editModel.TotalBedRooms;
             property.TotalBathRooms = editModel.TotalBathRooms;
+            property.TotalFloors = editModel.TotalFloors;
             property.TotalGarages = editModel.TotalGarages;
             property.Year = editModel.Year;
             property.Option = editModel.Option;

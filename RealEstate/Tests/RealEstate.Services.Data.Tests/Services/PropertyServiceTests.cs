@@ -278,6 +278,112 @@
             var exception = await Assert.ThrowsAsync<ArgumentNullException>(async () => await this.propertyService.AddAsync(propertyInputModel, user));
         }
 
+        [Fact]
+        public async Task EditAssyncShouldChangePropertyData()
+        {
+            //Arrange
+            var propertyInputModel = new PropertyInputModel
+            {
+                Id = 1,
+                PropertyTypeId = 2,
+                Price = 129,
+                Description = "test",
+                Floor = 5,
+                Option = PropertyOption.Sale,
+                Size = 333,
+                TotalBathRooms = 2,
+                TotalBedRooms = 10,
+                TotalGarages = 1,
+                TotalFloors = 23,
+                Year = 2020,
+                YardSize = 500,
+                BuildingTypes = new List<BuildingTypeViewModel>
+                {
+                    new BuildingTypeViewModel { Id = 1, Name = "BuildingType1", IsChecked = false},
+                    new BuildingTypeViewModel { Id = 2, Name = "BuildingType2", IsChecked = true},
+                    new BuildingTypeViewModel { Id = 3, Name = "BuildingType3",IsChecked = false},
+                    new BuildingTypeViewModel { Id = 4, Name = "BuildingType4",IsChecked = false},
+                },
+                ExpirationDays = 30,
+                PopulatedPlaceId = 2,
+                ContactModel = new ContactModel
+                {
+                    Names = "Bozhan Bozhanov",
+                    Email = "test@gmail.com",
+                    PhoneNumber = "0896655070",
+                },
+            };
+            var user = new ApplicationUser
+            {
+                FirstName = "Bozhan",
+                LastName = "Bozhanov",
+                UserName = "DareDeviL",
+                Email = "test@gmail.com",
+                PhoneNumber = "0896655707",
+            };
+
+            var propertyEditViewModel = new PropertyEditViewModel
+            {
+                Id = 1,
+                PropertyTypeId = 4,
+                Price = 300,
+                Description = "test2",
+                Floor = 6,
+                Option = PropertyOption.Rent,
+                Size = 300,
+                TotalBathRooms = 1,
+                TotalBedRooms = 1,
+                TotalGarages = 1,
+                TotalFloors = 21,
+                Year = 2021,
+                YardSize = 501,
+                BuildingTypes = new List<BuildingTypeViewModel>
+                {
+                    new BuildingTypeViewModel { Id = 1, Name = "BuildingType1", IsChecked = false},
+                    new BuildingTypeViewModel { Id = 2, Name = "BuildingType2", IsChecked = false},
+                    new BuildingTypeViewModel { Id = 3, Name = "BuildingType3",IsChecked = false},
+                    new BuildingTypeViewModel { Id = 4, Name = "BuildingType4",IsChecked = true},
+                },
+                ExpirationDays = 31,
+                PopulatedPlaceId = 4,
+            };
+
+            //Act
+            await this.propertyService.AddAsync(propertyInputModel, user);
+            await this.propertyService.EditAsync(propertyEditViewModel);
+
+            var property = await this.propertyRepository.All().FirstAsync(x => x.Id == propertyInputModel.Id);
+
+            //Assert
+            Assert.Equal(1, (int)property.Option);
+            Assert.Equal(4, property.PropertyTypeId);
+            Assert.Equal(300, property.Price);
+            Assert.Equal("test2", property.Description);
+            Assert.Equal(6, property.Floor);
+            Assert.Equal(300, property.Size);
+            Assert.Equal(1, property.TotalBathRooms);
+            Assert.Equal(1, property.TotalBedRooms);
+            Assert.Equal(1, property.TotalGarages);
+            Assert.Equal(21, property.TotalFloors);
+            Assert.Equal(2021, property.Year);
+            Assert.Equal(501, property.YardSize);
+            Assert.Equal(4, property.BuildingTypeId);
+            Assert.Equal(61, property.ExpirationDays);
+            Assert.Equal(4, property.PopulatedPlaceId);
+        }
+
+        [Fact]
+        public async Task EditAssyncShouldThrowExceptionIfPropertyNotFound()
+        {
+            //Arrange
+            var propertyEditViewModel = new PropertyEditViewModel
+            {
+                Id = 1,
+            };
+
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.propertyService.EditAsync(propertyEditViewModel));
+        }
+
         [Theory]
         [InlineData(0)]
         [InlineData(1)]

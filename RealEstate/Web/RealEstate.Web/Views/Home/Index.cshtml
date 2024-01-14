@@ -7,6 +7,7 @@
 @{
     ViewData["Title"] = "Home";
     var imagePath = string.Empty;
+    //TODO: Images are not responsive !
 }
 
 <div class="text-center text-info font-monospace">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalPropertiesCount)): @Model.GetAllCount</div>

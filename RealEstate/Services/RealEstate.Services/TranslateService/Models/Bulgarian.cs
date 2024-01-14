@@ -8,9 +8,12 @@
 
         public override string Password { get => "Парола"; }
 
+        public override string ForgotPassword { get => "Забравена парола"; }
+
         public override string AllProperties { get => "Всички обяви"; }
 
         public override string HomePage { get => "Начало"; }
+        public override string CreateAccount { get => "Създай нов акаунт"; }
 
         public override string YouHaveNotAddedProperties { get => "Нямате активни обяви!"; }
 

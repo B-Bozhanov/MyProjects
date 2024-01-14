@@ -72,6 +72,8 @@
                 {nameof(YouHaveNotAddedProperties), this.YouHaveNotAddedProperties},
                 {nameof(YouHaveNotUnactiveProperties), this.YouHaveNotUnactiveProperties},
                 {nameof(ExpiredProperties), this.ExpiredProperties},
+                {nameof(ForgotPassword), this.ForgotPassword},
+                {nameof(CreateAccount), this.CreateAccount},
             };
         }
 
@@ -80,6 +82,8 @@
         public Dictionary<string, string> Dictionary { get; private set; }
 
         public abstract string NewestProperties { get; }
+        public abstract string CreateAccount { get; }
+        public abstract string ForgotPassword { get; }
         public abstract string YouHaveNotAddedProperties { get; }
         public abstract string YouHaveNotUnactiveProperties { get; }
         public abstract string ExpiredProperties { get; }

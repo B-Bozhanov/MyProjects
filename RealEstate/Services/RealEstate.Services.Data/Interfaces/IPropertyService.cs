@@ -13,7 +13,7 @@
     {
         public int GetAllActiveCount();
 
-        public Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!);
+        public Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user);
 
         public Task EditAsync(PropertyEditViewModel editModel);
 
@@ -39,7 +39,7 @@
 
         public Task<T> GetByIdAsync<T>(int id);
 
-        public Task<T> GetByIdWithExpiredAsync<T>(int id, string userId);
+        public Task<T> GetByIdWithExpiredUserPropertiesAsync<T>(int id, string userId);
 
         public Task<bool> IsUserProperty(int propertyId, string userId);
 

@@ -36,8 +36,7 @@
         private readonly IDeletableEntityRepository<Equipment> equipmentRepository;
         private readonly IDeletableEntityRepository<Heating> heatingRepository;
         private readonly IImageService imageService;
-        private readonly IBackgroundJobClient backgroundJobClient;
-        private readonly IHangfireWrapperService hangfireWrapper;
+        private readonly IHangfireWrapperService hangfireWrapperService;
         private readonly IPaginationService paginationService;
 
         public PropertyService(
@@ -51,7 +50,7 @@
               IDeletableEntityRepository<Equipment> equipmentRepository,
               IDeletableEntityRepository<Heating> heatingRepository,
               IImageService imageService,
-              IHangfireWrapperService hangfireWrapper,
+              IHangfireWrapperService hangfireWrapperService,
               IPaginationService paginationService)
         {
             this.propertyRepository = propertyRepository;
@@ -64,12 +63,25 @@
             this.equipmentRepository = equipmentRepository;
             this.heatingRepository = heatingRepository;
             this.imageService = imageService;
-            this.hangfireWrapper = hangfireWrapper;
+            this.hangfireWrapperService = hangfireWrapperService;
             this.paginationService = paginationService;
         }
 
-        public async Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user, [CallerMemberName] string import = null!)
+        public async Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user)
         {
+            if (propertyModel.Floor < 0)
+            {
+                throw new InvalidOperationException("The property floor can not be negative");
+            }
+            if (propertyModel.Floor > propertyModel.TotalFloors)
+            {
+                throw new InvalidOperationException("Current floor can no be bigger than total floors");
+            }
+            if (propertyModel.BuildingTypes == null)
+            {
+                throw new ArgumentNullException("Building types is required");
+            }
+
             var property = new Property()
             {
                 Size = propertyModel.Size,
@@ -84,9 +96,10 @@
                 Description = propertyModel.Description,
                 ExpirationDays = propertyModel.ExpirationDays,
                 Option = propertyModel.Option,
-                PropertyType = this.propertyTypeRepository.All().First(pt => pt.Id == propertyModel.PropertyTypeId),
             };
+            property.PropertyType = this.propertyTypeRepository.All().FirstOrDefault(pt => pt.Id == propertyModel.PropertyTypeId);
 
+            //TODO: PopulatedPlaces are not all, and can not be null:
             var populatedPlace = this.populatedPlaceRepository.All().FirstOrDefault(p => p.Id == propertyModel.PopulatedPlaceId);
 
             property.PopulatedPlace = populatedPlace;
@@ -96,7 +109,7 @@
 
             if (buildingType != null)
             {
-                property.BuildingType = this.buildingTypeRepository.All().First(x => x.Id == buildingType.Id);
+                property.BuildingType = this.buildingTypeRepository.All().FirstOrDefault(x => x.Id == buildingType.Id);
             }
 
             property.ApplicationUser = user;
@@ -113,9 +126,8 @@
             await this.propertyRepository.AddAsync(property);
             await this.propertyRepository.SaveChangesAsync();
 
-            this.hangfireWrapper.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
-            this.hangfireWrapper.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
-            //RecurringJob.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
+            //this.hangfireWrapperService.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromDays(property.ExpirationDays));
+            //this.hangfireWrapperService.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Daily);
         }
 
         public async Task AutoRemoveById(int propertyId, PerformContext performContext)
@@ -137,19 +149,18 @@
                 return;
             }
 
-            this.hangfireWrapper.BackgroundJobClient.Reschedule(jobId, TimeSpan.FromMinutes(property.ExpirationDays));
+            this.hangfireWrapperService.BackgroundJobClient.Reschedule(jobId, TimeSpan.FromDays(property.ExpirationDays));
         }
 
         public async Task EditAsync(PropertyEditViewModel editModel)
         {
-            var property = await this.propertyRepository.AllWithDeleted().FirstAsync(p => p.Id == editModel.Id);
+            var property = await this.propertyRepository.AllWithDeleted().FirstOrDefaultAsync(p => p.Id == editModel.Id);
 
             property.Size = editModel.Size;
             property.YardSize = editModel.YardSize;
             property.Floor = editModel.Floor;
             property.Price = editModel.Price;
             property.IsExpirationDaysModified = editModel.IsExpirationDaysModified;
-            //property.IsExpired = editModel.IsExpired;
             property.Description = editModel.Description;
             property.TotalBedRooms = editModel.TotalBedRooms;
             property.TotalBathRooms = editModel.TotalBathRooms;
@@ -173,22 +184,10 @@
                 if (property.IsExpired)
                 {
                     property.IsExpired = false;
-                    this.hangfireWrapper.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
-                    this.hangfireWrapper.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
+                    this.hangfireWrapperService.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromDays(property.ExpirationDays));
+                    this.hangfireWrapperService.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Daily);
                 }
             }
-
-            //if (property.ExpirationDays <= 0 )
-            //{
-            //    if (property.IsExpirationDaysModified)
-            //    {
-            //        property.IsExpired = false;
-
-            //        this.hangfireWrapper.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromMinutes(property.ExpirationDays));
-            //        this.hangfireWrapper.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
-            //        //RecurringJob.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Minutely);
-            //    }
-            //}
 
             this.propertyRepository.Update(property);
             await this.propertyRepository.SaveChangesAsync();
@@ -201,7 +200,7 @@
             if (property == null || property.ExpirationDays <= 0)
             {
                 var jobId = performContext.BackgroundJob.Id;
-                this.hangfireWrapper.RecurringJobManager.RemoveIfExists(jobId);
+                this.hangfireWrapperService.RecurringJobManager.RemoveIfExists(jobId);
                 performContext.Connection.Dispose();
                 return;
             }
@@ -225,7 +224,7 @@
                  .To<T>()
                  .FirstOrDefaultAsync();
 
-        public async Task<T> GetByIdWithExpiredAsync<T>(int id, string userId)
+        public async Task<T> GetByIdWithExpiredUserPropertiesAsync<T>(int id, string userId)
             => await this.propertyRepository
                  .All()
                  .Where(p => p.Id == id && p.ApplicationUserId == userId)
@@ -429,7 +428,8 @@
             return result;
         }
 
-        private IQueryable<Property> GetAllWithoutExpired() => this.propertyRepository.AllAsNoTracking().Where(x => !x.IsExpired);
+        private IQueryable<Property> GetAllWithoutExpired() 
+            => this.propertyRepository.AllAsNoTracking().Where(x => !x.IsExpired);
 
         private IEnumerable<PropertyViewModel> Pager(IEnumerable<PropertyViewModel> properties, int page)
             => properties
@@ -449,7 +449,6 @@
                 }
 
                 errors["AddPropertyErrors"].Add("Canot check more than one building type!");
-                //this.ModelState.AddModelError("", "Canot check more than one building type!");
             }
             if (property.BuildingTypes.All(b => !b.IsChecked))
             {
@@ -459,7 +458,6 @@
                 }
 
                 errors["AddPropertyErrors"].Add("Building type is required!");
-                //this.ModelState.AddModelError("", "Building type is required!");
             }
 
             return errors;

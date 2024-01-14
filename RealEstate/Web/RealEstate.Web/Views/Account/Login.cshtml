@@ -32,8 +32,13 @@
 
                                 <p class="text-center text-muted mt-5 mb-0">
                                     <a asp-controller="Account" asp-action="Login" class="fw-bold text-body">
-                                        <u>Forgot Password</u>
-                                        </a>
+                                        <u>@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.ForgotPassword))</u>
+                                    </a>
+                                </p>
+                                <p class="text-center text-muted mt-5 mb-0">
+                                    <a asp-controller="Account" asp-action="Register" class="fw-bold text-body">
+                                        <u>@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.CreateAccount))</u>
+                                    </a>
                                 </p>
                                 <br>
                                 <br>

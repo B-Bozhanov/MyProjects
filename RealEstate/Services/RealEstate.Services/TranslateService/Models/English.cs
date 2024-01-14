@@ -7,6 +7,7 @@
         public override string Name => nameof(English);
 
         public override string NewestProperties => "Newst Properties";
+        public override string ForgotPassword => "Forgot Password";
 
         public override string Username => "Username";
 
@@ -16,6 +17,7 @@
 
         public override string YouHaveNotUnactiveProperties => "You have not unactive properties";
         public override string ExpiredProperties => "Expired Properties";
+        public override string CreateAccount => "Create Account";
 
         public override string AllProperties => "";
 

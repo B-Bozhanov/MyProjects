@@ -29,6 +29,7 @@ namespace RealEstate.Web
     using RealEstate.Services.LocationScraperService;
     using RealEstate.Services.Mapping;
     using RealEstate.Services.Messaging;
+    using RealEstate.Web.Hubs;
     using RealEstate.Web.ViewModels;
 
     public class Program
@@ -76,9 +77,11 @@ namespace RealEstate.Web
             services.AddControllersWithViews(
                 options =>
                 {
+                    //TODO: Research for why AJAX not work with AutoValidateAntiforgeryTokenAttribute:
                     // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
                 }).AddRazorRuntimeCompilation();
             services.AddRazorPages();
+            services.AddSignalR();
             services.AddDatabaseDeveloperPageExceptionFilter();
 
             services.AddSingleton(configuration);
@@ -142,6 +145,7 @@ namespace RealEstate.Web
             app.MapControllerRoute("areaRoute", "{area:exists}/{controller=Home}/{action=Index}/{id?}");
             app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
             app.MapRazorPages();
+            app.MapHub<PropertyHub>("/propertyHub");
         }
 
         private static void ConfigureRepositorues(IServiceCollection services)

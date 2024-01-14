@@ -3,11 +3,12 @@
 @{
     ViewData["Title"] = "Обавя";
     var imagePath = string.Empty;
+    //TODO: Images are not responsive !
 }
 <section class="property-single nav-arrow-b">
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-6 col-sm-4">
+            <div class="col-lg-8 col-md-6 col-sm-12">
                 <div id="property-single-carousel" class="swiper">
                     <div class="swiper-wrapper">
                         @if (Model.Images != null)
@@ -15,7 +16,7 @@
                             foreach (var image in Model.Images)
                             {
                                 <div class="carousel-item-b swiper-slide">
-                                    <img src="@PropertyImagesPath/@image.Url" alt="">
+                                    <img class="d-block" src="@PropertyImagesPath/@image.Url" alt="">
                                 </div>
                             }
                         }
@@ -24,7 +25,6 @@
                 <div class="property-single-carousel-pagination carousel-pagination"></div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-sm-12">
 
@@ -161,7 +161,7 @@
                             <ul class="list-unstyled">
                                 <li class="d-flex justify-content-between">
                                     <strong>Phone:</strong>
-                                    <span class="color-text-a">(222) 4568932</span>
+                                    <span class="color-text-a">@Model.ApplicationUser.PhoneNumber</span>
                                 </li>
                                 <li class="d-flex justify-content-between">
                                     <strong>Mobile:</strong>

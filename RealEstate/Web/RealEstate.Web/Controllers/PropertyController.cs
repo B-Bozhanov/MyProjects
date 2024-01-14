@@ -144,7 +144,7 @@
         [HttpGet]
         public async Task<IActionResult> Edit(int propertyId)
         {
-            var editModel = await this.propertyService.GetByIdWithExpiredAsync<PropertyEditViewModel>(propertyId, this.UserId);
+            var editModel = await this.propertyService.GetByIdWithExpiredUserPropertiesAsync<PropertyEditViewModel>(propertyId, this.UserId);
 
             if (editModel == null)
             {

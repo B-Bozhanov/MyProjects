@@ -358,3 +358,4 @@ MigrationBackup/
 appsettings.Production.json
 *.min.css
 *.min.js
+/RealEstate/Web/RealEstate.Web/wwwroot/assets/img/Properties/*.jpg

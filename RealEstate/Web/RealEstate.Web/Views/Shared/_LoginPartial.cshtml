@@ -25,10 +25,10 @@
     else
     {
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Register))</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Register">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Register))</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Login))</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Account" asp-action="Login">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Login))</a>
         </li>
     }
 </ul>

@@ -37,7 +37,6 @@
                         Name = populatedPlace.Name,
                         Location = dbLocation,
                     };
-
                     await dbContext.PopulatedPlaces.AddAsync(dbPopulatedPLace);
                     await dbContext.SaveChangesAsync();
                 }

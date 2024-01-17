@@ -10,9 +10,11 @@
 
     public class SendGridEmailSender : IEmailSender
     {
-        private readonly SendGridClient client;
+        //TODO: Move API key from here:
+        private const string APIKey = "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";
+        private SendGridClient client;
 
-        public SendGridEmailSender(string apiKey)
+        public SendGridEmailSender(string apiKey = APIKey)
         {
             this.client = new SendGridClient(apiKey);
         }
@@ -26,7 +28,8 @@
 
             var fromAddress = new EmailAddress(from, fromName);
             var toAddress = new EmailAddress(to);
-            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, null, htmlContent);
+            var message = MailHelper.CreateSingleEmail(fromAddress, toAddress, subject, "test", htmlContent);
+
             if (attachments?.Any() == true)
             {
                 foreach (var attachment in attachments)

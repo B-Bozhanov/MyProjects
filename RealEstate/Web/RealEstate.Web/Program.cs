@@ -96,11 +96,12 @@ namespace RealEstate.Web
 
             services.AddHangfireServer();
 
+            //TODO: Remove AddServices with reflection:
             services.AddServices(new Type[] { typeof(IPropertyService), typeof(IHangfireWrapperService)});
 
             ConfigureRepositorues(services);
-           // ConfigureApplicationServices(services);
-
+            services.AddTransient<IEmailSender, SendGridEmailSender>();
+            // ConfigureApplicationServices(services);
         }
 
         private static void Configure(WebApplication app)

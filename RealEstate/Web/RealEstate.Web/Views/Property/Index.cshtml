@@ -23,8 +23,14 @@
     <div class="row">
         <div class="col-md-12 col-lg-8">
             <div class="title-single-box">
-                <h1 class="title-single">Our Amazing Properties</h1>
-                <span class="color-text-a">Grid Properties</span>
+                @if (Model.AllProperties == null)
+                {
+                    <h1 class="title-single">Няма добавени обяви</h1>
+                }
+                else
+                {
+                    <h1 class="title-single">Our Amazing Properties</h1>
+                }
             </div>
         </div>
     </div>
@@ -49,66 +55,69 @@
                     </form>
                 </div>
             </div>
-            @foreach (var property in Model.AllProperties)
+            @if (Model.AllProperties != null)
             {
-                <div class="col-md-4">
-                    <div class="card-box-a card-shadow">
-                        <div class="img-box-a">
-                            <img src="@PropertyImagesPath/@property.Images.FirstOrDefault().Url" alt="" class="img-a img-fluid">
-                        </div>
-                        <div class="card-overlay">
-                            <div class="card-overlay-a-content">
-                                <div class="card-header-a">
-                                    <h2 class="card-title-a">
-                                        <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id">
-                                            @property.PropertyTypeName
-                                            <br /> @property.PopulatedPlace.Location.Name
-                                        </a>
-                                    </h2>
-                                </div>
-                                <div class="card-body-a">
-                                    <div class="price-box d-flex">
-                                        <span class="price-a">@property.Option | @property.PriceFormat()</span>
+                foreach (var property in Model.AllProperties)
+                {
+                    <div class="col-md-4">
+                        <div class="card-box-a card-shadow">
+                            <div class="img-box-a">
+                                <img src="@PropertyImagesPath/@property.Images.FirstOrDefault().Url" alt="" class="img-a img-fluid">
+                            </div>
+                            <div class="card-overlay">
+                                <div class="card-overlay-a-content">
+                                    <div class="card-header-a">
+                                        <h2 class="card-title-a">
+                                            <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id">
+                                                @property.PropertyTypeName
+                                                <br /> @property.PopulatedPlace.Location.Name
+                                            </a>
+                                        </h2>
                                     </div>
-                                    <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id" class="link-a">
-                                        Click here to view
-                                        <span class="bi bi-chevron-right"></span>
-                                    </a>
-                                </div>
-                                <div class="card-footer-a">
-                                    <ul class="card-info d-flex justify-content-around">
-                                        <li>
-                                            <h4 class="card-info-title">Area</h4>
-                                            <span>
-                                                @property.Size<span>m</span>
-                                                <sup>2</sup>
-                                            </span>
-                                        </li>
-                                        <li>
-                                            <h4 class="card-info-title">Beds</h4>
-                                            <span>@property.TotalBedRooms</span>
-                                        </li>
-                                        <li>
-                                            <h4 class="card-info-title">Baths</h4>
-                                            <span>@property.TotalBathRooms</span>
-                                        </li>
-                                        <li>
-                                            <h4 class="card-info-title">Garages</h4>
-                                            <span>@property.TotalGarages</span>
-                                        </li>
-                                    </ul>
+                                    <div class="card-body-a">
+                                        <div class="price-box d-flex">
+                                            <span class="price-a">@property.Option | @property.PriceFormat()</span>
+                                        </div>
+                                        <a asp-controller="Property" asp-action="PropertySingle" asp-route-id="@property.Id" class="link-a">
+                                            Click here to view
+                                            <span class="bi bi-chevron-right"></span>
+                                        </a>
+                                    </div>
+                                    <div class="card-footer-a">
+                                        <ul class="card-info d-flex justify-content-around">
+                                            <li>
+                                                <h4 class="card-info-title">Area</h4>
+                                                <span>
+                                                    @property.Size<span>m</span>
+                                                    <sup>2</sup>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <h4 class="card-info-title">Beds</h4>
+                                                <span>@property.TotalBedRooms</span>
+                                            </li>
+                                            <li>
+                                                <h4 class="card-info-title">Baths</h4>
+                                                <span>@property.TotalBathRooms</span>
+                                            </li>
+                                            <li>
+                                                <h4 class="card-info-title">Garages</h4>
+                                                <span>@property.TotalGarages</span>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                }
             }
         </div>
     </div>
-    <partial name="_PaginationPartial" model="@paginationModel"/>
+    <partial name="_PaginationPartial" model="@paginationModel" />
 </section>
 
-@section Scripts{
+@section Scripts {
     <script src="~/js/searchFormHider.js"></script>
     <script src="~/js/propertySorter.js"></script>
     <script src="~/js/jquery.poplatedPlacesGetter.js"></script>

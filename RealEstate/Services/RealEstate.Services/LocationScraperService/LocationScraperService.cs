@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
 
     using AngleSharp;
@@ -20,7 +21,7 @@
         {
             var locations = await GetLocatios();
 
-            var json = JsonConvert.SerializeObject(locations);
+            var json = JsonConvert.SerializeObject(locations, Formatting.Indented);
 
             return json;
         }
@@ -66,19 +67,16 @@
             {
                 request.AddParameter("id", $"{locationsIdes[id]}");
 
-                var response = client.Post(request).Content!
-                    .Split(new char[2] { '\n', '\t' })
-                    .ToList();
+                var response = client.Post(request).Content!.Split("\n").ToList();
 
                 var location = new Location
                 {
                     Name = locationsNames[id],
                 };
 
-                for (int j = 3; j < response.Count - 2; j += 2)
+                for (int j = 2; j < response.Count - 2; j++)
                 {
-                    var currentPlace = response[j].Replace("</option>", string.Empty).Split('>', StringSplitOptions.RemoveEmptyEntries)[1];
-
+                    var currentPlace = response[j].Split('>', StringSplitOptions.RemoveEmptyEntries)[1].Replace("</option", string.Empty);
                     location.PopulatedPlaces.Add(new PopulatedPlace(currentPlace));
                 }
 

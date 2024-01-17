@@ -7,6 +7,7 @@
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
+    using RealEstate.Services.Messaging;
     using RealEstate.Web.ViewModels.Account;
 
     public class AccountService : IAccountService
@@ -30,7 +31,7 @@
             }
 
             var result = await this.signInManager.PasswordSignInAsync(user, loginModel.Password, false, false);
-
+                       
             return result;
         }
 

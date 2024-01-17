@@ -1,5 +1,6 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System;
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Authorization;
@@ -12,20 +13,19 @@
     [Authorize(Roles = GlobalConstants.AdministratorRoleName)]
     public class UpdateRegionController : BaseController
     {
-        private readonly IRegionScraperService scraper;
+        private readonly ILocationScraperService scraperService;
         private readonly ILocationService locationService;
 
-        public UpdateRegionController(IRegionScraperService scraper, ILocationService regionService)
+        public UpdateRegionController(ILocationScraperService scraperService, ILocationService regionService)
         {
-            this.scraper = scraper;
+            this.scraperService = scraperService;
             this.locationService = regionService;
         }
 
         //[HttpPost]
         public async Task<IActionResult> UpdateRegions()
         {
-            var locations = await this.scraper.GetAllAsJason();
-
+            var locations = await this.scraperService.GetAllAsJason();
             this.locationService.SaveToFile(locations);
 
             return this.Content("Done");

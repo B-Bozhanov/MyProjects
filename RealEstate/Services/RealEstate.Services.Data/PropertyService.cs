@@ -12,6 +12,7 @@
 
     using Microsoft.AspNetCore.Server.IIS.Core;
     using Microsoft.EntityFrameworkCore;
+    using Microsoft.IdentityModel.Tokens;
 
     using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
@@ -127,8 +128,8 @@
             await this.propertyRepository.AddAsync(property);
             await this.propertyRepository.SaveChangesAsync();
 
-            //this.hangfireWrapperService.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromDays(property.ExpirationDays));
-            //this.hangfireWrapperService.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Daily);
+            this.hangfireWrapperService.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromDays(property.ExpirationDays));
+            this.hangfireWrapperService.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Daily);
         }
 
         public async Task AutoRemoveById(int propertyId, PerformContext performContext)
@@ -284,6 +285,11 @@
                 (int)OptionType.PriceAsc => this.GetAllWithoutExpired().OrderBy(p => p.Price),
                 _ => this.GetAllWithoutExpired().OrderByDescending(p => p.Id),
             };
+
+            if (result.IsNullOrEmpty())
+            {
+                return null;                //throw new ArgumentException("The databse properties is Empty");
+            }
 
             return result
                 .Skip((page - 1) * PropertiesPerPage)

@@ -3,6 +3,7 @@
     using System;
     using System.Diagnostics;
     using System.IO;
+    using System.Text;
     using System.Threading.Tasks;
 
     using CommandLine;
@@ -18,12 +19,31 @@
     using RealEstate.Data.Seeding;
     using RealEstate.Services.Data;
     using RealEstate.Services.Data.Interfaces;
+    using RealEstate.Services.Interfaces;
+    using RealEstate.Services.LocationScraperService;
     using RealEstate.Services.Messaging;
+    using RealEstate.Services.RegionScraperService;
 
     public static class Program
     {
         public static int Main(string[] args)
         {
+            ILocationScraperService locationScraperService = new LocationScraperService();
+            var regions = locationScraperService.GetRegionsAsync().GetAwaiter().GetResult();
+            Console.OutputEncoding = Encoding.UTF8;
+
+            foreach (var item in regions)
+            {
+                Console.WriteLine(item.Name);
+
+                foreach (var popPlaces in item.PopulatedPlaces)
+                {
+                    Console.WriteLine($"------{popPlaces.Name}");
+                }
+            }
+            Console.WriteLine(  );
+
+            /*
             Console.WriteLine(11%4);
             Console.WriteLine($"{typeof(Program).Namespace} ({string.Join(" ", args)}) starts working...");
             var serviceCollection = new ServiceCollection();
@@ -46,6 +66,8 @@
                     opts => SandboxCode(opts, serviceProvider).GetAwaiter().GetResult(),
                     _ => 255);
             }
+            */
+            return 0;
         }
 
         private static async Task<int> SandboxCode(SandboxOptions options, IServiceProvider serviceProvider)

@@ -1,5 +1,6 @@
 ﻿namespace RealEstate.Web.Controllers
 {
+    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Threading.Tasks;
@@ -9,7 +10,6 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
-    using Microsoft.AspNetCore.Mvc.ModelBinding;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
@@ -63,19 +63,27 @@
         [AllowAnonymous]
         public IActionResult Index(int optionId, int page = 1)
         {
-            var allPropertiesCount = this.propertyService.GetAllActiveCount();
-            var paginationModel = this.paginationService.CreatePagination(allPropertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Index));
-            var searchModel = new SearchViewModel
+            try
             {
-                AllProperties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
-                Locations = this.locationService.Get<LocationViewModel>(),
-            };
+                var allPropertiesCount = this.propertyService.GetAllActiveCount();
+                var paginationModel = this.paginationService.CreatePagination(allPropertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Index));
+                var searchModel = new SearchViewModel
+                {
+                    AllProperties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
+                    Locations = this.locationService.Get<LocationViewModel>(),
+                };
 
-            searchModel.CurrentOptionType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
+                searchModel.CurrentOptionType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
 
-            this.ViewBag.Pager = paginationModel;
+                this.ViewBag.Pager = paginationModel;
 
-            return this.View(searchModel);
+                return this.View(searchModel);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Redirect to friedly error page
+                return this.Content(ex.Message);
+            }
         }
 
         [HttpGet]

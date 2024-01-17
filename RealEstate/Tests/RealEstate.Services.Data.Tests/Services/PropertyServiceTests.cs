@@ -6,16 +6,16 @@
     using System.Threading.Tasks;
 
     using Hangfire;
+    using Hangfire.Common;
+    using Hangfire.States;
+    using Hangfire.Storage;
 
-    using Microsoft.CodeAnalysis.CSharp.Syntax;
     using Microsoft.EntityFrameworkCore;
 
     using Moq;
 
-    using RealEstate.Data;
     using RealEstate.Data.Common.Repositories;
     using RealEstate.Data.Models;
-    using RealEstate.Data.Repositories;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Data.Tests.Mocks;
     using RealEstate.Services.Interfaces;
@@ -33,29 +33,8 @@
         public PropertyServiceTests()
         {
             this.propertyRepository = PropertyRepositoryMock.Instance;
-
-            var userContactRepositoryMock = new Mock<IDeletableEntityRepository<UserContact>>();
-            var conditionRepositoryMock = new Mock<IDeletableEntityRepository<Condition>>();
-            var detailRepositoryMock = new Mock<IDeletableEntityRepository<Detail>>();
-            var equipmentRepositoryMock = new Mock<IDeletableEntityRepository<Equipment>>();
-            var heatingRepositoryMock = new Mock<IDeletableEntityRepository<Heating>>();
-
-            var imageServiceMock = new Mock<IImageService>();
-            var hangfireWrapperService = new Mock<IHangfireWrapperService>();
-            var paginationService = new Mock<IPaginationService>();
-
-            var propertyTypeRepositoryMock = PropertyTypeRepositoryMock.Instance;
-
-            var buildingTypeRepositoryMock = BuildingTypeRepositoryMock.Instance;
-
-            var populatedPlaceRepositoryMock = PopulatedPlaceRepositoryMock.Instance;
-
-            this.propertyService = new PropertyService(propertyRepository, propertyTypeRepositoryMock,
-                                                       buildingTypeRepositoryMock, userContactRepositoryMock.Object,
-                                                       populatedPlaceRepositoryMock, conditionRepositoryMock.Object,
-                                                       detailRepositoryMock.Object, equipmentRepositoryMock.Object,
-                                                       heatingRepositoryMock.Object, imageServiceMock.Object,
-                                                       hangfireWrapperService.Object, paginationService.Object);
+            var propertyServiceMock = new PropertyServiceMock(this.propertyRepository);
+            this.propertyService = propertyServiceMock.Instance;
         }
 
         [Fact]

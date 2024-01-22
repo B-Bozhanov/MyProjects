@@ -17,6 +17,7 @@
     using System.Xml.Linq;
 
     using static RealEstate.Common.GlobalConstants.Account;
+    using RealEstate.Web.ViewModels.ImageModel;
 
     public class PropertyEditViewModel : IMapFrom<Property>
     {

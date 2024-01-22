@@ -10,6 +10,7 @@
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
+    using Microsoft.Extensions.Configuration;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
@@ -35,13 +36,24 @@
         private readonly IPropertyService propertyService;
         private readonly IPopulatedPlaceService populatedPlaceService;
         private readonly IPropertyTypeService propertyTypeService;
+        private readonly IImageService imageService;
+        private readonly IConfiguration configuration;
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public PropertyController(IBackgroundJobClient backgroundJobClient, IBuildingTypeService buildingTypeService, 
-            IConditionService conditionService, IDetailService detailService, IEquipmentService equipmentService, 
-            IHeatingService heatingService, ILocationService locationService, IPaginationService paginationService, 
-            IPropertyService propertyService, IPopulatedPlaceService populatedPlaceService, IPropertyTypeService propertyTypeService,
+        public PropertyController(IBackgroundJobClient backgroundJobClient, 
+            IBuildingTypeService buildingTypeService, 
+            IConditionService conditionService, 
+            IDetailService detailService, 
+            IEquipmentService equipmentService, 
+            IHeatingService heatingService, 
+            ILocationService locationService, 
+            IPaginationService paginationService, 
+            IPropertyService propertyService, 
+            IPopulatedPlaceService populatedPlaceService, 
+            IPropertyTypeService propertyTypeService,
+            IImageService imageService,
+            IConfiguration configuration,
             SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
         {
             this.backgroundJobClient = backgroundJobClient;
@@ -55,42 +67,19 @@
             this.propertyService = propertyService;
             this.populatedPlaceService = populatedPlaceService;
             this.propertyTypeService = propertyTypeService;
+            this.imageService = imageService;
+            this.configuration = configuration;
             this.signInManager = signInManager;
             this.userManager = userManager;
         }
 
         [HttpGet]
-        [AllowAnonymous]
-        public IActionResult Index(int optionId, int page = 1)
-        {
-            try
-            {
-                var allPropertiesCount = this.propertyService.GetAllActiveCount();
-                var paginationModel = this.paginationService.CreatePagination(allPropertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Index));
-                var searchModel = new SearchViewModel
-                {
-                    AllProperties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
-                    Locations = this.locationService.Get<LocationViewModel>(),
-                };
-
-                searchModel.CurrentOptionType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
-
-                this.ViewBag.Pager = paginationModel;
-
-                return this.View(searchModel);
-            }
-            catch (Exception ex)
-            {
-                //TODO: Redirect to friedly error page
-                return this.Content(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Add() => this.View(await this.SetCollectionsAsync(new PropertyInputModel()));
+        [Route("/add")]
+        public async Task<IActionResult> AddAsync() => this.View(await this.SetCollectionsAsync(new PropertyInputModel()));
 
         [HttpPost]
-        public async Task<IActionResult> Add(PropertyInputModel property)
+        [Route("/add")]
+        public async Task<IActionResult> AddAsync(PropertyInputModel property)
         {
             var errors = this.propertyService.PropertyValidator(property);
             this.AddModelStateErrors(errors);
@@ -107,50 +96,9 @@
             return this.RedirectToAction(nameof(this.Success));
         }
 
-        [HttpPost]
-        [AllowAnonymous]
-        public async Task<IActionResult> Search(SearchViewModel searchModel, int page = 1)
-        {
-            try
-            {
-                var properties = await this.propertyService.SearchAsync(searchModel);
-
-                var paginationModel = this.paginationService.CreatePagination(properties.Count(), PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Search));
-
-                this.ViewBag.Pager = paginationModel;
-                return View(properties);
-            }
-            catch (System.Exception ex)
-            {
-                this.ModelState.AddModelError("", ex.Message);
-                return this.View(searchModel);
-            }
-        }
-
         [HttpGet]
-        [AllowAnonymous]
-        [Route("/Property/Single")]
-        public async Task<IActionResult> PropertySingle(int id)
-        {
-            var propertyModel = await this.propertyService.GetByIdAsync<PropertyViewModel>(id);
-            return this.View(propertyModel);
-        }
-
-        [HttpPost]
-        public IActionResult GetPopulatedPlaces(int id)
-        {
-            var populatedPlaces = this.populatedPlaceService.GetPopulatedPlacesByLocationId<PopulatedPlaceViewModel>(id);
-
-            return this.Json(new { data = populatedPlaces });
-        }
-
-        public IActionResult Success()
-        {
-            return this.View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Edit(int propertyId)
+        [Route("/edit")]
+        public async Task<IActionResult> EditAsync(int propertyId)
         {
             var editModel = await this.propertyService.GetByIdWithExpiredUserPropertiesAsync<PropertyEditViewModel>(propertyId, this.UserId);
 
@@ -164,6 +112,7 @@
             editModel.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
             editModel.Locations = this.locationService.Get<LocationViewModel>();
             editModel.BuildingTypes = this.buildingTypeService.GetAll();
+            editModel.Images = await this.imageService.GetAllByPropertyIdAsync(editModel.Id);
 
             foreach (var buildingType in editModel.BuildingTypes)
             {
@@ -179,7 +128,8 @@
         }
 
         [HttpPost]
-        public async Task<IActionResult> Edit(PropertyEditViewModel editModel)
+        [Route("/edit")]
+        public async Task<IActionResult> EditAsync(PropertyEditViewModel editModel)
         {
             if (!await this.propertyService.IsUserProperty(editModel.Id, this.UserId))
             {
@@ -214,6 +164,78 @@
             }
 
             return this.Redirect(returnUrlCookieValue);
+        }
+
+        [HttpPost]
+        public IActionResult GetPopulatedPlaces(int id)
+        {
+            var populatedPlaces = this.populatedPlaceService.GetPopulatedPlacesByLocationId<PopulatedPlaceViewModel>(id);
+
+            return this.Json(new { data = populatedPlaces });
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult Index(int optionId, int page = 1)
+        {
+            var key = this.configuration["ApiKeys:ImgBBApiKey"];
+            var key2 = this.configuration["ApiKeys:SendGridApiKey"];
+
+            try
+            {
+                var allPropertiesCount = this.propertyService.GetAllActiveCount();
+                var paginationModel = this.paginationService.CreatePagination(allPropertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Index));
+                var searchModel = new SearchViewModel
+                {
+                    AllProperties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
+                    Locations = this.locationService.Get<LocationViewModel>(),
+                };
+
+                searchModel.CurrentOptionType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
+
+                this.ViewBag.Pager = paginationModel;
+
+                return this.View(searchModel);
+            }
+            catch (Exception ex)
+            {
+                //TODO: Redirect to friedly error page
+                return this.Content(ex.Message);
+            }
+        }
+
+        [HttpGet]
+        [AllowAnonymous]
+        [Route("/Property/Single")]
+        public async Task<IActionResult> PropertySingle(int id)
+        {
+            var propertyModel = await this.propertyService.GetByIdAsync<PropertyViewModel>(id);
+            return this.View(propertyModel);
+        }
+
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> Search(SearchViewModel searchModel, int page = 1)
+        {
+            try
+            {
+                var properties = await this.propertyService.SearchAsync(searchModel);
+
+                var paginationModel = this.paginationService.CreatePagination(properties.Count(), PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Search));
+
+                this.ViewBag.Pager = paginationModel;
+                return View(properties);
+            }
+            catch (System.Exception ex)
+            {
+                this.ModelState.AddModelError("", ex.Message);
+                return this.View(searchModel);
+            }
+        }
+
+        public IActionResult Success()
+        {
+            return this.View();
         }
 
         private void AddModelStateErrors(Dictionary<string, List<string>> errorsCollection)

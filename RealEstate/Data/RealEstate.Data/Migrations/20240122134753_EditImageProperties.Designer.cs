@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RealEstate.Data;
 
@@ -11,9 +12,11 @@ using RealEstate.Data;
 namespace RealEstate.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240122134753_EditImageProperties")]
+    partial class EditImageProperties
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -497,16 +500,13 @@ namespace RealEstate.Data.Migrations
                     b.Property<DateTime>("CreatedOn")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeleteUrl")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("DeletedOn")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Expiration")
                         .HasColumnType("int");
 
-                    b.Property<string>("Extension")
+                    b.Property<string>("Extencion")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Height")
@@ -521,8 +521,8 @@ namespace RealEstate.Data.Migrations
                     b.Property<int>("PropertyId")
                         .HasColumnType("int");
 
-                    b.Property<long>("Size")
-                        .HasColumnType("bigint");
+                    b.Property<int>("Size")
+                        .HasColumnType("int");
 
                     b.Property<string>("Url")
                         .IsRequired()

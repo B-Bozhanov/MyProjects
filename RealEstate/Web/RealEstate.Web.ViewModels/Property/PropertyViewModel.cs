@@ -12,6 +12,7 @@
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
+    using RealEstate.Web.ViewModels.ImageModel;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
 
     public class PropertyViewModel : IMapFrom<Property>

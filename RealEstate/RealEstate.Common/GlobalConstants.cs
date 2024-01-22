@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using static System.Net.WebRequestMethods;
 
     public static class GlobalConstants
     {
@@ -44,10 +45,28 @@
 
         public static class Images
         {
-            public const string PropertyImagesPath = "/assets/img/Properties/";
-            public const string AgentImagesPath = "/assets/img/Agents/";
-            public const int Width = 1920;
+            public const string AgentImagesUrl = "/assets/img/Agents/";
             public const int Height = 1080;
+            public const string PropertyImagesUrl = "/assets/img/Properties/";
+            public const bool SaveToLocalDrive = false;
+            public const int ImageMaxSize = 1024 * 1024 * 10; // 10MB:
+            public const string UploadUrl = "https://api.imgbb.com/1/upload/";
+            public const int Width = 1920;
+
+
+            public static HashSet<string> GetSupportedExtensions()
+            {
+                var extensions = new HashSet<string>
+                {
+                    ".jpg",
+                    ".jpeg",
+                    ".bnp",
+                    ".png",
+                    ".gif",
+                };
+
+                return extensions;
+            }
         }
 
         public static class Properties

@@ -6,7 +6,6 @@
 
 @{
     ViewData["Title"] = "Home";
-    var imagePath = string.Empty;
     //TODO: Images are not responsive !
 }
 
@@ -25,9 +24,9 @@
         {
             if (property.Images.Count != 0)
             {
-                imagePath = $"{PropertyImagesPath}/{property.Images.First().Url}";
+                var test = property.Images.FirstOrDefault().Url;
             }
-            <div class="swiper-slide carousel-item-a intro-item bg-image" style="background-image: url(@imagePath)">
+            <div class="swiper-slide carousel-item-a intro-item bg-image" style="background-image: url(@property.Images.FirstOrDefault().Url)">
                 <div class="overlay overlay-a"></div>
                 <div class="intro-content display-table">
                     <div class="table-cell">
@@ -83,7 +82,7 @@
                     <div class="carousel-item-b swiper-slide">
                         <div class="card-box-a card-shadow">
                             <div class="img-box-a">
-                                <img src="@PropertyImagesPath/@property.Images.First().Url" alt="" class="img-a img-fluid">
+                                <img src="@property.Images.First().Url" alt="" class="img-a img-fluid">
                             </div>
                             <div class="card-overlay">
                                 <div class="card-overlay-a-content">

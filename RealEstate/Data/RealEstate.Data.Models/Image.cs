@@ -15,6 +15,18 @@
         [Required]
         public string Url { get; set; }
 
+        public string DeleteUrl { get; set; }
+
+        public int Width { get; set; }
+
+        public int Height { get; set; }
+
+        public long Size { get; set; }
+
+        public int Expiration { get; set; }
+
+        public string Extension { get; set; }
+
         [Required]
         public int PropertyId { get; set; }
 

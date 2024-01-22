@@ -24,7 +24,8 @@
     using RealEstate.Web.ViewModels.Property;
     using RealEstate.Web.ViewModels.Search;
 
-    using static RealEstate.Common.GlobalConstants.Properties;
+    using static RealEstate.Common.GlobalConstants;
+    using static RealEstate.Common.GlobalConstants;
 
     public class PropertyService : IPropertyService
     {
@@ -124,15 +125,15 @@
 
             property = await this.AddMoreDetailsAsync(propertyModel, property);
 
-            await this.imageService.AddAsync(propertyModel.Images, property);
+            await this.imageService.AddAsync(propertyModel.Images, property, Images.SaveToLocalDrive);
             await this.propertyRepository.AddAsync(property);
             await this.propertyRepository.SaveChangesAsync();
 
-            this.hangfireWrapperService.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromDays(property.ExpirationDays));
+            this.hangfireWrapperService.BackgroundJobClient.Schedule(() => this.RemoveByIdAsync(property.Id, null), TimeSpan.FromDays(property.ExpirationDays));
             this.hangfireWrapperService.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Daily);
         }
 
-        public async Task AutoRemoveById(int propertyId, PerformContext performContext)
+        public async Task RemoveByIdAsync(int propertyId, PerformContext performContext)
         {
             var property = await this.GetByIdAsync(propertyId);
 
@@ -192,7 +193,7 @@
                 if (property.IsExpired)
                 {
                     property.IsExpired = false;
-                    this.hangfireWrapperService.BackgroundJobClient.Schedule(() => this.AutoRemoveById(property.Id, null), TimeSpan.FromDays(property.ExpirationDays));
+                    this.hangfireWrapperService.BackgroundJobClient.Schedule(() => this.RemoveByIdAsync(property.Id, null), TimeSpan.FromDays(property.ExpirationDays));
                     this.hangfireWrapperService.RecurringJobManager.AddOrUpdate($"{property.Id}", () => this.ExpirationDaysDecreeser(property.Id, null), Cron.Daily);
                 }
             }
@@ -283,6 +284,7 @@
                 (int)OptionType.ForRent => this.GetAllWithoutExpired().Where(p => p.Option == PropertyOption.Rent).OrderByDescending(p => p.Id),
                 (int)OptionType.PriceDesc => this.GetAllWithoutExpired().OrderByDescending(p => p.Price),
                 (int)OptionType.PriceAsc => this.GetAllWithoutExpired().OrderBy(p => p.Price),
+                (int)OptionType.Test => throw new InvalidOperationException("TEST, test"),
                 _ => this.GetAllWithoutExpired().OrderByDescending(p => p.Id),
             };
 
@@ -292,8 +294,8 @@
             }
 
             return result
-                .Skip((page - 1) * PropertiesPerPage)
-                .Take(PropertiesPerPage)
+                .Skip((page - 1) * Properties.PropertiesPerPage)
+                .Take(Properties.PropertiesPerPage)
                 .To<PropertyViewModel>()
                 .ToArray();
         }
@@ -306,7 +308,7 @@
                  .To<PropertyViewModel>()
                  .ToListAsync();
 
-            var test = this.paginationService.Pager<PropertyViewModel>(activeProperties, page, PropertiesPerPage);
+            var test = this.paginationService.Pager<PropertyViewModel>(activeProperties, page, Properties.PropertiesPerPage);
             return test;
         }
 
@@ -446,8 +448,8 @@
 
         private IEnumerable<PropertyViewModel> Pager(IEnumerable<PropertyViewModel> properties, int page)
             => properties
-                .Skip((page - 1) * PropertiesPerPage)
-                .Take(PropertiesPerPage)
+                .Skip((page - 1) * Properties.PropertiesPerPage)
+                .Take(Properties.PropertiesPerPage)
                 .ToList();
 
         public Dictionary<string, List<string>> PropertyValidator(PropertyInputModel property)

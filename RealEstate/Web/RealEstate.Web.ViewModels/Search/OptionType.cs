@@ -9,5 +9,6 @@
         ForRent = 4,
         PriceDesc = 5,
         PriceAsc = 6,
+        Test = 7,
     }
 }

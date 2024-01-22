@@ -20,6 +20,7 @@
                 OptionType.NewToOld,
                 OptionType.PriceDesc,
                 OptionType.PriceAsc,
+                OptionType.Test,
             };
         }
 

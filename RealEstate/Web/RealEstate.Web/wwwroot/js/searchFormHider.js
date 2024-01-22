@@ -1,5 +1,5 @@
 ﻿var form = $("#searchForm");
-var isClicked = true;
+let isClicked = true;
 
 $(document).ready(function () {
     form.hide();

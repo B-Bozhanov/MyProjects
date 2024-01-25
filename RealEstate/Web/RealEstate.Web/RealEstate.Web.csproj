@@ -67,4 +67,10 @@
 		<Folder Include="wwwroot\assets\img\Agents\" />
 		<Folder Include="wwwroot\assets\img\Properties\" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Update="appsettings.json">
+	    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+	  </Content>
+	</ItemGroup>
 </Project>

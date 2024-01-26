@@ -16,7 +16,7 @@
                 return;
             }
 
-            var equipments = this.GetDataFromJson<Equipment>(nameof(Equipment));
+            var equipments = this.GetDataFromJson<Equipment>(nameof(Equipment), serviceProvider);
             await AddDataAsync(dbContext, equipments);
         }
 

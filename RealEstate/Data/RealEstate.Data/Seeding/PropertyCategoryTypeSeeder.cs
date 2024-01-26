@@ -15,7 +15,7 @@
                 return;
             }
 
-            var propertyCategoryTypes = this.GetDataFromJson<PropertyCategoryType>(nameof(PropertyCategoryType));
+            var propertyCategoryTypes = this.GetDataFromJson<PropertyCategoryType>(nameof(PropertyCategoryType), serviceProvider);
 
             await dbContext.AddRangeAsync(propertyCategoryTypes);
         }

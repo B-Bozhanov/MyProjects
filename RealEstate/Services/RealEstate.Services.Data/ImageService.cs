@@ -150,6 +150,12 @@
         {
             var supportedImageExtensions = Images.GetSupportedExtensions(); 
             var fileExtension = new FileInfo(file.FileName).Extension;
+            using var image = IshImage.Load(file.OpenReadStream());
+
+            if (image.Width < Images.Width || image.Height < Images.Height)
+            {
+                throw new InvalidDataException($"The image width must be more than {Images.Width}, and the image height must bemore than {Images.Height}!");
+            }
 
             if (!supportedImageExtensions.Contains(fileExtension))
             {

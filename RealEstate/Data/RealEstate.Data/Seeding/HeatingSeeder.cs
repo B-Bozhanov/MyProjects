@@ -16,7 +16,7 @@
                 return;
             }
 
-            var heatings = this.GetDataFromJson<Heating>(nameof(Heating));
+            var heatings = this.GetDataFromJson<Heating>(nameof(Heating), serviceProvider);
             await AddDataAsync(dbContext, heatings);
         }
 

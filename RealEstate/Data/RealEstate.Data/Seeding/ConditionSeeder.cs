@@ -16,7 +16,7 @@
                 return;
             }
 
-            var conditions = this.GetDataFromJson<Condition>(nameof(Condition));
+            var conditions = this.GetDataFromJson<Condition>(nameof(Condition), serviceProvider);
             await AddDataAsync(dbContext, conditions);
         }
 

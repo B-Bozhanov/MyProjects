@@ -16,7 +16,7 @@
                 return;
             }
 
-            var detaills =  this.GetDataFromJson<Detail>(nameof(Detail));
+            var detaills =  this.GetDataFromJson<Detail>(nameof(Detail), serviceProvider);
             await AddDataAsync(dbContext, detaills);
         }
 

@@ -15,7 +15,7 @@
                 return;
             }
 
-            var buildingTypes = this.GetDataFromJson<BuildingType>(nameof(BuildingType));
+            var buildingTypes = this.GetDataFromJson<BuildingType>(nameof(BuildingType), serviceProvider);
 
             await dbContext.BuildingTypes.AddRangeAsync(buildingTypes);
         }

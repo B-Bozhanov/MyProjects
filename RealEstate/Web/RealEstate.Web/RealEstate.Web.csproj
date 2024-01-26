@@ -16,6 +16,17 @@
 		<EmbeddedResource Remove="Areas\Identity\**" />
 		<None Remove="Areas\Identity\**" />
 	</ItemGroup>
+
+	<ItemGroup>
+	  <Content Remove="wwwroot\dataToSeed\buildingTypes.json" />
+	  <Content Remove="wwwroot\dataToSeed\conditions.json" />
+	  <Content Remove="wwwroot\dataToSeed\details.json" />
+	  <Content Remove="wwwroot\dataToSeed\equipments.json" />
+	  <Content Remove="wwwroot\dataToSeed\heatings.json" />
+	  <Content Remove="wwwroot\dataToSeed\locations.json" />
+	  <Content Remove="wwwroot\dataToSeed\propertyCategoryTypes.json" />
+	  <Content Remove="wwwroot\dataToSeed\propertyTypes.json" />
+	</ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
 	</ItemGroup>
@@ -26,6 +37,14 @@
 
 	<ItemGroup>
 		<None Include="..\..\.editorconfig" Link=".editorconfig" />
+		<None Include="wwwroot\dataToSeed\buildingTypes.json" />
+		<None Include="wwwroot\dataToSeed\conditions.json" />
+		<None Include="wwwroot\dataToSeed\details.json" />
+		<None Include="wwwroot\dataToSeed\equipments.json" />
+		<None Include="wwwroot\dataToSeed\heatings.json" />
+		<None Include="wwwroot\dataToSeed\locations.json" />
+		<None Include="wwwroot\dataToSeed\propertyCategoryTypes.json" />
+		<None Include="wwwroot\dataToSeed\propertyTypes.json" />
 	</ItemGroup>
 
 	<ItemGroup>

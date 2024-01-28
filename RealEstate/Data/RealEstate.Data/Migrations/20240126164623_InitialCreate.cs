@@ -34,6 +34,9 @@ namespace RealEstate.Data.Migrations
                 columns: table => new
                 {
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
@@ -393,6 +396,8 @@ namespace RealEstate.Data.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Option = table.Column<int>(type: "int", nullable: false),
                     ExpirationDays = table.Column<int>(type: "int", nullable: false),
+                    IsExpirationDaysModified = table.Column<bool>(type: "bit", nullable: false),
+                    IsExpired = table.Column<bool>(type: "bit", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalBedRooms = table.Column<int>(type: "int", nullable: true),
                     TotalBathRooms = table.Column<int>(type: "int", nullable: true),
@@ -519,7 +524,7 @@ namespace RealEstate.Data.Migrations
                 columns: table => new
                 {
                     HeatingsId = table.Column<int>(type: "int", nullable: false),
-                    PropertiesId = table.Column<int>(type: "int", nullable: false),
+                    PropertiesId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -544,11 +549,17 @@ namespace RealEstate.Data.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DeleteUrl = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Width = table.Column<int>(type: "int", nullable: false),
+                    Height = table.Column<int>(type: "int", nullable: false),
+                    Size = table.Column<long>(type: "bigint", nullable: false),
+                    Expiration = table.Column<int>(type: "int", nullable: false),
+                    Extension = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PropertyId = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {

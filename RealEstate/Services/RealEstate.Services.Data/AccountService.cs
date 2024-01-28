@@ -39,6 +39,8 @@
         {
             var user = new ApplicationUser
             {
+                FirstName = registerModel.FirstName,
+                LastName = registerModel.LastName,
                 UserName = registerModel.Username,
                 Email = registerModel.Email,
             };

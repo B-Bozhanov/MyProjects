@@ -18,14 +18,14 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Content Remove="wwwroot\dataToSeed\buildingTypes.json" />
-	  <Content Remove="wwwroot\dataToSeed\conditions.json" />
-	  <Content Remove="wwwroot\dataToSeed\details.json" />
-	  <Content Remove="wwwroot\dataToSeed\equipments.json" />
-	  <Content Remove="wwwroot\dataToSeed\heatings.json" />
-	  <Content Remove="wwwroot\dataToSeed\locations.json" />
-	  <Content Remove="wwwroot\dataToSeed\propertyCategoryTypes.json" />
-	  <Content Remove="wwwroot\dataToSeed\propertyTypes.json" />
+	  <Content Remove="wwwroot\datatoseed\buildingTypes.json" />
+	  <Content Remove="wwwroot\datatoseed\conditions.json" />
+	  <Content Remove="wwwroot\datatoseed\details.json" />
+	  <Content Remove="wwwroot\datatoseed\equipments.json" />
+	  <Content Remove="wwwroot\datatoseed\heatings.json" />
+	  <Content Remove="wwwroot\datatoseed\locations.json" />
+	  <Content Remove="wwwroot\datatoseed\propertyCategoryTypes.json" />
+	  <Content Remove="wwwroot\datatoseed\propertyTypes.json" />
 	</ItemGroup>
 	<ItemGroup>
 		<AdditionalFiles Include="..\..\stylecop.json" />
@@ -37,14 +37,14 @@
 
 	<ItemGroup>
 		<None Include="..\..\.editorconfig" Link=".editorconfig" />
-		<None Include="wwwroot\dataToSeed\buildingTypes.json" />
-		<None Include="wwwroot\dataToSeed\conditions.json" />
-		<None Include="wwwroot\dataToSeed\details.json" />
-		<None Include="wwwroot\dataToSeed\equipments.json" />
-		<None Include="wwwroot\dataToSeed\heatings.json" />
-		<None Include="wwwroot\dataToSeed\locations.json" />
-		<None Include="wwwroot\dataToSeed\propertyCategoryTypes.json" />
-		<None Include="wwwroot\dataToSeed\propertyTypes.json" />
+		<None Include="wwwroot\datatoseed\buildingTypes.json" />
+		<None Include="wwwroot\datatoseed\conditions.json" />
+		<None Include="wwwroot\datatoseed\details.json" />
+		<None Include="wwwroot\datatoseed\equipments.json" />
+		<None Include="wwwroot\datatoseed\heatings.json" />
+		<None Include="wwwroot\datatoseed\locations.json" />
+		<None Include="wwwroot\datatoseed\propertyCategoryTypes.json" />
+		<None Include="wwwroot\datatoseed\propertyTypes.json" />
 	</ItemGroup>
 
 	<ItemGroup>

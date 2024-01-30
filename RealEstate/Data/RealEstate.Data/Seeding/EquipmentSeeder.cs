@@ -7,7 +7,7 @@
     using System.Threading.Tasks;
     using RealEstate.Data.Models;
 
-    internal class EquipmentSeeder : DataSeeder, ISeeder
+    internal class EquipmentSeeder : DataSeederBase, ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {

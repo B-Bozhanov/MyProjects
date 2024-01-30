@@ -7,7 +7,7 @@
 
     using RealEstate.Data.Models;
 
-    internal class HeatingSeeder : DataSeeder, ISeeder
+    internal class HeatingSeeder : DataSeederBase, ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {

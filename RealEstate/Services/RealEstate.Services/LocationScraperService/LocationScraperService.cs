@@ -26,7 +26,7 @@
             return json;
         }
 
-        public async Task<IEnumerable<Location>> GetRegionsAsync(string country = null)
+        public async Task<IEnumerable<Location>> GetLocationsAsync(string country = null)
         {
             return await GetLocatios();
         }

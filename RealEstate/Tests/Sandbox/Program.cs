@@ -29,7 +29,7 @@
         public static int Main(string[] args)
         {
             ILocationScraperService locationScraperService = new LocationScraperService();
-            var regions = locationScraperService.GetRegionsAsync().GetAwaiter().GetResult();
+            var regions = locationScraperService.GetLocationsAsync().GetAwaiter().GetResult();
             Console.OutputEncoding = Encoding.UTF8;
 
             foreach (var item in regions)

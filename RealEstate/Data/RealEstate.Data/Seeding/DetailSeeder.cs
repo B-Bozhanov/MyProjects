@@ -7,7 +7,7 @@
 
     using RealEstate.Data.Models;
 
-    internal class DetailSeeder : DataSeeder, ISeeder
+    internal class DetailSeeder : DataSeederBase, ISeeder
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {

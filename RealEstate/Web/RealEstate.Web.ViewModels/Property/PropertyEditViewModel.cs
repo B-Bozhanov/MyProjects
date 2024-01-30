@@ -1,23 +1,17 @@
 ﻿namespace RealEstate.Web.ViewModels.Property
 {
-    using AutoMapper;
-    using Microsoft.AspNetCore.Http;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.ComponentModel.DataAnnotations;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
     //using RealEstate.Web.Infrastructure.CustomAttributes;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
+    using RealEstate.Web.ViewModels.ImageModel;
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.PropertyTypes;
-
-    using System.Collections.Generic;
-    using System.ComponentModel.DataAnnotations;
-    using System.ComponentModel;
-    using System.Xml.Linq;
-
-    using static RealEstate.Common.GlobalConstants.Account;
-    using RealEstate.Web.ViewModels.ImageModel;
 
     public class PropertyEditViewModel : IMapFrom<Property>
     {

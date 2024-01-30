@@ -7,7 +7,7 @@
 
     public interface ILocationScraperService
     {
-        public Task<IEnumerable<Location>> GetRegionsAsync(string country = null);
+        public Task<IEnumerable<Location>> GetLocationsAsync(string country = null);
 
         public Task<string> GetAllAsJason();
     }

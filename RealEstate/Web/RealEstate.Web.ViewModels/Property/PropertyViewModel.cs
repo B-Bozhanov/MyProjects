@@ -2,13 +2,6 @@
 {
     using System.Collections.Generic;
     using System.Globalization;
-    using System.Runtime.CompilerServices;
-
-    using AutoMapper;
-
-    using Hangfire.Storage;
-
-    using Microsoft.AspNetCore.Routing.Constraints;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;

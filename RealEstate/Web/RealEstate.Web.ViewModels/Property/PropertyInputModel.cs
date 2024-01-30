@@ -2,16 +2,13 @@
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
-    using System.Runtime.CompilerServices;
 
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
     using RealEstate.Data.Models;
-    using RealEstate.Services.Interfaces;
     using RealEstate.Services.Mapping;
-    using RealEstate.Services.TranslateService.Models;
     // using RealEstate.Web.Infrastructure.CustomAttributes;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.ConditionModel;
@@ -21,8 +18,6 @@
     using RealEstate.Web.ViewModels.HeatingModel;
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PropertyTypes;
-
-    using static RealEstate.Common.GlobalConstants;
 
     public class PropertyInputModel : IMapFrom<Property>
     {

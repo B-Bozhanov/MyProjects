@@ -9,6 +9,7 @@ namespace RealEstate.Web
 
     using Microsoft.AspNetCore.Authentication.Cookies;
     using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
@@ -22,11 +23,8 @@ namespace RealEstate.Web
     using RealEstate.Data.Models;
     using RealEstate.Data.Repositories;
     using RealEstate.Data.Seeding;
-    using RealEstate.Services.Data;
     using RealEstate.Services.Data.Interfaces;
-    using RealEstate.Services.HangFireWrapper;
     using RealEstate.Services.Interfaces;
-    using RealEstate.Services.LocationScraperService;
     using RealEstate.Services.Mapping;
     using RealEstate.Services.Messaging;
     using RealEstate.Web.Hubs;

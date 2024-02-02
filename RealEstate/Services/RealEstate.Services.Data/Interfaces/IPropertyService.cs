@@ -13,7 +13,7 @@
     {
         public int GetAllActiveCount();
 
-        public Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user);
+        public Task AddAsync(PropertyInputModel propertyModel, string userId);
 
         public Task EditAsync(PropertyEditViewModel editModel);
 

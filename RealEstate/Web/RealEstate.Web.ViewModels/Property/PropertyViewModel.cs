@@ -8,49 +8,21 @@
     using RealEstate.Web.ViewModels.ImageModel;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
 
-    public class PropertyViewModel : IMapFrom<Property>
+    public class PropertyViewModel : BasePropertyModel
     {
-        public int Id { get; init; }
-
         public ApplicationUser ApplicationUser { get; init; }
-
-        public string Description { get; init; }
 
         public PopulatedPlaceViewModel PopulatedPlace { get; init; }
 
-        public string Option { get; set; }
-
         public string PropertyTypeName { get; set; }
 
-        public decimal Price { get; init; }
-
-        public int Size { get; init; }
-
-        public int? TotalBedRooms { get; init; }
-
-        public int? TotalBathRooms { get; init; }
-
-        public int? TotalGarages { get; init; }
-
-        public bool IsDeleted { get; set; }
-
-        public int ExpirationDays { get; init; }
-
-        // TODO: Math.Round or something for the days.
         public bool IsExpired { get; set; }
 
         public bool IsExpirationDaysModified { get; set; }
-
-        public int ExpireAfter { get; private set; }
 
         // TODO: Move to GlobalConstants
         public string ExpireMessage { get; init; } = $"Expired!";
 
         public ICollection<ImageViewModel> Images { get; init; }
-
-        public string PriceFormat()
-        {
-            return this.Price.ToString("C", CultureInfo.GetCultureInfo("fr-FR"));
-        }
     }
 }

@@ -88,10 +88,8 @@
             {
                 return this.View(await this.SetCollectionsAsync(property));
             }
-
-            var user = await this.userManager.GetUserAsync(this.User);
-            
-            await this.propertyService.AddAsync(property, user);
+                        
+            await this.propertyService.AddAsync(property, this.UserId);
 
             return this.RedirectToAction(nameof(this.Success));
         }

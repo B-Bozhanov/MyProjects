@@ -19,34 +19,13 @@
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PropertyTypes;
 
-    public class PropertyInputModel : IMapFrom<Property>
+    public class PropertyInputModel : BasePropertyModel
     {
-        public int Id { get; init; }
-
-        [Range(0, double.MaxValue, ErrorMessage = "The price can not be negative")]
-        public decimal? Price { get; set; }
-
-        [Required(ErrorMessage = "The field is required!")]
-        public int Size { get; set; }
-
-        public int ExpirationDays { get; set; }
-
-        public PropertyOption Option { get; set; }
-
         public int? YardSize { get; set; }
 
         public int Floor { get; set; }
 
         public int TotalFloors { get; set; }
-
-        public int TotalBedRooms { get; set; }
-
-        public int? TotalBathRooms { get; set; }
-
-        public int TotalGarages { get; set; }
-
-        [Required]
-        public string Description { get; set; }
 
         // [YearValidator(ErrorMessage = "Test")]
         public int? Year { get; set; }

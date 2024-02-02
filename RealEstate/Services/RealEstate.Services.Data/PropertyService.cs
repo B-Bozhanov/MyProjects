@@ -3,14 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
-    using System.Reflection;
-    using System.Runtime.CompilerServices;
     using System.Threading.Tasks;
 
     using Hangfire;
     using Hangfire.Server;
 
-    using Microsoft.AspNetCore.Server.IIS.Core;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.IdentityModel.Tokens;
 
@@ -19,12 +16,9 @@
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Interfaces;
     using RealEstate.Services.Mapping;
-    using RealEstate.Web.ViewModels.Locations;
-    using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.Property;
     using RealEstate.Web.ViewModels.Search;
 
-    using static RealEstate.Common.GlobalConstants;
     using static RealEstate.Common.GlobalConstants;
 
     public class PropertyService : IPropertyService
@@ -70,7 +64,7 @@
             this.paginationService = paginationService;
         }
 
-        public async Task AddAsync(PropertyInputModel propertyModel, ApplicationUser user)
+        public async Task AddAsync(PropertyInputModel propertyModel, string userId)
         {
             if (propertyModel.Floor < 0)
             {
@@ -115,7 +109,7 @@
                 property.BuildingType = this.buildingTypeRepository.All().FirstOrDefault(x => x.Id == buildingType.Id);
             }
 
-            property.ApplicationUser = user;
+            property.ApplicationUserId = userId;
             property.UserContact = new UserContact
             {
                 Names = propertyModel.ContactModel.Names,

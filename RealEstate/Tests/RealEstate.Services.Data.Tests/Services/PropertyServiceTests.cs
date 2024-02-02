@@ -63,6 +63,7 @@
             };
             var user = new ApplicationUser
             {
+                Id = Guid.NewGuid().ToString(),
                 FirstName = "Bozhan",
                 LastName = "Bozhanov",
                 UserName = "DareDeviL",
@@ -72,7 +73,7 @@
 
             //Act
 
-            await this.propertyService.AddAsync(propertyInputModel, user);
+            await this.propertyService.AddAsync(propertyInputModel, user.Id);
             
             //Assert
 
@@ -116,6 +117,7 @@
             };
             var user = new ApplicationUser
             {
+                Id = Guid.NewGuid().ToString(),
                 FirstName = "Bozhan",
                 LastName = "Bozhanov",
                 UserName = "DareDeviL",
@@ -124,7 +126,7 @@
             };
 
             //Act
-            await this.propertyService.AddAsync(propertyInputModel, user);
+            await this.propertyService.AddAsync(propertyInputModel, user.Id);
             var property = this.propertyRepository.All().FirstOrDefault();
 
             //Assert
@@ -178,6 +180,7 @@
             propertyInputModel.Floor = -5;
             var user = new ApplicationUser
             {
+                Id = Guid.NewGuid().ToString(),
                 FirstName = "Bozhan",
                 LastName = "Bozhanov",
                 UserName = "DareDeviL",
@@ -185,7 +188,7 @@
                 PhoneNumber = "0896655707",
             };
 
-            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async() => await this.propertyService.AddAsync(propertyInputModel, user));
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async() => await this.propertyService.AddAsync(propertyInputModel, user.Id));
             Assert.Equal(exception.Message, "The property floor can not be negative");
         }
 
@@ -217,6 +220,7 @@
             propertyInputModel.TotalFloors = 3;
             var user = new ApplicationUser
             {
+                Id = Guid.NewGuid().ToString(),
                 FirstName = "Bozhan",
                 LastName = "Bozhanov",
                 UserName = "DareDeviL",
@@ -224,7 +228,7 @@
                 PhoneNumber = "0896655707",
             };
 
-            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.propertyService.AddAsync(propertyInputModel, user));
+            var exception = await Assert.ThrowsAsync<InvalidOperationException>(async () => await this.propertyService.AddAsync(propertyInputModel, user.Id));
             Assert.Equal(exception.Message, "Current floor can no be bigger than total floors");
         }
 
@@ -247,6 +251,7 @@
             };
             var user = new ApplicationUser
             {
+                Id = Guid.NewGuid().ToString(),
                 FirstName = "Bozhan",
                 LastName = "Bozhanov",
                 UserName = "DareDeviL",
@@ -254,7 +259,7 @@
                 PhoneNumber = "0896655707",
             };
 
-            var exception = await Assert.ThrowsAsync<ArgumentNullException>(async () => await this.propertyService.AddAsync(propertyInputModel, user));
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(async () => await this.propertyService.AddAsync(propertyInputModel, user.Id));
         }
 
         [Fact]
@@ -294,6 +299,7 @@
             };
             var user = new ApplicationUser
             {
+                Id = Guid.NewGuid().ToString(),
                 FirstName = "Bozhan",
                 LastName = "Bozhanov",
                 UserName = "DareDeviL",
@@ -328,7 +334,7 @@
             };
 
             //Act
-            await this.propertyService.AddAsync(propertyInputModel, user);
+            await this.propertyService.AddAsync(propertyInputModel, user.Id);
             await this.propertyService.EditAsync(propertyEditViewModel);
 
             var property = await this.propertyRepository.All().FirstAsync(x => x.Id == propertyInputModel.Id);
@@ -408,13 +414,14 @@
 
                 var user = new ApplicationUser
                 {
+                    Id = Guid.NewGuid().ToString(),
                     FirstName = $"Name{i}",
                     LastName = $"LastName{i}",
                     UserName = $"Username{i}",
                     Email = $"{i}@gmail.com",
                     PhoneNumber = $"089665570{i}",
                 };
-                await this.propertyService.AddAsync(propertyInputModel, user);
+                await this.propertyService.AddAsync(propertyInputModel, user.Id);
             }
         }
 

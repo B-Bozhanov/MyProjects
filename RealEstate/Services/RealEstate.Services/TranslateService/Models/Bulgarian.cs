@@ -6,6 +6,8 @@
 
         public override string NewestProperties { get => "Последно добавени"; }
 
+        public override string Expired { get => "Изтекли"; }
+
         public override string Password { get => "Парола"; }
 
         public override string ForgotPassword { get => "Забравена парола"; }

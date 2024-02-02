@@ -1,16 +1,14 @@
 ﻿namespace RealEstate.Web.ViewModels.Property
 {
     using System.Collections.Generic;
-    using System.Globalization;
 
-    using RealEstate.Data.Models;
-    using RealEstate.Services.Mapping;
+    using RealEstate.Web.ViewModels.ApplicationUser;
     using RealEstate.Web.ViewModels.ImageModel;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
 
     public class PropertyViewModel : BasePropertyModel
     {
-        public ApplicationUser ApplicationUser { get; init; }
+        public UserViewModel ApplicationUser { get; init; }
 
         public PopulatedPlaceViewModel PopulatedPlace { get; init; }
 

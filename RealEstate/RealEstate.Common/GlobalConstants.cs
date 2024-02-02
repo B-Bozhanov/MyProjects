@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+
     using static System.Net.WebRequestMethods;
 
     public static class GlobalConstants
@@ -26,7 +27,6 @@
             public const int MaxImageSize = 1024 * 1024 * 10; // 10MB:
             public const string UploadUrl = "https://api.imgbb.com/1/upload/";
 
-
             public static HashSet<string> GetSupportedExtensions()
             {
                 var extensions = new HashSet<string>
@@ -42,21 +42,22 @@
             }
         }
 
+        public static class Pagination
+        {
+            public const int PaginationMaxPages = 5;
+        }
+
         public static class Properties
         {
             public const int TopNewest = 5;
-
             public const int TopMostExpensive = 3;
-
             public const int MaxGarages = 20;
             public const int MaxBedRooms = 20;
             public const int MaxBathRooms = 20;
             public const int MaxFloors = 150;
-
             public static int MinYear = 1800;
-
             public const int DefaultStartPage = 1;
-            public const int PropertiesPerPage = 16;
+            public const int PropertiesPerPage = 1;
             //public const string YearErrorMessage = $"The must be in range {MinYear} and {DateTime.UtcNow.Year}";
 
             public static class ErrorMessages

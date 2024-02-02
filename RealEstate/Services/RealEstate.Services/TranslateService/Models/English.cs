@@ -7,6 +7,7 @@
         public override string Name => nameof(English);
 
         public override string NewestProperties => "Newst Properties";
+        public override string Expired => "Expired";
         public override string ForgotPassword => "Forgot Password";
 
         public override string Username => "Username";

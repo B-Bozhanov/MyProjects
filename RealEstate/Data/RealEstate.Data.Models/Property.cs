@@ -34,8 +34,6 @@
 
         public int ExpirationDays { get; set; }
 
-        public bool IsExpirationDaysModified { get; set; }
-
         public bool IsExpired { get; set; }
 
 #nullable enable

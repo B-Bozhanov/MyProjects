@@ -1,14 +1,9 @@
 ﻿namespace RealEstate.Web.ViewModels.Property
 {
-    using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
 
     using Microsoft.AspNetCore.Http;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-
-    using RealEstate.Data.Models;
-    using RealEstate.Services.Mapping;
     // using RealEstate.Web.Infrastructure.CustomAttributes;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.ConditionModel;

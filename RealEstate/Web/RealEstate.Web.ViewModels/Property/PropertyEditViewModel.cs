@@ -26,11 +26,7 @@
         [Display(Name = "Ad Expiration")]
         public int ExpirationDays { get; init; }
 
-        public bool IsExpirationDaysModified { get; set; }
-
         public bool IsExpired { get; set; }
-
-        public bool IsDeleted { get; set; }
 
         [Display(Name = "Options")]
         public PropertyOption Option { get; init; }
@@ -70,10 +66,6 @@
         [Required(ErrorMessage = "Populated place is required!")]
         [DisplayName("Populated Place")]
         public int PopulatedPlaceId { get; init; }
-
-        //[Required]
-        //[Display(Name = "Contacts")]
-        //public ContactModel ContactModel { get; set; } = null!;
 
         public ICollection<ImageViewModel> Images { get; set; }
 

@@ -26,4 +26,9 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\RealEstate.Common\RealEstate.Common.csproj" />
+    <ProjectReference Include="..\RealEstate.Services.Mapping\RealEstate.Services.Mapping.csproj" />
+  </ItemGroup>
+
 </Project>

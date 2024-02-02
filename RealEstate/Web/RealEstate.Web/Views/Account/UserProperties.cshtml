@@ -21,7 +21,9 @@
                 }
                 else
                 {
-                    <h1 class="title-single font-monospace text-danger text-center">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.YouHaveNotAddedProperties)) </h1>
+                    <h1 class="title-single font-monospace text-danger text-center">
+                        @translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.YouHaveNotAddedProperties))
+                    </h1>
 
                     <a class="btn btn-outline-success align-center" asp-controller="Property" asp-action="Add" role="button">
                         @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Add))
@@ -35,11 +37,12 @@
                 {
                     <h1 class="title-single font-monospace text-center text-success">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MyActiveProperties)) </h1>
 
-                    <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">Expired</a>
-                    <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">Expired</a>
-                    <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">Expired</a>
-                    <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">Expired</a>
-                    <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">Expired</a>
+                    <a class="btn btn-outline-success" asp-controller="Property" asp-action="Add" role="button">
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Add))
+                    </a>
+                    <a class="btn btn-outline-danger" asp-controller="Account" asp-action="ExpiredProperties" role="button">
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Expired))
+                    </a>
                 }
                 else
                 {

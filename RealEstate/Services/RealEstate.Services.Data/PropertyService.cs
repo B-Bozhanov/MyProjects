@@ -16,6 +16,7 @@
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Interfaces;
     using RealEstate.Services.Mapping;
+    using RealEstate.Web.Infrastructure.Extencions;
     using RealEstate.Web.ViewModels.Property;
     using RealEstate.Web.ViewModels.Search;
 
@@ -96,7 +97,6 @@
             };
             property.PropertyType = this.propertyTypeRepository.All().FirstOrDefault(pt => pt.Id == propertyModel.PropertyTypeId);
 
-            //TODO: PopulatedPlaces are not all, and can not be null:
             var populatedPlace = this.populatedPlaceRepository.All().FirstOrDefault(p => p.Id == propertyModel.PopulatedPlaceId);
 
             property.PopulatedPlace = populatedPlace;
@@ -162,7 +162,6 @@
             property.YardSize = editModel.YardSize;
             property.Floor = editModel.Floor;
             property.Price = editModel.Price;
-            property.IsExpirationDaysModified = editModel.IsExpirationDaysModified;
             property.Description = editModel.Description;
             property.TotalBedRooms = editModel.TotalBedRooms;
             property.TotalBathRooms = editModel.TotalBathRooms;
@@ -287,11 +286,8 @@
                 return null;                //throw new ArgumentException("The databse properties is Empty");
             }
 
-            return result
-                .Skip((page - 1) * Properties.PropertiesPerPage)
-                .Take(Properties.PropertiesPerPage)
-                .To<PropertyViewModel>()
-                .ToArray();
+            var pagedProperties = this.paginationService.Pager<PropertyViewModel, Property>(result, page);
+            return pagedProperties;
         }
 
         public async Task<IEnumerable<PropertyViewModel>> GetActiveUserPropertiesPerPageAsync(string id, int page)
@@ -302,8 +298,8 @@
                  .To<PropertyViewModel>()
                  .ToListAsync();
 
-            var test = this.paginationService.Pager<PropertyViewModel>(activeProperties, page, Properties.PropertiesPerPage);
-            return test;
+            var pagedProperties = activeProperties.GetPagination<PropertyViewModel>(page);
+            return pagedProperties;
         }
 
         public async Task<IEnumerable<PropertyViewModel>> GetExpiredUserPropertiesPerPageAsync(string id, int page)
@@ -315,7 +311,7 @@
                  .To<PropertyViewModel>()
                  .ToListAsync();
 
-            return this.Pager(expiredProperties, page);
+            return expiredProperties.GetPagination<PropertyViewModel>(page);
         }
 
         public async Task<IEnumerable<PropertyViewModel>> GetAllWithExpiredUserPropertiesPerPage(string id, int page)
@@ -327,7 +323,8 @@
                  .To<PropertyViewModel>()
                  .ToListAsync();
 
-            return this.Pager(allProperties, page);
+            var pagedProperties = allProperties.GetPagination<PropertyViewModel>(page);
+            return pagedProperties;
         }
 
         public async Task<bool> IsAnyExpiredProperties(string userId)

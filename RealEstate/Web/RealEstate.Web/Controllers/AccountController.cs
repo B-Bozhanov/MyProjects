@@ -92,7 +92,7 @@
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Login(LoginViewModel loginModel)
+        public async Task<IActionResult> Login(LoginViewModel loginModel, string? returnUrl)
         {
             if (!this.ModelState.IsValid)
             {
@@ -106,6 +106,11 @@
                 this.ModelState.AddModelError(string.Empty, InvalidLogin);
 
                 return this.View(loginModel);
+            }
+
+            if (returnUrl != null)
+            {
+                return this.Redirect(returnUrl);
             }
 
             return this.RedirectToAction(nameof(this.ActiveProperties));
@@ -136,7 +141,6 @@
         public async Task<IActionResult> ActiveProperties(int page = 1)
         {
             var propertiesCount = this.propertyService.GetAllActiveUserPropertiesCount(this.UserId);
-
             var paginationModel = this.paginationService.CreatePagination(propertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(AccountController)), nameof(this.ActiveProperties));
             var currentProperties = await this.propertyService.GetActiveUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
 

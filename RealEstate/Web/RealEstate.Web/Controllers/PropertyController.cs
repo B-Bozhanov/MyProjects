@@ -208,6 +208,7 @@
         public async Task<IActionResult> PropertySingle(int id)
         {
             var propertyModel = await this.propertyService.GetByIdAsync<PropertyViewModel>(id);
+
             return this.View(propertyModel);
         }
 

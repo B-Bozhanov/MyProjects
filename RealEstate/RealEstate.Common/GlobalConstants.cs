@@ -16,42 +16,15 @@
 
         public const string Layout = "_Theme1";
 
-
-        // TODO: Move administrators data to json in data folder
-        public static List<Administrator> GetAdministrators()
-        {
-            var administrators = new List<Administrator>
-            {
-                new Administrator
-                {
-                    FirstName = "Bozhan",
-                    LastName = "Bozhanov",
-                    UserName = "DareDeviL88",
-                    Password = "123456",
-                    Email = "bojanilkov88@gmail.com",
-                },
-                new Administrator
-                {
-                    FirstName = "Iliyan",
-                    LastName = "Bozhanov",
-                    UserName = "Ribkata",
-                    Password = "123456789",
-                    Email = "iliyan.bojanov@ka1.bg",
-                },
-            };
-
-            return administrators;
-        }
-
         public static class Images
         {
             public const string AgentImagesUrl = "/assets/img/Agents/";
-            public const int Height = 1080;
             public const string PropertyImagesUrl = "/assets/img/Properties/";
-            public const bool SaveToLocalDrive = false;
-            public const int ImageMaxSize = 1024 * 1024 * 10; // 10MB:
-            public const string UploadUrl = "https://api.imgbb.com/1/upload/";
+            public const int Height = 1080;
             public const int Width = 1920;
+            public const bool SaveToLocalDrive = false;
+            public const int MaxImageSize = 1024 * 1024 * 10; // 10MB:
+            public const string UploadUrl = "https://api.imgbb.com/1/upload/";
 
 
             public static HashSet<string> GetSupportedExtensions()

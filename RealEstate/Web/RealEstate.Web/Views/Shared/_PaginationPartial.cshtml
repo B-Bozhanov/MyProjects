@@ -2,7 +2,7 @@
 
 <nav aria-label="...">
     <ul class="pagination justify-content-center">
-        
+
         @if (Model.PreviousPage < 1)
         {
             <li class="page-item disabled">
@@ -20,7 +20,9 @@
             <li class="page-item enabled">
                 <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.PreviousPage" tabindex="-1">Previous</a>
             </li>
-            <li class="page-item"><a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.PreviousPage">@Model.PreviousPage</a></li>
+            @* <li class="page-item">
+                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.PreviousPage">@Model.PreviousPage</a>
+            </li> *@
         }
 
         <li class="page-item active">

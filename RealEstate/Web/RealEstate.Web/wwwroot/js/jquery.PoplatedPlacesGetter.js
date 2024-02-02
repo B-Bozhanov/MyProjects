@@ -1,5 +1,5 @@
 ﻿$(document).ready(function () {
-    $("#PopulatedPlaceId").prop("disabled", true);
+    $("#PopulatedPlacesHide").hide();
 });
 
 $('#location').change(function () {
@@ -8,7 +8,7 @@ $('#location').change(function () {
     $.ajax({
         type: 'POST',
         dataType: "JSON",
-        url:  "/Property/GetPopulatedPlaces",
+        url: "/Property/GetPopulatedPlaces",
         cors: true,
         data: { id: id },
         success:
@@ -16,9 +16,10 @@ $('#location').change(function () {
                 var markup;
 
                 if (!id) {
-                    markup += "<option>Select Populated place</option>";
-                    $(document).ready(function () {
-                        $("#PopulatedPlaceId").prop("disabled", true);
+                    markup += "<option>Изберете населено място</option>";
+                    $(function () {
+                        $("#PopulatedPlacesHide").hide();
+                        // $("#PopulatedPlaceId").prop("disabled", true);
                     });
                 }
                 else {
@@ -26,8 +27,8 @@ $('#location').change(function () {
 
                         markup += " <option value=" + response.data[i].id + ">" + response.data[i].name + "</option>";
                     }
-
-                    $("#PopulatedPlaceId").prop("disabled", false);
+                    $("#PopulatedPlacesHide").show();
+                    // $("#PopulatedPlaceId").prop("disabled", false);
                 }
 
                 markup += "<br />";

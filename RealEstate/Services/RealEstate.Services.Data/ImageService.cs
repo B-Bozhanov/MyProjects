@@ -162,7 +162,7 @@
                 throw new InvalidDataException("Invalid image extension");
             }
 
-            if (file.Length > Images.ImageMaxSize)
+            if (file.Length > Images.MaxImageSize)
             {
                 throw new InvalidDataException("The max size is 10MB.");
             }

@@ -2,11 +2,12 @@
 
 @{
     ViewData["Title"] = this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Title));
+    var locations = this.Model.Locations.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 }
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6 col-sm-12 offset-sm-3">
+        <div class="col-lg-6 col-md-8 col-sm-12 offset-sm-3">
             <form class="form-group" method="post" enctype="multipart/form-data">
                 <div class="title-box-d offset-4">
                     <h3 class="title-d"> @ViewData["Title"]</h3>
@@ -37,28 +38,22 @@
                             @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Location))
                         </label>
                     </h1>
-                    <select asp-for="LocationId" class="form-select" id="location">
+                    <select asp-for="LocationId" asp-items="@locations" class="form-select" id="location">
                         <option value=""> @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.SelectLocation))</option>
-                        @foreach (var location in Model.Locations)
-                        {
-                            <optgroup>
-                                <option value="@location.Id">@location.Name</option>
-                            </optgroup>
-                        }
                     </select>
                     <span asp-validation-for="LocationId" class="text-danger"></span>
                 </div>
                 <br />
 
                 @*PopulatedPlace*@
-                <div class="form-group">
+                <div class="form-group" id="PopulatedPlacesHide">
                     <h1 style="font-size:large">
                         <label id="PopulatedPlaceIdLabel">
                             @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.PopulatedPlace))
                         </label>
                     </h1>
                     <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
-                        <option value="">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.SelectPopulatedPlace))</option>
+                        <option value="0">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.SelectPopulatedPlace))</option>
                     </select>
                     <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
                 </div>

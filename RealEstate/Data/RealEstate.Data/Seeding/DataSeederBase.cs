@@ -15,10 +15,8 @@
         {
             var environment = serviceProvider.GetService<IWebHostEnvironment>();
             var rootPath = environment.WebRootPath;
-            var test = File.ReadAllText($"{rootPath}/dataToSeed/{fileName}s.json");
-            //var json = File.ReadAllText($"{GlobalConstants.SeedDataPath}{fileName}s.json");
-
-            var list = JsonConvert.DeserializeObject<IEnumerable<T>>(test);
+            var json = File.ReadAllText($"{rootPath}/dataToSeed/{fileName}s.json");
+            var list = JsonConvert.DeserializeObject<IEnumerable<T>>(json);
 
             return list;
         }

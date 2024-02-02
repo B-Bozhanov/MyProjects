@@ -5,6 +5,7 @@
     using System.Threading.Tasks;
 
     using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
 
     using RealEstate.Common;
@@ -14,26 +15,22 @@
     {
         public async Task SeedAsync(ApplicationDbContext dbContext, IServiceProvider serviceProvider)
         {
+            if (dbContext.Users.Any())
+            {
+                return;
+            }
+
             var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var configuration = serviceProvider.GetService<IConfiguration>();
 
-            var administrators = GlobalConstants.GetAdministrators();
-
+            var administrators = configuration.GetSection("Administrators").GetChildren();
             foreach (var administrator in administrators)
             {
-                if (!dbContext.Users.Any(u => u.UserName == administrator.UserName))
-                {
-                    ApplicationUser user = new()
-                    {
-                        FirstName = administrator.FirstName,
-                        LastName = administrator.LastName,
-                        UserName = administrator.UserName,
-                        Email = administrator.Email,
-                    };
+                var user = administrator.Get<ApplicationUser>();
+                var userPassword = administrator.GetValue<string>("Password");
 
-                    await userManager.CreateAsync(user, administrator.Password);
-
-                    await userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
-                }
+                await userManager.CreateAsync(user, userPassword);
+                await userManager.AddToRoleAsync(user, GlobalConstants.AdministratorRoleName);
             }
         }
     }

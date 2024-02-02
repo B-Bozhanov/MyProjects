@@ -3,6 +3,7 @@
 namespace RealEstate.Web
 {
     using System;
+    using System.Linq;
     using System.Reflection;
 
     using Hangfire;
@@ -11,6 +12,7 @@ namespace RealEstate.Web
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
@@ -28,6 +30,7 @@ namespace RealEstate.Web
     using RealEstate.Services.Mapping;
     using RealEstate.Services.Messaging;
     using RealEstate.Web.Hubs;
+    using RealEstate.Web.Infrastructure.DatabaseModels;
     using RealEstate.Web.ViewModels;
 
     public class Program
@@ -45,7 +48,7 @@ namespace RealEstate.Web
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            var sqlConnectionString = configuration.GetConnectionString("DefaultConnection");
+            string sqlConnectionString = GetConnectionString(configuration, "SqlConnectionString");
 
             services.AddDbContext<ApplicationDbContext>(options
                 => options.UseSqlServer(sqlConnectionString));
@@ -152,6 +155,26 @@ namespace RealEstate.Web
             services.AddScoped(typeof(IDeletableEntityRepository<>), typeof(EfDeletableEntityRepository<>));
             services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
             services.AddScoped<IDbQueryRunner, DbQueryRunner>();
+        }
+
+        private static string GetConnectionString(IConfiguration configuration, string databaseConnectionStringName)
+        {
+            var databaseConfigurationSection = configuration
+                .GetSection("ConnectionStrings")
+                .GetChildren()
+                .FirstOrDefault(x => x.Key == databaseConnectionStringName)
+                ?? throw new ArgumentNullException("The Database connection string can not be found");
+
+            var databaseModel = databaseConfigurationSection.Get<SqlDatabaseModel>();
+
+            var sqlConnectionStringBuilder = new SqlConnectionStringBuilder
+            {
+                ConnectionString = databaseModel.ConnectionString,
+                Password = databaseModel.Password,
+                UserID = databaseModel.UserId,
+            };
+
+            return sqlConnectionStringBuilder.ConnectionString;
         }
 
         //private static void ConfigureApplicationServices(IServiceCollection services)

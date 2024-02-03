@@ -11,42 +11,41 @@
                     <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.FirstPage" tabindex="-1">First</a>
                 </li>
             }
-           
+
             <li class="page-item enabled">
                 <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.PreviousPage" tabindex="-1">Previous</a>
             </li>
+
         }
 
-        @for (int i = 0; i < Pagination.PaginationMaxPages; i++)
+        @for (int i = 2; i >= 1; i--)
         {
-            
+            var previesPage = Model.CurrentPage - i;
+            if (previesPage > 0)
+            {
+                <li class="page-item">
+                    <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@previesPage" tabindex="-1">@previesPage</a>
+                </li>
+            }
         }
 
         <li class="page-item active">
             <a class="page-link" href="#">@Model.CurrentPage<span class="sr-only"></span></a>
         </li>
 
-        @if (Model.LastPage == Model.CurrentPage)
-        {@* 
-            <li class="page-item disabled"><a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">@Model.NextPage</a></li>
-            <li class="page-item disabled">
-                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">Next</a>
-            </li>
-            <li class="page-item disabled">
-                <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.LastPage" tabindex="-1">Last</a>
-            </li> *@
-        }
-        else
+        @for (int i = 0; i < 2; i++)
         {
-            @* for (int i = Model.NextPage; i <= Model.NextPage + 5; i++)
+            var nextPage = Model.NextPage + i;
+            if (nextPage <= Model.LastPage)
             {
                 <li class="page-item">
-                    <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">
-                        @i
-                    </a>
+                    <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@nextPage" tabindex="-1">@nextPage</a>
                 </li>
-            } *@
-            //<li class="page-item"><a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">@Model.NextPage</a></li>
+            }
+        }   
+
+        @if (Model.LastPage > Model.CurrentPage)
+        {
             <li class="page-item">
                 <a class="page-link" asp-controller="@Model.ControllerName" asp-action="@Model.ActionName" asp-route-page="@Model.NextPage">Next</a>
             </li>

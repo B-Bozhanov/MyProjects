@@ -41,7 +41,7 @@
 
         public Task<T> GetByIdWithExpiredUserPropertiesAsync<T>(int id, string userId);
 
-        public Task<bool> IsUserProperty(int propertyId, string userId);
+        public Task<bool> IsUserPropertyAsync(int propertyId, string userId);
 
         public Dictionary<string, List<string>> PropertyValidator(PropertyInputModel property);
 

@@ -7,7 +7,7 @@
 
     public class TranslateService : ITranslateService
     {
-        private readonly Dictionary<string, LanguageBase> supportedLanuages = new Dictionary<string, LanguageBase>
+        private readonly Dictionary<string, BaseLanguage> supportedLanuages = new Dictionary<string, BaseLanguage>
         {
             {nameof(Bulgarian), new Bulgarian() },
             {nameof(English), new English() },
@@ -25,7 +25,7 @@
             return TranslateWord(language, wordToTranslate);
         }
 
-        private static string TranslateWord(LanguageBase language, string wordToTranslate)
+        private static string TranslateWord(BaseLanguage language, string wordToTranslate)
         {
             if (language.Dictionary.ContainsKey(wordToTranslate))
             {
@@ -37,7 +37,7 @@
             }
         }
 
-        private LanguageBase GetSupportedLanguage(string languageName)
+        private BaseLanguage GetSupportedLanguage(string languageName)
         {
             if (!this.supportedLanuages.ContainsKey(languageName))
             {

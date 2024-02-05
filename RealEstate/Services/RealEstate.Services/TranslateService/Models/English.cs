@@ -2,12 +2,14 @@
 {
     using System;
 
-    public class English : LanguageBase
+    public class English : BaseLanguage
     {
         public override string Name => nameof(English);
 
         public override string NewestProperties => "Newst Properties";
         public override string Expired => "Expired";
+        public override string Edit => "Edit";
+        public override string Remove => "Remove";
         public override string ForgotPassword => "Forgot Password";
 
         public override string Username => "Username";

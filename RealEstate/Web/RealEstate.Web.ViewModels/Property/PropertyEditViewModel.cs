@@ -24,7 +24,7 @@
         public int Size { get; init; }
 
         [Display(Name = "Ad Expiration")]
-        public int ExpirationDays { get; init; }
+        public int ExpirationDays { get; set; }
 
         public bool IsExpired { get; set; }
 

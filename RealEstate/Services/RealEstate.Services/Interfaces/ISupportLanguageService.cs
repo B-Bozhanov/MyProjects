@@ -4,6 +4,6 @@
 
     public interface ISupportLanguageService
     {
-        public LanguageBase GetSupportedLanguage(string languageName);
+        public BaseLanguage GetSupportedLanguage(string languageName);
     }
 }

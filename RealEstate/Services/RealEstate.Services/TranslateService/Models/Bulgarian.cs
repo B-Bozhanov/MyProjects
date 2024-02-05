@@ -1,10 +1,12 @@
 ﻿namespace RealEstate.Services.TranslateService.Models
 {
-    public class Bulgarian : LanguageBase
+    public class Bulgarian : BaseLanguage
     {
         public override string Name => nameof(Bulgarian);
 
         public override string NewestProperties { get => "Последно добавени"; }
+        public override string Edit { get => "Редактиране"; }
+        public override string Remove { get => "Изтриване"; }
 
         public override string Expired { get => "Изтекли"; }
 
@@ -37,7 +39,7 @@
 
         public override string Login { get => "Вход"; }
 
-        public override string MyActiveProperties { get => "Моите Активни Обяви"; }
+        public override string MyActiveProperties { get => "Моите Обяви"; }
 
         public override string IamAAgent { get => "Аз съм Агенция"; }
 
@@ -57,7 +59,7 @@
 
         public override string Username { get => "Потребителско име"; }
 
-        public override string PopulatedPlace  => "Населено място"; 
+        public override string PopulatedPlace => "Населено място";
 
         public override string DetailInfo { get => "Детайлна информация"; }
 

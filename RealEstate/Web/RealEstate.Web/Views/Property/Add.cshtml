@@ -1,7 +1,7 @@
 ﻿@model PropertyInputModel
 
 @{
-    ViewData["Title"] = this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Title));
+    ViewData["Title"] = this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Title));
     var locations = this.Model.Locations.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 }
 
@@ -18,7 +18,7 @@
                 <div class="form-group">
                     <h1 style="font-size:large">
                         <label class="form-label">
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.PropertyType))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.PropertyType))
                         </label>
                     </h1>
                     <select asp-for="PropertyTypeId" class="form-select">
@@ -35,11 +35,11 @@
                 <div class="form-group">
                     <h1 style="font-size:large">
                         <label>
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Location))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Location))
                         </label>
                     </h1>
                     <select asp-for="LocationId" asp-items="@locations" class="form-select" id="location">
-                        <option value=""> @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.SelectLocation))</option>
+                        <option value=""> @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.SelectLocation))</option>
                     </select>
                     <span asp-validation-for="LocationId" class="text-danger"></span>
                 </div>
@@ -49,11 +49,11 @@
                 <div class="form-group" id="PopulatedPlacesHide">
                     <h1 style="font-size:large">
                         <label id="PopulatedPlaceIdLabel">
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.PopulatedPlace))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.PopulatedPlace))
                         </label>
                     </h1>
                     <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
-                        <option value="0">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.SelectPopulatedPlace))</option>
+                        <option value="0">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.SelectPopulatedPlace))</option>
                     </select>
                     <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
                 </div>
@@ -65,7 +65,7 @@
                 <br />
 
                 @*Building types*@
-                <h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.BuildingType))</h1>
+                <h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.BuildingType))</h1>
                 <div class="row">
                     @for (int i = 0; i < Model.BuildingTypes.Count; i++)
                     {
@@ -89,11 +89,11 @@
                 <div class="form-group">
                     <h1 style="font-size:large">
                         <label>
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Description))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Description))
                         </label>
                     </h1>
                     <textarea class="form-control" asp-for="Description" rows="4"
-                              placeholder=" @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MoreInfo))">
+                              placeholder=" @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.MoreInfo))">
                 </textarea>
                 </div>
                 <br />
@@ -101,19 +101,19 @@
                 <div class="form-group">
                     <h1 style="font-size:large">
                         <label>
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Options))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Options))
                         </label>
                     </h1>
                     <div class="form-check-inline">
                         <input class="form-check-input" type="radio" name="Option" id="Option" value="sale" checked>
                         <label class="form-check-label">
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Sale))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Sale))
                         </label>
                     </div>
                     <div class="form-check-inline">
                         <input class="form-check-input" type="radio" name="Option" id="Option" value="rent">
                         <label class="form-check-label">
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Rent))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Rent))
                         </label>
                     </div>
                 </div>
@@ -123,11 +123,11 @@
                     @*Price*@
                     <h1 style="font-size:large">
                         <label>
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Price))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Price))
                         </label>
                     </h1>
                     <input asp-for="Price" class="form-control"
-                           placeholder="@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.PriceInEUR))" />
+                           placeholder="@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.PriceInEUR))" />
                     <span asp-validation-for="Price" class="text-danger"></span>
                 </div>
                 <br />
@@ -136,7 +136,7 @@
                 <div class="col-3">
                     <h1 style="font-size:large">
                         <label>
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.ExpirationDays))
+                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.ExpirationDays))
                         </label>
                     </h1>
                     <select class="form-select" asp-for="ExpirationDays">
@@ -152,7 +152,7 @@
 
                 <h1 style="font-size:large">
                     <label>
-                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.ContactModel))
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.ContactModel))
                     </label>
                 </h1>
                 <div class="property-contact">
@@ -183,7 +183,7 @@
                 <br />
                 <h1 style="font-size:large">
                     <label>
-                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.ChooseImage))
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.ChooseImage))
                     </label>
                 </h1>
                 <div class="row">
@@ -194,7 +194,7 @@
                 <br />
                 <div class="row">
                     <div class="col-md-12">
-                        <button type="submit" class="btn btn-b">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Add))</button>
+                        <button type="submit" class="btn btn-b">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Add))</button>
                     </div>
                 </div>
             </form>

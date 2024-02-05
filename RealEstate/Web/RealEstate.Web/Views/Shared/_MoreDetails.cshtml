@@ -1,6 +1,6 @@
 ﻿@model PropertyInputModel
 
-<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Condition))</h1>
+<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Condition))</h1>
 <div class="row">
     @for (int i = 0; i < Model.BuildingTypes.Count; i++)
     {
@@ -14,7 +14,7 @@
     <br />
 </div>
 
-<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Equipments))</h1>
+<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Equipments))</h1>
 <div class="row">
     @for (int i = 0; i < Model.Equipments.Count; i++)
     {
@@ -28,7 +28,7 @@
     <br />
 </div>
 
-<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Heating))</h1>
+<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Heating))</h1>
 <div class="row">
     @for (int i = 0; i < Model.Heatings.Count; i++)
     {
@@ -42,7 +42,7 @@
     <br />
 </div>
 
-<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.Details))</h1>
+<h1 style="font-size:large">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Details))</h1>
 <div class="row">
     @for (int i = 0; i < Model.Details.Count; i++)
     {

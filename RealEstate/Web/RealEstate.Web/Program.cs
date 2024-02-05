@@ -1,3 +1,6 @@
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using RealEstate.Data;
 // Add migrations related user to property
 
 namespace RealEstate.Web
@@ -69,10 +72,16 @@ namespace RealEstate.Web
                 options.Cookie.Name = "AutenticationCookie";
                 options.Cookie.HttpOnly = true;
                 options.ExpireTimeSpan = TimeSpan.FromMinutes(60);
-                options.LoginPath = "/Account/Login";
+                options.LoginPath = "/Login";
                 options.LogoutPath = "/Home/Index";
                 options.ReturnUrlParameter = CookieAuthenticationDefaults.ReturnUrlParameter;
                 options.SlidingExpiration = true;
+            });
+
+            services.AddAuthentication().AddFacebook(facebookOptions =>
+            {
+                facebookOptions.AppId = configuration["Authentication:Facebook:AppId"];
+                facebookOptions.AppSecret = configuration["Authentication:Facebook:AppSecret"];
             });
 
             services.AddControllersWithViews(
@@ -138,7 +147,7 @@ namespace RealEstate.Web
             app.UseHangfireDashboard();
 
             app.UseRouting();
-
+            
             app.UseAuthentication();
             app.UseAuthorization();
 

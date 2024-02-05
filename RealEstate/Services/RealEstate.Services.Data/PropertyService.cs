@@ -172,11 +172,14 @@
             property.PopulatedPlaceId = editModel.PopulatedPlaceId;
             property.PropertyTypeId = editModel.PropertyTypeId;
 
-            var buildingType = editModel.BuildingTypes.FirstOrDefault(bt => bt.IsChecked);
-
-            if (buildingType != null)
+            if (editModel.BuildingTypes != null)
             {
-                property.BuildingTypeId = buildingType.Id;
+                var buildingType = editModel.BuildingTypes.FirstOrDefault(bt => bt.IsChecked);
+
+                if (buildingType != null)
+                {
+                    property.BuildingTypeId = buildingType.Id;
+                }
             }
 
             if (editModel.ExpirationDays > property.ExpirationDays)
@@ -332,7 +335,7 @@
             .All()
             .AnyAsync(p => p.IsExpired);
 
-        public async Task<bool> IsUserProperty(int propertyId, string userId)
+        public async Task<bool> IsUserPropertyAsync(int propertyId, string userId)
             => await this.propertyRepository
             .AllWithDeleted()
             .AnyAsync(p => p.ApplicationUserId == userId);

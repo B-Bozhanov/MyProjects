@@ -23,14 +23,7 @@
 
         public async Task<SignInResult> LoginAsync(LoginViewModel loginModel)
         {
-            var user = await this.userManager.FindByNameAsync(loginModel.Username);
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            var result = await this.signInManager.PasswordSignInAsync(user, loginModel.Password, false, false);
+            var result = await this.signInManager.PasswordSignInAsync(loginModel.Username, loginModel.Password, loginModel.RememberMe, lockoutOnFailure: false);
                        
             return result;
         }

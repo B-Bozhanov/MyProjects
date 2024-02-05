@@ -9,12 +9,12 @@
     //TODO: Images are not responsive !
 }
 
-<div class="text-center text-info font-monospace">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.TotalPropertiesCount)): @Model.GetAllCount</div>
+<div class="text-center text-info font-monospace">@translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.TotalPropertiesCount)): @Model.GetAllCount</div>
 <br />
     <div class="col-md-12">
         <div class="title-wrap d-flex justify-content-center">
             <div class="title-box">
-                <h2 class="title-a ">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.NewestProperties))</h2>
+                <h2 class="title-a ">@translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.NewestProperties))</h2>
             </div>
         </div>
     </div>
@@ -64,10 +64,10 @@
             <div class="col-md-12">
                 <div class="title-wrap d-flex justify-content-between">
                     <div class="title-box">
-                        <h2 class="title-a">@translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.MostExpensiveProperties))</h2>
+                        <h2 class="title-a">@translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.MostExpensiveProperties))</h2>
                     </div>
                     <div class="title-link">
-                        <a asp-controller="Property" asp-action="Index"> @translateService.TranslateTo(CurrentSystemLanguage, nameof(LanguageBase.AllProperties))
+                        <a asp-controller="Property" asp-action="Index"> @translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.AllProperties))
                             <span class="bi bi-chevron-right"></span>
                         </a>
                     </div>

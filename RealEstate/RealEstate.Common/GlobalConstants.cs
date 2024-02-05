@@ -57,7 +57,7 @@
             public const int MaxFloors = 150;
             public static int MinYear = 1800;
             public const int DefaultStartPage = 1;
-            public const int PropertiesPerPage = 1;
+            public const int PropertiesPerPage = 9;
             //public const string YearErrorMessage = $"The must be in range {MinYear} and {DateTime.UtcNow.Year}";
 
             public static class ErrorMessages

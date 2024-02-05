@@ -7,13 +7,13 @@
 
     public abstract class SupportLanguage
     {
-        private readonly Dictionary<string, LanguageBase> supportedLanuages = new Dictionary<string, LanguageBase>
+        private readonly Dictionary<string, BaseLanguage> supportedLanuages = new Dictionary<string, BaseLanguage>
         {
             {nameof(Bulgarian), new Bulgarian() },
             {nameof(English), new English() },
         };
 
-        public LanguageBase GetSupportedLanguage(string languageName)
+        public BaseLanguage GetSupportedLanguage(string languageName)
         {
             if (!this.supportedLanuages.ContainsKey(languageName))
             {

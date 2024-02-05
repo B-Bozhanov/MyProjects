@@ -15,6 +15,7 @@
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Interfaces;
+    using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.Property;
@@ -41,16 +42,16 @@
         private readonly SignInManager<ApplicationUser> signInManager;
         private readonly UserManager<ApplicationUser> userManager;
 
-        public PropertyController(IBackgroundJobClient backgroundJobClient, 
-            IBuildingTypeService buildingTypeService, 
-            IConditionService conditionService, 
-            IDetailService detailService, 
-            IEquipmentService equipmentService, 
-            IHeatingService heatingService, 
-            ILocationService locationService, 
-            IPaginationService paginationService, 
-            IPropertyService propertyService, 
-            IPopulatedPlaceService populatedPlaceService, 
+        public PropertyController(IBackgroundJobClient backgroundJobClient,
+            IBuildingTypeService buildingTypeService,
+            IConditionService conditionService,
+            IDetailService detailService,
+            IEquipmentService equipmentService,
+            IHeatingService heatingService,
+            ILocationService locationService,
+            IPaginationService paginationService,
+            IPropertyService propertyService,
+            IPopulatedPlaceService populatedPlaceService,
             IPropertyTypeService propertyTypeService,
             IImageService imageService,
             IConfiguration configuration,
@@ -88,10 +89,30 @@
             {
                 return this.View(await this.SetCollectionsAsync(property));
             }
-                        
+
             await this.propertyService.AddAsync(property, this.UserId);
 
             return this.RedirectToAction(nameof(this.Success));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Activate(int propertyId)
+        {
+            var property = await this.propertyService.GetByIdWithExpiredUserPropertiesAsync<PropertyEditViewModel>(propertyId, this.UserId);
+
+            if (property == null)
+            {
+                throw new ArgumentNullException();
+            }
+
+            if (property.IsExpired == false || property.ExpirationDays > 0)
+            {
+                throw new InvalidOperationException();
+            }
+
+            property.ExpirationDays = 30;
+
+            return await this.EditAsync(property);
         }
 
         [HttpGet]
@@ -129,17 +150,20 @@
         [Route("/edit")]
         public async Task<IActionResult> EditAsync(PropertyEditViewModel editModel)
         {
-            if (!await this.propertyService.IsUserProperty(editModel.Id, this.UserId))
+            if (!await this.propertyService.IsUserPropertyAsync(editModel.Id, this.UserId))
             {
                 //TODO: Not found call administrator!
                 return this.NotFound("This is not your Property");
             }
 
-            if (editModel.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
+            if (editModel.BuildingTypes != null)
             {
-                this.ModelState.AddModelError("", "Canot check more than one building type!");
+                if (editModel.BuildingTypes.Where(b => b.IsChecked).Count() > 1)
+                {
+                    this.ModelState.AddModelError("", "Canot check more than one building type!");
+                }
             }
-
+           
             if (!this.ModelState.IsValid)
             {
                 editModel.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
@@ -192,6 +216,7 @@
                 searchModel.CurrentOptionType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
 
                 this.ViewBag.Pager = paginationModel;
+                this.ViewBag.IsFromMyProperties = false;
 
                 return this.View(searchModel);
             }

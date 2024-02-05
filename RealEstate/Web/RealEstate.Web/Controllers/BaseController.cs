@@ -18,16 +18,16 @@
 
         protected IActionResult RedirectToMyActiveProperties()
         {
-            var action = nameof(AccountController.ActiveProperties);
-            var controller = nameof(AccountController).Replace("Controller", string.Empty);
+            var action = nameof(MyPropertyController.ActiveProperties);
+            var controller = nameof(MyPropertyController).Replace("Controller", string.Empty);
 
             return this.RedirectToAction(action, controller);
         }
 
         protected IActionResult RedirectToMyExpiredProperties()
         {
-            var action = nameof(AccountController.ExpiredProperties);
-            var controller = nameof(AccountController).Replace("Controller", string.Empty);
+            var action = nameof(MyPropertyController.ExpiredProperties);
+            var controller = nameof(MyPropertyController).Replace("Controller", string.Empty);
 
             return this.RedirectToAction(action, controller);
         }

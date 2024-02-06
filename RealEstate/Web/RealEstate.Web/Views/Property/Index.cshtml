@@ -64,11 +64,8 @@
             }
         </div>
     </div>
-    <partial name="_PaginationPartial" model="@paginationModel" />
+    @if (Model.AllProperties != null)
+    {
+        <partial name="_PaginationPartial" model="@paginationModel" />
+    }
 </section>
-
-@section Scripts {
-    <script src="~/js/searchFormHider.js"></script>
-    <script src="~/js/propertySorter.js"></script>
-    <script src="~/js/jquery.poplatedPlacesGetter.js"></script>
-}

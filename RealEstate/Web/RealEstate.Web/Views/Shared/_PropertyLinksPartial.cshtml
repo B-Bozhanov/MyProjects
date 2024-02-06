@@ -1,0 +1,36 @@
+﻿@model PropertyViewModel
+
+<div class="col-lg-12">
+
+    <button class="btn btn-link"
+            data-toggle="tooltip"
+            data-placement="top"
+            title="Редактирай"
+            id="editLink">
+        <a asp-area="" asp-controller="Property" asp-action="Edit" asp-route-propertyId="@Model.Id">
+            <i class="bi bi-pencil link-primary col-3" style="font-size: 20px;"> </i>
+        </a>
+    </button>
+
+    <div class="btn btn-link color-d"
+         data-toggle="tooltip"
+         data-placement="bottom"
+         title="Изтрий">
+        <a onclick="RemoveProperty('@Model.Id')">
+            <i class="bi bi-trash3 link-danger col-3" style="font-size: 20px;"></i>
+        </a>
+    </div>
+
+    @if (Model.IsExpired)
+    {
+        <form method="post" asp-controller="Property" asp-action="Activate" asp-route-propertyId="@Model.Id">
+            <button class="btn btn-link color-b"
+                    data-toggle="tooltip"
+                    data-placement="top"
+                    title="Активирай">
+                <i class="bi-check2-circle col-3 link-success" style="font-size: 23px;" id="activate"></i>
+            </button>
+        </form>
+    }
+</div>
+<br>

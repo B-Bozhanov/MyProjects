@@ -19,7 +19,6 @@ $('#location').change(function () {
                     markup += "<option>Изберете населено място</option>";
                     $(function () {
                         $("#PopulatedPlacesHide").hide();
-                        // $("#PopulatedPlaceId").prop("disabled", true);
                     });
                 }
                 else {

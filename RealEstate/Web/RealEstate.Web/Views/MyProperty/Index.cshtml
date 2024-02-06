@@ -1,0 +1,63 @@
+﻿@using System.Globalization;
+@model IEnumerable<PropertyViewModel>
+
+@{
+    ViewData["Title"] = "My Properties";
+
+    PaginationModel paginationModel;
+    paginationModel = this.ViewBag.Pager;
+    var isFromExpired = this.ViewBag.IsFromExpired;
+}
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="title-single-box">
+            @if (Model.Count() == 0)
+            {
+                if (isFromExpired)
+                {
+                    <h1 class="title-single font-monospace text-danger text-center">@translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.YouHaveNotUnactiveProperties)) </h1>
+                    <a class="btn btn-outline-success" asp-area="" asp-controller="MyProperties" asp-action="ActiveProperties" role="button">Active</a>
+                }
+                else
+                {
+                    <h1 class="title-single font-monospace text-danger text-center">
+                        @translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.YouHaveNotAddedProperties))
+                    </h1>
+
+                    <a class="btn btn-outline-success align-center" asp-area="" asp-controller="Property" asp-action="Add" role="button">
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Add))
+                    </a>
+                    <a class="btn btn-outline-danger" asp-area="" asp-controller="MyProperties" asp-action="ExpiredProperties" role="button">Expired</a>
+                }
+            }
+            else
+            {
+                if (Model.Any(p => !p.IsExpired))
+                {
+                    <h1 class="title-single font-monospace text-center text-success">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.MyActiveProperties)) </h1>
+
+                    <a class="btn btn-outline-success" asp-area="" asp-controller="Property" asp-action="Add" role="button">
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Add))
+                    </a>
+                    <a class="btn btn-outline-danger" asp-area="" asp-controller="MyProperties" asp-action="ExpiredProperties" role="button">
+                        @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Expired))
+                    </a>
+                }
+                else
+                {
+                    <h1 class="title-single font-monospace text-danger text-center">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.ExpiredProperties)) </h1>
+                    <br />
+                    <a class="btn btn-outline-success" asp-area="" asp-controller="MyProperties" asp-action="ActiveProperties" role="button">Active</a>
+                }
+            }
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<br>
+<section class="property-grid grid">
+    <partial name="_PropertyViewPartial" model="@Model" />
+    <partial name="_PaginationPartial" model="@paginationModel" />
+</section>

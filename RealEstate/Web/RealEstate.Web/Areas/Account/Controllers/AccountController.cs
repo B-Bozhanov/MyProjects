@@ -78,7 +78,7 @@
                 return this.View(registerModel);
             }
 
-            return this.RedirectToAction(nameof(this.LoginAsync));
+            return this.RedirectToAction("/Login");
         }
 
         [HttpGet]

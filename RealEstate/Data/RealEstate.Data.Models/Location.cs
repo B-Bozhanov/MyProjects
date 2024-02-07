@@ -17,5 +17,7 @@
 
         [Required]
         public virtual ICollection<PopulatedPlace> PopulatedPlaces { get; set; }
+
+        public virtual ICollection<Property> Properties { get; set; }
     }
 }

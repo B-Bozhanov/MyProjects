@@ -38,7 +38,7 @@
                                            buildingTypeRepositoryMock, userContactRepositoryMock,
                                            populatedPlaceRepositoryMock, conditionRepositoryMock,
                                            detailRepositoryMock, equipmentRepositoryMock,
-                                           heatingRepositoryMock, imageServiceMock,
+                                           heatingRepositoryMock, new Mock<ISearchService>().Object, imageServiceMock,
                                            hangfireWrapperService, paginationService);
             }
         }

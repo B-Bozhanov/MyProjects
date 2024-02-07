@@ -642,6 +642,9 @@ namespace RealEstate.Data.Migrations
                     b.Property<bool>("IsExpired")
                         .HasColumnType("bit");
 
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
@@ -689,6 +692,8 @@ namespace RealEstate.Data.Migrations
                     b.HasIndex("BuildingTypeId");
 
                     b.HasIndex("IsDeleted");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("PopulatedPlaceId");
 
@@ -1012,6 +1017,12 @@ namespace RealEstate.Data.Migrations
                         .WithMany("Properties")
                         .HasForeignKey("BuildingTypeId");
 
+                    b.HasOne("RealEstate.Data.Models.Location", "Location")
+                        .WithMany("Properties")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("RealEstate.Data.Models.PopulatedPlace", "PopulatedPlace")
                         .WithMany("Properties")
                         .HasForeignKey("PopulatedPlaceId")
@@ -1033,6 +1044,8 @@ namespace RealEstate.Data.Migrations
                     b.Navigation("ApplicationUser");
 
                     b.Navigation("BuildingType");
+
+                    b.Navigation("Location");
 
                     b.Navigation("PopulatedPlace");
 
@@ -1071,6 +1084,8 @@ namespace RealEstate.Data.Migrations
             modelBuilder.Entity("RealEstate.Data.Models.Location", b =>
                 {
                     b.Navigation("PopulatedPlaces");
+
+                    b.Navigation("Properties");
                 });
 
             modelBuilder.Entity("RealEstate.Data.Models.PopulatedPlace", b =>

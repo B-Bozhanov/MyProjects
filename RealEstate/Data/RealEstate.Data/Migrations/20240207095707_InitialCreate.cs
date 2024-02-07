@@ -396,7 +396,6 @@ namespace RealEstate.Data.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
                     Option = table.Column<int>(type: "int", nullable: false),
                     ExpirationDays = table.Column<int>(type: "int", nullable: false),
-                    IsExpirationDaysModified = table.Column<bool>(type: "bit", nullable: false),
                     IsExpired = table.Column<bool>(type: "bit", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TotalBedRooms = table.Column<int>(type: "int", nullable: true),
@@ -404,6 +403,7 @@ namespace RealEstate.Data.Migrations
                     TotalGarages = table.Column<int>(type: "int", nullable: true),
                     Year = table.Column<int>(type: "int", nullable: true),
                     PopulatedPlaceId = table.Column<int>(type: "int", nullable: false),
+                    LocationId = table.Column<int>(type: "int", nullable: false),
                     PropertyTypeId = table.Column<int>(type: "int", nullable: false),
                     BuildingTypeId = table.Column<int>(type: "int", nullable: true),
                     UserContactId = table.Column<string>(type: "nvarchar(450)", nullable: false),
@@ -427,6 +427,12 @@ namespace RealEstate.Data.Migrations
                         column: x => x.BuildingTypeId,
                         principalTable: "BuildingTypes",
                         principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Properties_Locations_LocationId",
+                        column: x => x.LocationId,
+                        principalTable: "Locations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Properties_PopulatedPlaces_PopulatedPlaceId",
                         column: x => x.PopulatedPlaceId,
@@ -729,6 +735,11 @@ namespace RealEstate.Data.Migrations
                 name: "IX_Properties_IsDeleted",
                 table: "Properties",
                 column: "IsDeleted");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Properties_LocationId",
+                table: "Properties",
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Properties_PopulatedPlaceId",

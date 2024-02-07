@@ -29,7 +29,8 @@
             => this.populatedPlaceRepository
             .All()
             .Where(p => p.LocationId == id)
-            .OrderBy(p => p.Name)
+            .OrderBy(p => p.Id)
+            .ThenBy(p => p.Name)
             .To<T>()
             .ToList();
 

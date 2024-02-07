@@ -5,6 +5,8 @@
     using System.Linq;
     using System.Threading.Tasks;
 
+    using AutoMapper.Internal;
+
     using Hangfire;
     using Hangfire.Server;
 
@@ -33,6 +35,7 @@
         private readonly IDeletableEntityRepository<Detail> detailRepository;
         private readonly IDeletableEntityRepository<Equipment> equipmentRepository;
         private readonly IDeletableEntityRepository<Heating> heatingRepository;
+        private readonly ISearchService searchService;
         private readonly IImageService imageService;
         private readonly IHangfireWrapperService hangfireWrapperService;
         private readonly IPaginationService paginationService;
@@ -47,6 +50,7 @@
               IDeletableEntityRepository<Detail> detailRepository,
               IDeletableEntityRepository<Equipment> equipmentRepository,
               IDeletableEntityRepository<Heating> heatingRepository,
+              ISearchService searchService,
               IImageService imageService,
               IHangfireWrapperService hangfireWrapperService,
               IPaginationService paginationService)
@@ -60,6 +64,7 @@
             this.detailRepository = detailRepository;
             this.equipmentRepository = equipmentRepository;
             this.heatingRepository = heatingRepository;
+            this.searchService = searchService;
             this.imageService = imageService;
             this.hangfireWrapperService = hangfireWrapperService;
             this.paginationService = paginationService;
@@ -93,14 +98,14 @@
                 Price = propertyModel.Price,
                 Description = propertyModel.Description,
                 ExpirationDays = propertyModel.ExpirationDays,
-                Option = propertyModel.Option,
+                Option = (PropertyOption)propertyModel.Option,
             };
             property.PropertyType = this.propertyTypeRepository.All().FirstOrDefault(pt => pt.Id == propertyModel.PropertyTypeId);
 
             var populatedPlace = this.populatedPlaceRepository.All().FirstOrDefault(p => p.Id == propertyModel.PopulatedPlaceId);
 
             property.PopulatedPlace = populatedPlace;
-
+            property.LocationId = populatedPlace.LocationId;
             // TODO: Nullable building type.
             var buildingType = propertyModel.BuildingTypes.FirstOrDefault(x => x.IsChecked);
 
@@ -422,9 +427,9 @@
             .All()
             .FirstOrDefaultAsync(p => p.Id == id);
 
-        public async Task<IEnumerable<PropertyViewModel>> SearchAsync(SearchViewModel searchModel)
+        public async Task<IEnumerable<PropertyViewModel>> SearchAsync(SearchInputModel searchModel)
         {
-            var result = new List<PropertyViewModel>();
+            IEnumerable<PropertyViewModel> result;
 
             if (searchModel.KeyWord == null && searchModel.Type == null
                 && searchModel.BathRooms == null && searchModel.BedRooms == null
@@ -433,11 +438,81 @@
             {
                 throw new InvalidOperationException("Select at least one criteria");
             }
+            if (searchModel.KeyWord == null && searchModel.Type == null
+                && searchModel.BathRooms == null && searchModel.BedRooms == null
+                && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+                && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice != null)
+            {
+                return await this.searchService.SearchByMaxPriceAsync<PropertyViewModel>(searchModel.MaxPrice);
+            }
+            if (searchModel.KeyWord == null && searchModel.Type == null
+               && searchModel.BathRooms == null && searchModel.BedRooms == null
+               && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+               && searchModel.Garages == null && searchModel.MinPrice != null && searchModel.MaxPrice == null)
+            {
+                return await this.searchService.SearchByMinPriceAsync<PropertyViewModel>(searchModel.MinPrice);
+            }
+            if (searchModel.KeyWord == null && searchModel.Type == null
+              && searchModel.BathRooms == null && searchModel.BedRooms == null
+              && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+              && searchModel.Garages == null && searchModel.MinPrice != null && searchModel.MaxPrice != null)
+            {
+                if (searchModel.MinPrice > searchModel.MaxPrice)
+                {
+                    throw new InvalidOperationException("The Mininum price can not be more than Maxumum price");
+                }
 
-            return result;
+                return await this.searchService.SearchBetweenMinAndMaxPriceAsync<PropertyViewModel>(searchModel.MinPrice, searchModel.MaxPrice);
+            }
+            if (searchModel.KeyWord == null && searchModel.Type != null
+             && searchModel.BathRooms == null && searchModel.BedRooms == null
+             && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+             && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
+            {
+                return await this.searchService.SearchByTypeAsync<PropertyViewModel>(searchModel.Type);
+            }
+            if (searchModel.KeyWord == null && searchModel.Type != null
+            && searchModel.BathRooms == null && searchModel.BedRooms == null
+            && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+            && searchModel.Garages == null && searchModel.MinPrice != null && searchModel.MaxPrice == null)
+            {
+                return await this.searchService.SearchByTypeAndMinPriceAsync<PropertyViewModel>(searchModel.Type, (int)searchModel.MinPrice);
+            }
+            if (searchModel.KeyWord == null && searchModel.Type != null
+            && searchModel.BathRooms == null && searchModel.BedRooms == null
+            && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+            && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice != null)
+            {
+                return await this.searchService.SearchByTypeAndMaxPriceAsync<PropertyViewModel>(searchModel.Type, searchModel.MaxPrice);
+            }
+            if (searchModel.KeyWord == null && searchModel.Type != null
+            && searchModel.BathRooms == null && searchModel.BedRooms == null
+            && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+            && searchModel.Garages == null && searchModel.MinPrice != null && searchModel.MaxPrice != null)
+            {
+                return await this.searchService.SearchByTypeBetweenMinAndMaxPriceAsync<PropertyViewModel>(searchModel.Type,searchModel.MinPrice, searchModel.MaxPrice);
+            }
+            if (searchModel.KeyWord == null && searchModel.Type == null
+            && searchModel.BathRooms == null && searchModel.BedRooms == null
+            && searchModel.LocationId != null && searchModel.PopulatedPlaceId != null
+            && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
+            {
+                var populatedPlace = this.populatedPlaceRepository.All().FirstOrDefault(p => p.Id == searchModel.PopulatedPlaceId);
+
+                if (populatedPlace.Name == "Всички")
+                {
+                    return await this.searchService.SearchByLocationIdAsync<PropertyViewModel>((int)searchModel.LocationId);
+                }
+                else
+                {
+                    return await this.searchService.SearchByLocationIdAndPopulatedPlaceIdAsync<PropertyViewModel>((int)searchModel.LocationId, (int)searchModel.PopulatedPlaceId);
+                }
+            }
+
+            return new List<PropertyViewModel>();
         }
 
-        private IQueryable<Property> GetAllWithoutExpired() 
+        private IQueryable<Property> GetAllWithoutExpired()
             => this.propertyRepository.AllAsNoTracking().Where(x => !x.IsExpired);
 
         private IEnumerable<PropertyViewModel> Pager(IEnumerable<PropertyViewModel> properties, int page)

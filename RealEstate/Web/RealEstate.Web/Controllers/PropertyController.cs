@@ -207,18 +207,21 @@
             {
                 var allPropertiesCount = this.propertyService.GetAllActiveCount();
                 var paginationModel = this.paginationService.CreatePagination(allPropertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Index));
-                var searchModel = new SearchViewModel
+
+                var propertyIndexModel = new PropertyIndexModel
                 {
-                    AllProperties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
-                    Locations = this.locationService.Get<LocationViewModel>(),
+                    Properties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
                 };
 
-                searchModel.CurrentOptionType = searchModel.OptionTypeModels.First(o => (int)o == optionId);
+                propertyIndexModel.SearchInputModel = new SearchInputModel
+                {
+                    Locations = this.locationService.Get<LocationViewModel>(),
+                };
+                propertyIndexModel.CurrentOptionType = propertyIndexModel.OptionTypeModels.First(o => (int)o == optionId);
 
                 this.ViewBag.Pager = paginationModel;
-                this.ViewBag.IsFromMyProperties = false;
 
-                return this.View(searchModel);
+                return this.View(propertyIndexModel);
             }
             catch (Exception ex)
             {
@@ -239,11 +242,11 @@
 
         [HttpPost]
         [AllowAnonymous]
-        public async Task<IActionResult> Search(SearchViewModel searchModel, int page = 1)
+        public async Task<IActionResult> Search(SearchInputModel searchInputModel, int page = 1)
         {
             try
             {
-                var properties = await this.propertyService.SearchAsync(searchModel);
+                var properties = await this.propertyService.SearchAsync(searchInputModel);
 
                 var paginationModel = this.paginationService.CreatePagination(properties.Count(), PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Search));
 
@@ -253,7 +256,7 @@
             catch (System.Exception ex)
             {
                 this.ModelState.AddModelError("", ex.Message);
-                return this.View(searchModel);
+                return this.View(new List<PropertyViewModel>());
             }
         }
 

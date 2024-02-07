@@ -53,6 +53,10 @@
         [Required]
         public virtual PopulatedPlace PopulatedPlace { get; set; }
 
+        public int LocationId { get; set; }
+
+        public virtual Location  Location{ get; set; }
+
         [Required]
         public int PropertyTypeId { get; set; }
 

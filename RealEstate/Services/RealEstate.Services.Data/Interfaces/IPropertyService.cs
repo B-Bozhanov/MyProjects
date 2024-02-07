@@ -47,6 +47,6 @@
 
         public Task<bool> RemoveByIdAsync(int id);
 
-        public Task<IEnumerable<PropertyViewModel>> SearchAsync(SearchViewModel searchModel);
+        public Task<IEnumerable<PropertyViewModel>> SearchAsync(SearchInputModel searchModel);
     }
 }

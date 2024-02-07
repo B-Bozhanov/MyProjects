@@ -15,7 +15,7 @@
 
         public int ExpirationDays { get; set; }
 
-        public PropertyOption Option { get; set; }
+        public PropertyOptionModel Option { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessage = "The price can not be negative")]
         public decimal Price { get; init; }

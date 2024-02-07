@@ -1,4 +1,4 @@
-﻿@model SearchViewModel
+﻿@model PropertyIndexModel
 
 @{
     ViewData["Title"] = "Property";
@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<partial name="_SearchForm" id="test" />
+<partial name="_SearchForm" model="@Model.SearchInputModel" id="test" />
 <br />
 <br />
 
@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-md-12 col-lg-8">
             <div class="title-single-box">
-                @if (Model.AllProperties == null)
+                @if (Model.Properties == null)
                 {
                     <h1 class="title-single">Няма добавени обяви</h1>
                 }
@@ -58,13 +58,13 @@
                     </form>
                 </div>
             </div>
-            @if (Model.AllProperties != null)
+            @if (Model.Properties != null)
             {
-                <partial name="_PropertyViewPartial" model="Model.AllProperties" />
+                <partial name="_PropertyViewPartial" model="Model.Properties" />
             }
         </div>
     </div>
-    @if (Model.AllProperties != null)
+    @if (Model.Properties != null)
     {
         <partial name="_PaginationPartial" model="@paginationModel" />
     }

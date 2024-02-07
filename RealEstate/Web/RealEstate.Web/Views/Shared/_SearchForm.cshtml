@@ -1,4 +1,5 @@
-﻿@model SearchViewModel
+﻿@using RealEstate.Data.Models
+@model SearchInputModel
 
 @*TODO: Partial view for Locations and populate places!*@
 
@@ -40,8 +41,8 @@
                             <label asp-for=Type class="pb-2"></label>
                             <select asp-for=Type class="form-control form-select form-control-a">
                                 <option value="">Select Option Type</option>
-                                <option value="@OptionType.ForSale">@OptionType.ForSale</option>
-                                <option value="@OptionType.ForRent">@OptionType.ForRent</option>
+                                <option value="@PropertyOption.Sale">@PropertyOption.Sale</option>
+                                <option value="@PropertyOption.Rent">@PropertyOption.Rent</option>
                             </select>
                         </div>
                     </div>

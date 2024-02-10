@@ -4,24 +4,28 @@
     using System.Net;
     using System.Threading.Tasks;
 
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Interfaces;
+    using RealEstate.Web.ViewModels.Property;
 
     using static RealEstate.Common.GlobalConstants.Properties;
 
     public class MyPropertyController : BaseController
     {
         private readonly IPropertyService propertyService;
+        private readonly IPropertyGetService propertyGetService;
         private readonly IPaginationService paginationService;
         private CookieOptions cookieOptions;
         private Cookie cookie;
 
-        public MyPropertyController(IPropertyService propertyService, IPaginationService paginationService)
+        public MyPropertyController(IPropertyService propertyService,IPropertyGetService propertyGetService, IPaginationService paginationService)
         {
             this.propertyService = propertyService;
+            this.propertyGetService = propertyGetService;
             this.paginationService = paginationService;
             this.CreateReturnUrlCookie("ReturnUrl");
         }
@@ -30,9 +34,9 @@
         [Route("/MyProperties/PropertiesAll")]
         public async Task<IActionResult> Index(int page = 1)
         {
-            var propertiesCount = this.propertyService.GetAllActiveUserPropertiesCount(this.UserId);
+            var propertiesCount = this.propertyGetService.GetAllActiveUserPropertiesCount(this.UserId);
             var paginationModel = this.paginationService.CreatePagination(propertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(MyPropertyController)), nameof(this.Index));
-            var currentProperties = await this.propertyService.GetAllWithExpiredUserPropertiesPerPage(this.UserId, paginationModel.CurrentPage);
+            var currentProperties = await this.propertyGetService.GetAllWithExpiredUserPropertiesPerPage<PropertyViewModel>(this.UserId, paginationModel.CurrentPage);
 
             this.ViewBag.Pager = paginationModel;
             this.ViewBag.IsFromMyProperties = true;
@@ -43,9 +47,9 @@
         [Route("/MyProperties/ActiveProperties")]
         public async Task<IActionResult> ActiveProperties(int page = 1)
         {
-            var propertiesCount = this.propertyService.GetAllActiveUserPropertiesCount(this.UserId);
+            var propertiesCount = this.propertyGetService.GetAllActiveUserPropertiesCount(this.UserId);
             var paginationModel = this.paginationService.CreatePagination(propertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(MyPropertyController)), nameof(this.ActiveProperties));
-            var currentProperties = await this.propertyService.GetActiveUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
+            var currentProperties = await this.propertyGetService.GetActiveUserPropertiesPerPageAsync<PropertyViewModel>(this.UserId, paginationModel.CurrentPage);
 
             this.ViewBag.Pager = paginationModel;
             this.ViewBag.IsFromExpired = false;
@@ -60,9 +64,9 @@
         [Route("/MyProperties/ExpiredProperties")]
         public async Task<IActionResult> ExpiredProperties(int page = 1)
         {
-            var propertiesCount = this.propertyService.GetAllExpiredUserPropertiesCount(this.UserId);
+            var propertiesCount = this.propertyGetService.GetAllExpiredUserPropertiesCount(this.UserId);
             var paginationModel = this.paginationService.CreatePagination(propertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(MyPropertyController)), nameof(this.ExpiredProperties));
-            var currentProperties = await this.propertyService.GetExpiredUserPropertiesPerPageAsync(this.UserId, paginationModel.CurrentPage);
+            var currentProperties = await this.propertyGetService.GetExpiredUserPropertiesPerPageAsync<PropertyViewModel>(this.UserId, paginationModel.CurrentPage);
 
             this.ViewBag.Pager = paginationModel;
             this.ViewBag.IsFromExpired = true;

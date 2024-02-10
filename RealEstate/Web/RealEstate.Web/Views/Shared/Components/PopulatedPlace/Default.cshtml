@@ -1,0 +1,9 @@
+﻿@using RealEstate.Web.ViewModels.PopulatedPlaces
+@model IEnumerable<PopulatedPlaceViewModel>
+
+@foreach (var place in Model)
+{
+    <optgroup>
+        <option value="@place.Id">@place.Name</option>
+    </optgroup>
+}

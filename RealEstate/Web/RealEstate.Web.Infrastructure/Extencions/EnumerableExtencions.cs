@@ -5,7 +5,6 @@
     using System.Linq;
 
     using RealEstate.Common;
-
     public static class EnumerableExtencions
     {
         public static IEnumerable<T> GetPagination<T>(this IEnumerable<T> TCollection, int currentPage) where T : notnull

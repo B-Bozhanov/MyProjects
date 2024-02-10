@@ -11,6 +11,7 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
+    using Microsoft.IdentityModel.Tokens;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
@@ -37,6 +38,7 @@
         private readonly IPropertyService propertyService;
         private readonly IPopulatedPlaceService populatedPlaceService;
         private readonly IPropertyTypeService propertyTypeService;
+        private readonly IPropertyGetService propertyGetService;
         private readonly IImageService imageService;
         private readonly IConfiguration configuration;
         private readonly SignInManager<ApplicationUser> signInManager;
@@ -53,6 +55,7 @@
             IPropertyService propertyService,
             IPopulatedPlaceService populatedPlaceService,
             IPropertyTypeService propertyTypeService,
+            IPropertyGetService propertyGetService,
             IImageService imageService,
             IConfiguration configuration,
             SignInManager<ApplicationUser> signInManager, UserManager<ApplicationUser> userManager)
@@ -68,6 +71,7 @@
             this.propertyService = propertyService;
             this.populatedPlaceService = populatedPlaceService;
             this.propertyTypeService = propertyTypeService;
+            this.propertyGetService = propertyGetService;
             this.imageService = imageService;
             this.configuration = configuration;
             this.signInManager = signInManager;
@@ -98,7 +102,7 @@
         [HttpPost]
         public async Task<IActionResult> Activate(int propertyId)
         {
-            var property = await this.propertyService.GetByIdWithExpiredUserPropertiesAsync<PropertyEditViewModel>(propertyId, this.UserId);
+            var property = await this.propertyGetService.GetByIdWithExpiredUserPropertiesAsync<PropertyEditViewModel>(propertyId, this.UserId);
 
             if (property == null)
             {
@@ -119,7 +123,7 @@
         [Route("/edit")]
         public async Task<IActionResult> EditAsync(int propertyId)
         {
-            var editModel = await this.propertyService.GetByIdWithExpiredUserPropertiesAsync<PropertyEditViewModel>(propertyId, this.UserId);
+            var editModel = await this.propertyGetService.GetByIdWithExpiredUserPropertiesAsync<PropertyEditViewModel>(propertyId, this.UserId);
 
             if (editModel == null)
             {
@@ -129,7 +133,7 @@
 
             editModel.BuildingType.IsChecked = true;
             editModel.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
-            editModel.Locations = this.locationService.Get<LocationViewModel>();
+           //editModel.Locations = this.locationService.Get<LocationViewModel>();
             editModel.BuildingTypes = this.buildingTypeService.GetAll();
             editModel.Images = await this.imageService.GetAllByPropertyIdAsync(editModel.Id);
 
@@ -163,11 +167,11 @@
                     this.ModelState.AddModelError("", "Canot check more than one building type!");
                 }
             }
-           
+
             if (!this.ModelState.IsValid)
             {
                 editModel.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
-                editModel.Locations = this.locationService.Get<LocationViewModel>();
+               // editModel.Locations = this.locationService.Get<LocationViewModel>();
                 editModel.BuildingTypes = this.buildingTypeService.GetAll();
 
                 editModel.PopulatedPlace = this.populatedPlaceService.GetPopulatedPlacesByProperty<PopulatedPlaceViewModel>(editModel.PopulatedPlaceId);
@@ -180,7 +184,7 @@
 
             var returnUrlCookieValue = this.Request.Cookies["ReturnUrl"];
 
-            if (returnUrlCookieValue == null || this.propertyService.GetAllExpiredUserPropertiesCount(this.UserId) == 0)
+            if (returnUrlCookieValue == null || this.propertyGetService.GetAllExpiredUserPropertiesCount(this.UserId) == 0)
             {
                 return this.RedirectToMyActiveProperties();
             }
@@ -189,9 +193,15 @@
         }
 
         [HttpPost]
-        public IActionResult GetPopulatedPlaces(int id)
+        [AllowAnonymous]
+        public IActionResult GetPopulatedPlaces(int? locationId)
         {
-            var populatedPlaces = this.populatedPlaceService.GetPopulatedPlacesByLocationId<PopulatedPlaceViewModel>(id);
+            if (locationId == null || locationId <= 0)
+            {
+                throw new InvalidOperationException("Invalid operation!");
+            }
+
+            var populatedPlaces = this.populatedPlaceService.GetPopulatedPlacesByLocationId<PopulatedPlaceViewModel>((int)locationId);
 
             return this.Json(new { data = populatedPlaces });
         }
@@ -205,12 +215,12 @@
 
             try
             {
-                var allPropertiesCount = this.propertyService.GetAllActiveCount();
+                var allPropertiesCount = this.propertyGetService.GetAllActiveCount();
                 var paginationModel = this.paginationService.CreatePagination(allPropertiesCount, PropertiesPerPage, page, this.ControllerName(nameof(PropertyController)), nameof(this.Index));
 
                 var propertyIndexModel = new PropertyIndexModel
                 {
-                    Properties = this.propertyService.GetAllByOptionIdPerPage(optionId, paginationModel.CurrentPage),
+                    Properties = this.propertyGetService.GetAllByOptionIdPerPage<PropertyViewModel>(optionId, paginationModel.CurrentPage),
                 };
 
                 propertyIndexModel.SearchInputModel = new SearchInputModel
@@ -235,7 +245,7 @@
         [Route("/Property/Single")]
         public async Task<IActionResult> PropertySingle(int id)
         {
-            var propertyModel = await this.propertyService.GetByIdAsync<PropertyViewModel>(id);
+            var propertyModel = await this.propertyGetService.GetByIdAsync<PropertyViewModel>(id);
 
             return this.View(propertyModel);
         }
@@ -244,6 +254,9 @@
         [AllowAnonymous]
         public async Task<IActionResult> Search(SearchInputModel searchInputModel, int page = 1)
         {
+            searchInputModel.Locations = this.locationService.Get<LocationViewModel>();
+            this.ViewBag.SearchModel = searchInputModel;
+
             try
             {
                 var properties = await this.propertyService.SearchAsync(searchInputModel);

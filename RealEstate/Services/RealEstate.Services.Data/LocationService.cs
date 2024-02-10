@@ -11,6 +11,8 @@
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Mapping;
+    using RealEstate.Web.ViewModels.Locations;
+    using RealEstate.Web.ViewModels.PopulatedPlaces;
 
     public class LocationService : ILocationService
     {
@@ -27,6 +29,20 @@
                 .OrderBy(p => p.Name)
                 .To<T>()
                 .ToList();
+
+        public IEnumerable<LocationViewModel> GetLocations()
+        {
+            return this.locationRepository.All().Select( x => new LocationViewModel
+            {
+                Id = x.Id,
+                Name = x.Name,
+                PopulatedPlaces = x.PopulatedPlaces.Select(p => new PopulatedPlaceViewModel
+                {
+                    Id = p.Id,
+                    Name = p.Name,
+                }).ToList(),
+            });
+        }
 
         public void SaveToFile(string file)
         {

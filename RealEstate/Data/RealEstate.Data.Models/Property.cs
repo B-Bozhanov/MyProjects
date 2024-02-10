@@ -20,6 +20,10 @@
             this.Option = PropertyOption.Sale; // By default
         }
 
+        public bool IsSelled { get; set; }
+
+        public bool IsRented { get; set; }
+
         public int Size { get; set; }
 
         public int? YardSize { get; set; }

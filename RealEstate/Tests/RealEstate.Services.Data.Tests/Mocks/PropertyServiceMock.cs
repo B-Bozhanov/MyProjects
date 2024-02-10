@@ -38,8 +38,8 @@
                                            buildingTypeRepositoryMock, userContactRepositoryMock,
                                            populatedPlaceRepositoryMock, conditionRepositoryMock,
                                            detailRepositoryMock, equipmentRepositoryMock,
-                                           heatingRepositoryMock, new Mock<ISearchService>().Object, imageServiceMock,
-                                           hangfireWrapperService, paginationService);
+                                           heatingRepositoryMock, new Mock<IPropertySearchService>().Object,new Mock<IPropertyGetService>().Object, imageServiceMock,
+                                           hangfireWrapperService);
             }
         }
     }

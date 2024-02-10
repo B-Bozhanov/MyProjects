@@ -8,18 +8,21 @@ function RemoveProperty(value) {
     let message = "Are you sure?";
 
     if (confirm(message)) {
-        var propertyId = value;
+        var id = value;
+        var token = $('input:hidden[name="__RequestVerificationToken"]').val();
         $.ajax({
             type: 'POST',
             dataType: "JSON",
             url: "/MyProperties/RemoveUserProperty",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XhrToken", token);
+            },
             cors: true,
-            data: { propertyId: propertyId },
+            data: { propertyId: id },
             success:
                 function (response) {
                     if (response.data) {
-                        console.log("Redirected");
-                        window.location.href = "/MyProperties/ActiveProperties";
+                        window.location.reload();
                     }
                 }
         });
@@ -28,9 +31,16 @@ function RemoveProperty(value) {
 
 $(function SearchFormHider() {
     var form = $("#searchForm");
-    let isClicked = true;
+    var button = $('#Search');
+    let isToHide = button.val();
     form.hide();
-    $('#Search').on('click', function () {
+    let isClicked = true;
+
+    if (isToHide == "false") {
+        form.show();
+        isClicked = false;
+    }
+    button.on('click', function () {
         if (isClicked) {
             form.show();
             isClicked = false;
@@ -46,17 +56,14 @@ $(function RegisterButtonDisable() {
     $('#registerForm :checkbox').on('change', function () {
         if (this.checked) {
             $('#submitButton').prop('disabled', false);
-            console.log(true);
         } else {
             $('#submitButton').prop('disabled', true);
-            console.log(false);
         }
     });
 });
 
 $(function PropertySorter() {
     var option = $('#optionTypes');
-
     var optionId;
 
     option.on('change', function () {
@@ -69,6 +76,8 @@ $(function PropertySorter() {
 
 $(function PopulatedPlaceGetter() {
     $("#PopulatedPlacesHide").hide();
+    var form = $('#searchForm');
+    var token = $('input:hidden[name="__RequestVerificationToken"]').val();
 
     $('#location').on('change', function () {
         var id = $(this).val();
@@ -77,8 +86,11 @@ $(function PopulatedPlaceGetter() {
             type: 'POST',
             dataType: "JSON",
             url: "/Property/GetPopulatedPlaces",
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("XhrToken", token);
+            },
             cors: true,
-            data: { id: id },
+            data: {locationId: id},
             success:
                 function (response) {
                     var markup;
@@ -95,7 +107,7 @@ $(function PopulatedPlaceGetter() {
                             markup += " <option value=" + response.data[i].id + ">" + response.data[i].name + "</option>";
                         }
                         $("#PopulatedPlacesHide").show();
-                        // $("#PopulatedPlaceId").prop("disabled", false);
+                        //$("#PopulatedPlaceId").prop("disabled", false);
                     }
 
                     markup += "<br />";

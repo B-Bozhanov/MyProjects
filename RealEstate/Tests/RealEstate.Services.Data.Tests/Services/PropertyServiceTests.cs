@@ -28,6 +28,7 @@
     public class PropertyServiceTests
     {
         private readonly IPropertyService propertyService;
+        private readonly IPropertyGetService propertyGetService;
         private readonly IDeletableEntityRepository<Property> propertyRepository;
 
         public PropertyServiceTests()
@@ -35,6 +36,7 @@
             this.propertyRepository = PropertyRepositoryMock.Instance;
             var propertyServiceMock = new PropertyServiceMock(this.propertyRepository);
             this.propertyService = propertyServiceMock.Instance;
+            this.propertyGetService = new Mock<IPropertyGetService>().Object;
         }
 
         [Fact]
@@ -314,7 +316,7 @@
                 Price = 300,
                 Description = "test2",
                 Floor = 6,
-                Option = PropertyOption.Rent,
+                Option = PropertyOptionModel.Rent,
                 Size = 300,
                 TotalBathRooms = 1,
                 TotalBedRooms = 1,
@@ -376,7 +378,7 @@
         public async Task GetAllActiveCountShouldReturnCorrectCount(int count)
         {
             await this.AddProperty(count);
-            var result = this.propertyService.GetAllActiveCount();
+            var result = this.propertyGetService.GetAllActiveCount();
 
             Assert.True(count == result);
         }

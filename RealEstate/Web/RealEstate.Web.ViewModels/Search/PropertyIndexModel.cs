@@ -23,14 +23,15 @@
                 OptionType.PriceAsc,
                 OptionType.Test,
             };
+
+            this.Properties = new List<PropertyViewModel>();
         }
 
-        [BindRequired]
         public SearchInputModel SearchInputModel { get; set; }
 
         public OptionType? CurrentOptionType { get; set; }
 
-        public IEnumerable<PropertyViewModel> Properties { get; init; }
+        public IEnumerable<PropertyViewModel> Properties { get; set; }
 
         public IEnumerable<OptionType> OptionTypeModels { get; init; }
     }

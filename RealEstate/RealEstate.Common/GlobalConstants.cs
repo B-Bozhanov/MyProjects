@@ -7,6 +7,8 @@
 
     public static class GlobalConstants
     {
+        public const string AjaxAntiforgeryTokenName = "XhrToken";
+
         public const string SystemName = "RealEstate";
 
         public const string CurrentSystemLanguage = "Bulgarian";

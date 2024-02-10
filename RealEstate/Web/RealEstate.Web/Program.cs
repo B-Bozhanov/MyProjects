@@ -15,13 +15,16 @@ namespace RealEstate.Web
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
     using Microsoft.Data.SqlClient;
     using Microsoft.EntityFrameworkCore;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.DependencyInjection.Extensions;
     using Microsoft.Extensions.Hosting;
+    using Microsoft.Extensions.Options;
 
+    using RealEstate.Common;
     using RealEstate.Data;
     using RealEstate.Data.Common;
     using RealEstate.Data.Common.Repositories;
@@ -87,9 +90,15 @@ namespace RealEstate.Web
             services.AddControllersWithViews(
                 options =>
                 {
-                    //TODO: Research for why AJAX not work with AutoValidateAntiforgeryTokenAttribute:
-                    // options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
-                }).AddRazorRuntimeCompilation();
+                    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                })
+                .AddRazorRuntimeCompilation()
+                .AddRazorOptions(opt =>
+                {
+                    opt.ViewLocationFormats.Add("/{0}.cshtml");
+                });
+            services.AddAntiforgery(x => x.HeaderName = GlobalConstants.AjaxAntiforgeryTokenName);
+
             services.AddRazorPages();
             services.AddSignalR();
             services.AddDatabaseDeveloperPageExceptionFilter();

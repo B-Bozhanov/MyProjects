@@ -5,9 +5,12 @@
 
     using RealEstate.Data.Models;
     using RealEstate.Web.ViewModels.Property;
+    using RealEstate.Web.ViewModels.Search;
 
-    public interface ISearchService
+    public interface IPropertySearchService
     {
+        public Task<IEnumerable<T>> SearchAsync<T>(SearchInputModel searchInputModel);
+
         public Task<IEnumerable<T>> SearchByMinPriceAsync<T>(decimal? minPrice);
 
         public Task<IEnumerable<T>> SearchByMaxPriceAsync<T>(decimal? maxPrice);

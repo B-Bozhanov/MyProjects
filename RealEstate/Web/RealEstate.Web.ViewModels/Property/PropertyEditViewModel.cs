@@ -6,30 +6,14 @@
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Mapping;
-    //using RealEstate.Web.Infrastructure.CustomAttributes;
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.ImageModel;
-    using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.PropertyTypes;
 
-    public class PropertyEditViewModel : IMapFrom<Property>
+    public class PropertyEditViewModel :BasePropertyModel, IMapFrom<Property>
     {
-        public int Id { get; init; }
-
-        [Range(0, double.MaxValue, ErrorMessage = "The price can not be negative")]
-        public decimal? Price { get; init; }
-
-        [Required(ErrorMessage = "The field is required!")]
-        public int Size { get; init; }
-
-        [Display(Name = "Ad Expiration")]
-        public int ExpirationDays { get; set; }
-
         public bool IsExpired { get; set; }
-
-        [Display(Name = "Options")]
-        public PropertyOption Option { get; init; }
 
         public int? YardSize { get; init; }
 
@@ -38,18 +22,7 @@
         [Display(Name = "Total Floors")]
         public int? TotalFloors { get; init; }
 
-        [Display(Name = "Bed Rooms")]
-        public int? TotalBedRooms { get; init; }
-
-        [Display(Name = "Bath Rooms")]
-        public int? TotalBathRooms { get; init; }
-
-        [Display(Name = "Garages")]
-        public int? TotalGarages { get; init; }
-
         public string Condition { get; init; }
-
-        public string Description { get; init; }
 
         public int? Year { get; init; }
 
@@ -72,9 +45,5 @@
         public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; set; }
 
         public IList<BuildingTypeViewModel> BuildingTypes { get; set; }
-
-        public IEnumerable<LocationViewModel> Locations { get; set; }
-
-        public IEnumerable<PopulatedPlaceViewModel> PopulatedPlaces { get; set; }
     }
 }

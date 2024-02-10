@@ -1,0 +1,9 @@
+﻿@using RealEstate.Web.ViewModels.Locations
+@model IEnumerable<LocationViewModel>
+
+@foreach (var location in Model)
+{
+    <optgroup>
+        <option value="@location.Id">@location.Name</option>
+    </optgroup>
+}

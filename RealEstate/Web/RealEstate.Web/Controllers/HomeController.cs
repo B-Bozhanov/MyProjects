@@ -13,23 +13,22 @@
 
     public class HomeController : BaseController
     {
-        private readonly IPropertyService propertyService;
+        private readonly IPropertyGetService propertyGetService;
 
         public HomeController(
-            IPropertyService propertyService)
+            IPropertyGetService propertyGetService)
         {
-            this.propertyService = propertyService;
+            this.propertyGetService = propertyGetService;
         }
 
         [AllowAnonymous]
         public IActionResult Index()
         {
-            var Newest = this.propertyService.GetTopNewest(TopNewest);
             return this.View(new PropertyIntroViewModel
             {
-                GetAllCount = this.propertyService.GetAllActiveCount(),
-                Newest = this.propertyService.GetTopNewest(TopNewest),
-                MostExpensive = this.propertyService.GetTopMostExpensive(TopMostExpensive),
+                GetAllCount = this.propertyGetService.GetAllActiveCount(),
+                Newest = this.propertyGetService.GetTopNewest<PropertyViewModel>(TopNewest),
+                MostExpensive = this.propertyGetService.GetTopMostExpensive<PropertyViewModel>(TopMostExpensive),
             });
         }
 

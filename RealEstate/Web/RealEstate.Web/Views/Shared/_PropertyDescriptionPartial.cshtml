@@ -1,0 +1,12 @@
+﻿@model BasePropertyModel
+
+<div class="form-group">
+    <h1 style="font-size:large">
+        <label>
+            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Description))
+        </label>
+    </h1>
+    <textarea class="form-control" asp-for="Description" rows="4"
+              placeholder=" @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.MoreInfo))">
+                </textarea>
+</div>

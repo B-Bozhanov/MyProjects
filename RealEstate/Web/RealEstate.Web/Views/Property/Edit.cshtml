@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Edit";
-    dynamic locationIdTest = Model.LocationId;
 }
 
 <div class="container-fluid">
@@ -13,109 +12,19 @@
                     <h3 class="title-d"> @ViewData["Title"]</h3>
                 </div>
                 <div asp-validation-summary=All class="text-danger"></div>
-
                 <input asp-for="Id" type="hidden" />
                 @*Type*@
-                <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="PropertyTypeId" class="form-label"></label></h1>
-                    <select asp-for="PropertyTypeId" class="form-select">
-                        <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
-                        <option value="@Model.PropertyTypeId"></option>
-                        @foreach (var type in Model.PropertyTypes)
-                        {
-                            <option value="@type.Id">@type.Name</option>
-                        }
-                    </select>
-                </div>
+                <vc:Property-Type model="@Model"></vc:Property-Type>
                 <br />
-
-                @*Location*@
-                <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="LocationId"></label></h1>
-                    <select asp-for="LocationId" class="form-select" id="location">
-                        <option value="@Model.LocationId">@Model.PopulatedPlace.Location.Name</option>
-                        <vc:Locations></vc:Locations>
-                    </select>
-                    <span asp-validation-for="LocationId" class="text-danger"></span>
-                </div>
+                <vc:Locations model="@Model"></vc:Locations>
                 <br />
 
                 @*PopulatedPlace*@
-                <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="PopulatedPlaceId" id="PopulatedPlaceIdLabel"></label></h1>
-                    <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
-                        <option value="@Model.PopulatedPlaceId">@Model.PopulatedPlace.Name</option>
-                        @await Component.InvokeAsync("PopulatedPlace", new { locationId = Model.LocationId })
-                    </select>
-                    <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
-                </div>
+                <partial name="_PopulatedPlacePartial" />
                 <br />
 
                 @*Details*@
-                <h1 style="font-size:large">Detail info </h1>
-                <br />
-                <div class="row">
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="Size"></label></h1>
-                        <input asp-for="Size" class="form-control">
-                        <span asp-validation-for="Size" class="text-danger"></span>
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="Year"></label></h1>
-                        <input asp-for="Year" class="form-control">
-                        <span asp-validation-for="Year" class="text-danger"></span>
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="Floor"></label></h1>
-                        <select asp-for="Floor" class="form-select">
-                            @for (int i = 0; i <= 100; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="TotalFloors"></label></h1>
-                        <select asp-for="TotalFloors" class="form-select">
-                            @for (int i = 0; i <= 100; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="TotalBedRooms"></label></h1>
-                        <select asp-for="TotalBedRooms" class="form-select">
-                            @for (int i = 0; i <= 15; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="TotalBathRooms"></label></h1>
-                        <select asp-for="TotalBathRooms" class="form-select">
-                            @for (int i = 0; i <= 15; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="TotalGarages"></label></h1>
-                        <select asp-for="TotalGarages" class="form-select">
-                            @for (int i = 0; i <= 15; i++)
-                            {
-                                <option value="@i">@i</option>
-                            }
-                        </select>
-                        <br />
-                    </div>
-                </div>
+                <partial name="_PropertyDetailsPartial" />
 
                 <br />
                 <br />
@@ -128,7 +37,7 @@
                         <div class="col">
                             <label class="form-check-label">@Model.BuildingTypes[i].Name</label>
                             @*
-                        TODO: If clicked 2 building types then we havea bug!
+                        TODO: If clicked 2 building types then we have a bug!
                         *@
                             @if (Model.BuildingTypes[i].IsChecked)
                             {
@@ -149,10 +58,7 @@
                 <br />
 
                 @*Description*@
-                <div class="form-group">
-                    <h1 style="font-size:large"><label asp-for="Description"></label></h1>
-                    <textarea class="form-control" asp-for="Description" rows="4" placeholder="More info..."></textarea>
-                </div>
+                <partial name="_PropertyDescriptionPartial" />
                 <br />
                 <br />
 

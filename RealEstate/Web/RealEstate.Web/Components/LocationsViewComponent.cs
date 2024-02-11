@@ -6,6 +6,7 @@
 
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Web.ViewModels.Locations;
+    using RealEstate.Web.ViewModels.Property;
 
     public class LocationsViewComponent : ViewComponent
     {
@@ -16,10 +17,10 @@
             this.locationService = locationService;
         }
         
-        public async Task<IViewComponentResult> InvokeAsync()
+        public async Task<IViewComponentResult> InvokeAsync(BasePropertyModel model)
         {
-            var model = locationService.Get<LocationViewModel>();
-
+            //var model = locationService.Get<LocationViewModel>();
+            model.Locations = this.locationService.Get<LocationViewModel>();
             return this.View(model);
         }
     }

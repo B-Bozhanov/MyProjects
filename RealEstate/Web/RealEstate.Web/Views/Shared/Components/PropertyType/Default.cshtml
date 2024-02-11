@@ -1,0 +1,16 @@
+﻿@model BasePropertyModel
+
+<div class="form-group">
+    <h1 style="font-size:large">
+        <label class="form-label">
+            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.PropertyType))
+        </label>
+    </h1>
+    <select asp-for="PropertyTypeId" class="form-select">
+        <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
+        @foreach (var type in Model.PropertyTypes)
+        {
+            <option value="@type.Id">@type.Name</option>
+        }
+    </select>
+</div>

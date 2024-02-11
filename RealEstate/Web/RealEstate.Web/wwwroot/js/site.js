@@ -75,7 +75,7 @@ $(function PropertySorter() {
 });
 
 $(function PopulatedPlaceGetter() {
-    $("#PopulatedPlacesHide").hide();
+   /* $("#PopulatedPlacesHide").hide();*/
     var form = $('#searchForm');
     var token = $('input:hidden[name="__RequestVerificationToken"]').val();
 

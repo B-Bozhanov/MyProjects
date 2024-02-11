@@ -1,0 +1,29 @@
+﻿@model BasePropertyModel
+@{
+    var isEdit = this.ViewBag.IsEdit;
+
+    if (isEdit == null)
+    {
+        isEdit = false;
+    }
+}
+
+<div class="form-group" id="PopulatedPlacesHide">
+    <h1 style="font-size:large">
+        <label id="PopulatedPlaceIdLabel">
+            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.PopulatedPlace))
+        </label>
+    </h1>
+    <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
+        @if (isEdit)
+        {
+            <option value="@Model.PopulatedPlaceId">@Model.PopulatedPlace.Name</option>
+            @await Component.InvokeAsync("PopulatedPlace", new { locationId = Model.LocationId })
+        }
+        else
+        {
+            <option value="0">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.SelectPopulatedPlace))</option>
+        }
+    </select>
+    <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
+</div>

@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-9 col-lg-6 col-sm-12 justify-content-center offset-md-2 offset-lg-3">
-            <form method="post" class="form-a" id="searchForm" >
+            <form method="post" class="form-a" id="searchForm">
                 @Html.AntiForgeryToken()
                 <div asp-validation-summary=All class="text-danger"></div>
                 <div class="row">
@@ -16,27 +16,17 @@
                             <input asp-for="KeyWord" class="form-control form-control-lg form-control-a" placeholder="Keyword">
                         </div>
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <div class="form-group mt-3">
-                            <label asp-for=LocationId class="pb-2"></label>
-                            <select asp-for=LocationId class="form-control form-select form-control-a" id="location">
-                                <option value="">Select Location</option>
-                                @foreach (var location in Model.Locations)
-                                {
-                                    <option value="@location.Id">@location.Name</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-2">
-                        <div class="form-group mt-3">
-                            <label asp-for="PopulatedPlaceId" class="pb-2" id="PopulatedPlaceIdLabel"></label>
-                            <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
-                                <option value="">Select Populated place</option>
-                            </select>
-                            <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
-                        </div>
-                    </div>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <vc:Locations model="@Model"></vc:Locations>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <partial name="_PopulatedPlacePartial" />
+
                     <div class="col-md-6 mb-2">
                         <div class="form-group mt-3">
                             <label asp-for=Type class="pb-2"></label>

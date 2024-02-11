@@ -147,6 +147,7 @@
 
             editModel.LocationId = editModel.PopulatedPlace.Location.Id;
 
+            this.ViewBag.IsEdit = true;
             return this.View(editModel);
         }
 
@@ -291,8 +292,6 @@
 
         private async Task<PropertyInputModel> SetCollectionsAsync(PropertyInputModel property)
         {
-            property.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
-            property.Locations = this.locationService.Get<LocationViewModel>();
             property.BuildingTypes = this.buildingTypeService.GetAll();
             property.Heatings = await this.heatingService.GetAllAsync();
             property.Details = await this.detailService.GetAllAsync();

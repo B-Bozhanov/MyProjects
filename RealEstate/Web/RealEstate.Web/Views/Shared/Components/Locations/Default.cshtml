@@ -1,9 +1,18 @@
 ﻿@using RealEstate.Web.ViewModels.Locations
-@model IEnumerable<LocationViewModel>
-
-@foreach (var location in Model)
-{
-    <optgroup>
-        <option value="@location.Id">@location.Name</option>
-    </optgroup>
+@model BasePropertyModel
+@{
+    var locations = Model.Locations.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 }
+
+
+<div class="form-group">
+    <h1 style="font-size:large">
+        <label>
+            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Location))
+        </label>
+    </h1>
+    <select asp-for="LocationId" asp-items="@locations" class="form-select" id="location">
+        <option value=""> @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.SelectLocation))</option>
+    </select>
+    <span asp-validation-for="LocationId" class="text-danger"></span>
+</div>

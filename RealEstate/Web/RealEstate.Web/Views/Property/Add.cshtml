@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Title));
-    var locations = this.Model.Locations.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 }
 
 <div class="container-fluid">
@@ -15,52 +14,19 @@
                 <div asp-validation-summary=All class="text-danger"></div>
 
                 @*Type*@
-                <div class="form-group">
-                    <h1 style="font-size:large">
-                        <label class="form-label">
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.PropertyType))
-                        </label>
-                    </h1>
-                    <select asp-for="PropertyTypeId" class="form-select">
-                        <span asp-validation-for="PropertyTypeId" class="text-danger"></span>
-                        @foreach (var type in Model.PropertyTypes)
-                        {
-                            <option value="@type.Id">@type.Name</option>
-                        }
-                    </select>
-                </div>
+                <vc:Property-Type model="@Model"></vc:Property-Type>
                 <br />
 
                 @*Location*@
-                <div class="form-group">
-                    <h1 style="font-size:large">
-                        <label>
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Location))
-                        </label>
-                    </h1>
-                    <select asp-for="LocationId" asp-items="@locations" class="form-select" id="location">
-                        <option value=""> @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.SelectLocation))</option>
-                    </select>
-                    <span asp-validation-for="LocationId" class="text-danger"></span>
-                </div>
+                <vc:Locations model="@Model"></vc:Locations>
                 <br />
 
                 @*PopulatedPlace*@
-                <div class="form-group" id="PopulatedPlacesHide">
-                    <h1 style="font-size:large">
-                        <label id="PopulatedPlaceIdLabel">
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.PopulatedPlace))
-                        </label>
-                    </h1>
-                    <select asp-for="PopulatedPlaceId" class="form-select" id="PopulatedPlaceId">
-                        <option value="0">@this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.SelectPopulatedPlace))</option>
-                    </select>
-                    <span asp-validation-for="PopulatedPlaceId" class="text-danger"></span>
-                </div>
+                <partial name="_PopulatedPlacePartial" />
                 <br />
 
                 @*Details*@
-                <partial name="_Details" model="Model" />
+                <partial name="_PropertyDetailsPartial" />
                 <br />
                 <br />
 
@@ -86,16 +52,7 @@
                 <br />
 
                 @*Description*@
-                <div class="form-group">
-                    <h1 style="font-size:large">
-                        <label>
-                            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.Description))
-                        </label>
-                    </h1>
-                    <textarea class="form-control" asp-for="Description" rows="4"
-                              placeholder=" @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.MoreInfo))">
-                </textarea>
-                </div>
+                <partial name="_PropertyDescriptionPartial" />
                 <br />
                 <br />
                 <div class="form-group">

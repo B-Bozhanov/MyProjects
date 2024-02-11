@@ -16,24 +16,6 @@
 
     public class PropertyInputModel : BasePropertyModel
     {
-        public int? YardSize { get; set; }
-
-        public int Floor { get; set; }
-
-        public int TotalFloors { get; set; }
-
-        // [YearValidator(ErrorMessage = "Test")]
-        public int? Year { get; set; }
-
-        [Required]
-        public int PropertyTypeId { get; set; }
-
-        [Required(ErrorMessage = "Location is required!")]
-        public string LocationId { get; set; }
-
-        [Required(ErrorMessage = "Populated place is required!")]
-        public int PopulatedPlaceId { get; set; }
-
         [Required]
         public ContactModel ContactModel { get; set; } = null!;
 

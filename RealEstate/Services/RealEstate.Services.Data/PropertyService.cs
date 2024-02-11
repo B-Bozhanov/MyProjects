@@ -101,6 +101,7 @@
             var populatedPlace = this.populatedPlaceRepository.All().FirstOrDefault(p => p.Id == propertyModel.PopulatedPlaceId);
 
             property.PopulatedPlace = populatedPlace;
+            property.LocationId = propertyModel.LocationId;
             // TODO: Nullable building type.
             var buildingType = propertyModel.BuildingTypes.FirstOrDefault(x => x.IsChecked);
 

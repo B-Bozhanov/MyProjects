@@ -16,8 +16,6 @@
 
         public bool IsExpired { get; set; }
 
-        public bool IsExpirationDaysModified { get; set; }
-
         // TODO: Move to GlobalConstants
         public string ExpireMessage { get; init; } = $"Expired!";
 

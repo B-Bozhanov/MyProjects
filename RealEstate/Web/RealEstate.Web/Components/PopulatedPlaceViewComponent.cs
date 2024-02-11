@@ -1,7 +1,5 @@
 ﻿namespace RealEstate.Web.Components
 {
-    using System.Threading.Tasks;
-
     using Microsoft.AspNetCore.Mvc;
 
     using RealEstate.Services.Data.Interfaces;
@@ -16,11 +14,12 @@
             this.populatedPlaceService = populatedPlaceService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int locationId)
+        public IViewComponentResult Invoke(int locationId)
         {
-            var model = this.populatedPlaceService.GetPopulatedPlacesByLocationId<PopulatedPlaceViewModel>((int)locationId);
-            return this.View(model);
+            var model = this.populatedPlaceService
+                .GetPopulatedPlacesByLocationId<PopulatedPlaceViewModel>((int)locationId);
 
+            return this.View(model);
         }
     }
 }

@@ -54,7 +54,9 @@ namespace RealEstate.Web
 
         private static void ConfigureServices(IServiceCollection services, IConfiguration configuration)
         {
-            string sqlConnectionString = GetConnectionString(configuration, "SqlConnectionString");
+            // string sqlConnectionString = GetConnectionString(configuration, "SqlConnectionString");
+
+            string sqlConnectionString = "Server=localhost;Database=RealEstate;Trusted_Connection=true;MultipleActiveResultSets=true;TrustServerCertificate=True;Integrated Security=true";
 
             services.AddDbContext<ApplicationDbContext>(options
                 => options.UseSqlServer(sqlConnectionString));

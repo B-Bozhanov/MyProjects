@@ -1,5 +1,5 @@
 ﻿@using RealEstate.Web.ViewModels.Locations
-@model BasePropertyModel
+@model IBasePropertyModel
 @{
     var locations = Model.Locations.Select(x => new SelectListItem(x.Name, x.Id.ToString()));
 }
@@ -12,7 +12,6 @@
         </label>
     </h1>
     <select asp-for="LocationId" asp-items="@locations" class="form-select" id="location">
-        <option value=""> @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.SelectLocation))</option>
+        <option value="0"> @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.SelectLocation))</option>
     </select>
-    <span asp-validation-for="LocationId" class="text-danger"></span>
 </div>

@@ -5,7 +5,7 @@
     using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.ImageModel;
 
-    public class PropertyEditViewModel :BasePropertyModel
+    public class PropertyEditViewModel : BasePropertyModel
     {
         public bool IsExpired { get; set; }
 

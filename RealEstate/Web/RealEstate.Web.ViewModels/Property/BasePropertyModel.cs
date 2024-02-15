@@ -10,15 +10,16 @@
     using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.PropertyTypes;
 
-    public abstract class BasePropertyModel : IMapFrom<Property>
+    public abstract class BasePropertyModel : IBasePropertyModel, IMapFrom<Property> 
     {
         public int Id { get; init; }
 
-        [Required]
-        public string Description { get; init; }
+        public virtual string Description { get; init; }
 
         public int ExpirationDays { get; set; }
+
         public PopulatedPlaceViewModel PopulatedPlace { get; set; }
+
         public PropertyOptionModel Option { get; set; }
 
         [Range(0, double.MaxValue, ErrorMessage = "The price can not be negative")]
@@ -35,15 +36,11 @@
 
         public int? Year { get; set; }
 
-        [Required]
         public int PropertyTypeId { get; set; }
 
+        public virtual int LocationId { get; set; } 
 
-        [Required(ErrorMessage = "Location is required!")]
-        public int LocationId { get; set; }
-
-        [Required(ErrorMessage = "Populated place is required!")]
-        public int PopulatedPlaceId { get; set; }
+        public virtual int PopulatedPlaceId { get; set; }
 
         public int? TotalBedRooms { get; init; }
 

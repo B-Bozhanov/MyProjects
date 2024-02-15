@@ -11,12 +11,10 @@
     using Microsoft.AspNetCore.Identity;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.Extensions.Configuration;
-    using Microsoft.IdentityModel.Tokens;
 
     using RealEstate.Data.Models;
     using RealEstate.Services.Data.Interfaces;
     using RealEstate.Services.Interfaces;
-    using RealEstate.Web.ViewModels.BuildingTypeModel;
     using RealEstate.Web.ViewModels.Locations;
     using RealEstate.Web.ViewModels.PopulatedPlaces;
     using RealEstate.Web.ViewModels.Property;

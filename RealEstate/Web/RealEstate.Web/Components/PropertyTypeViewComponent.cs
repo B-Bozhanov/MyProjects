@@ -17,7 +17,7 @@
             this.propertyTypeService = propertyTypeService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(BasePropertyModel model)
+        public async Task<IViewComponentResult> InvokeAsync(IBasePropertyModel model)
         {
             model.PropertyTypes = this.propertyTypeService.Get<PropertyTypeViewModel>();
             return this.View(model);

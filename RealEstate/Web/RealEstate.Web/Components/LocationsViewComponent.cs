@@ -17,9 +17,8 @@
             this.locationService = locationService;
         }
         
-        public async Task<IViewComponentResult> InvokeAsync(BasePropertyModel model)
+        public async Task<IViewComponentResult> InvokeAsync(IBasePropertyModel model)
         {
-            //var model = locationService.Get<LocationViewModel>();
             model.Locations = this.locationService.Get<LocationViewModel>();
             return this.View(model);
         }

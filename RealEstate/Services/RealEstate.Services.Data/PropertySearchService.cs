@@ -27,32 +27,30 @@
 
         public async Task<IEnumerable<T>> SearchAsync<T>(SearchInputModel searchModel)
         {
-            IEnumerable<PropertyViewModel> result;
-
             if (searchModel.KeyWord == null && searchModel.Type == null
                 && searchModel.BathRooms == null && searchModel.BedRooms == null
-                && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+                && searchModel.LocationId == default && searchModel.PopulatedPlaceId == default
                 && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
             {
                 throw new InvalidOperationException("Select at least one criteria");
             }
             if (searchModel.KeyWord == null && searchModel.Type == null
                 && searchModel.BathRooms == null && searchModel.BedRooms == null
-                && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+                && searchModel.LocationId == default && searchModel.PopulatedPlaceId == default
                 && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice != null)
             {
                 return await this.SearchByMaxPriceAsync<T>(searchModel.MaxPrice);
             }
             if (searchModel.KeyWord == null && searchModel.Type == null
                && searchModel.BathRooms == null && searchModel.BedRooms == null
-               && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+               && searchModel.LocationId == default && searchModel.PopulatedPlaceId == default
                && searchModel.Garages == null && searchModel.MinPrice != null && searchModel.MaxPrice == null)
             {
                 return await this.SearchByMinPriceAsync<T>(searchModel.MinPrice);
             }
             if (searchModel.KeyWord == null && searchModel.Type == null
               && searchModel.BathRooms == null && searchModel.BedRooms == null
-              && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+              && searchModel.LocationId == default && searchModel.PopulatedPlaceId == default
               && searchModel.Garages == null && searchModel.MinPrice != null && searchModel.MaxPrice != null)
             {
                 if (searchModel.MinPrice > searchModel.MaxPrice)
@@ -64,35 +62,35 @@
             }
             if (searchModel.KeyWord == null && searchModel.Type != null
              && searchModel.BathRooms == null && searchModel.BedRooms == null
-             && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+             && searchModel.LocationId == default && searchModel.PopulatedPlaceId == default
              && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
             {
                 return await this.SearchByTypeAsync<T>(searchModel.Type);
             }
             if (searchModel.KeyWord == null && searchModel.Type != null
             && searchModel.BathRooms == null && searchModel.BedRooms == null
-            && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+            && searchModel.LocationId == default && searchModel.PopulatedPlaceId == default
             && searchModel.Garages == null && searchModel.MinPrice != null && searchModel.MaxPrice == null)
             {
                 return await this.SearchByTypeAndMinPriceAsync<T>(searchModel.Type, (int)searchModel.MinPrice);
             }
             if (searchModel.KeyWord == null && searchModel.Type != null
             && searchModel.BathRooms == null && searchModel.BedRooms == null
-            && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+            && searchModel.LocationId == default && searchModel.PopulatedPlaceId == default
             && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice != null)
             {
                 return await this.SearchByTypeAndMaxPriceAsync<T>(searchModel.Type, searchModel.MaxPrice);
             }
             if (searchModel.KeyWord == null && searchModel.Type != null
             && searchModel.BathRooms == null && searchModel.BedRooms == null
-            && searchModel.LocationId == null && searchModel.PopulatedPlaceId == null
+            && searchModel.LocationId == default && searchModel.PopulatedPlaceId == default
             && searchModel.Garages == null && searchModel.MinPrice != null && searchModel.MaxPrice != null)
             {
                 return await this.SearchByTypeBetweenMinAndMaxPriceAsync<T>(searchModel.Type, searchModel.MinPrice, searchModel.MaxPrice);
             }
             if (searchModel.KeyWord == null && searchModel.Type == null
             && searchModel.BathRooms == null && searchModel.BedRooms == null
-            && searchModel.LocationId != null && searchModel.PopulatedPlaceId != null
+            && searchModel.LocationId != default && searchModel.PopulatedPlaceId != default
             && searchModel.Garages == null && searchModel.MinPrice == null && searchModel.MaxPrice == null)
             {
                 var populatedPlace = this.populatedPlaceRepository.All().FirstOrDefault(p => p.Id == searchModel.PopulatedPlaceId);

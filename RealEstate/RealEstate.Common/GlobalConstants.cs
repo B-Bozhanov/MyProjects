@@ -61,7 +61,10 @@
             public const int DefaultStartPage = 1;
             public const int PropertiesPerPage = 9;
             //public const string YearErrorMessage = $"The must be in range {MinYear} and {DateTime.UtcNow.Year}";
-
+            public const int ExpDays0 = 0;
+            public const int ExpDays30 = 30;
+            public const int ExpDays60 = 60;
+            public const int ExpDays90 = 90;
             public static class ErrorMessages
             {
                 public const string Test = "Test";

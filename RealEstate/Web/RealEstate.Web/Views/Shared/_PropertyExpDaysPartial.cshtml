@@ -1,0 +1,22 @@
+﻿@model BasePropertyModel
+@{
+    var plusDays = ' ';
+    if (Model.ExpirationDays > 0)
+    {
+        plusDays = '+';
+    }
+}
+<div class="col-3">
+    <h1 style="font-size:large">
+        <label>
+            @this.translateService.TranslateTo(CurrentSystemLanguage, nameof(BaseLanguage.ExpirationDays))
+        </label>
+    </h1>
+    <select class="form-select" asp-for="ExpirationDays">
+        <option value="@GlobalConstants.Properties.ExpDays0">@plusDays@GlobalConstants.Properties.ExpDays0 days</option>
+        <option value="@GlobalConstants.Properties.ExpDays30">@plusDays@GlobalConstants.Properties.ExpDays30 days</option>
+        <option value="@GlobalConstants.Properties.ExpDays60">@plusDays@GlobalConstants.Properties.ExpDays60 days</option>
+        <option value="@GlobalConstants.Properties.ExpDays90">@plusDays@GlobalConstants.Properties.ExpDays90 days</option>
+    </select>
+    <span asp-validation-for="ExpirationDays" class="text-danger"></span>
+</div>

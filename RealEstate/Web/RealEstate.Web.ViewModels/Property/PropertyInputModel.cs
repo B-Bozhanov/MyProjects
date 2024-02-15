@@ -23,6 +23,9 @@
         [Required(ErrorMessage = "The images is required, min images - 1, max - 20")]
         public IFormFileCollection Images { get; set; }
 
+        [Required(ErrorMessage = "Description is required")]
+        public override string Description { get ; init ; }
+
         public IEnumerable<PropertyTypeViewModel> PropertyTypes { get; set; }
 
         public IEnumerable<LocationViewModel> Locations { get; set; }

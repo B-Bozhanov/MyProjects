@@ -4,11 +4,15 @@ $(function () {
     $('[data-toggle="tooltip"]').tooltip();
 });
 
+function RemoveElement(value) {
+    var element = document.getElementById(value);
+    element.remove();
+}
 function RemoveProperty(value) {
     let message = "Are you sure?";
-
     if (confirm(message)) {
         var id = value;
+
         var token = $('input:hidden[name="__RequestVerificationToken"]').val();
         $.ajax({
             type: 'POST',
@@ -22,7 +26,7 @@ function RemoveProperty(value) {
             success:
                 function (response) {
                     if (response.data) {
-                        window.location.reload();
+                        RemoveElement(id);
                     }
                 }
         });

@@ -25,7 +25,6 @@
 
                 @*Details*@
                 <partial name="_PropertyDetailsPartial" />
-
                 <br />
                 <br />
 
@@ -90,41 +89,14 @@
                 </div>
                 <br />
                 <div class="col-3">
-
                     @*Price*@
-                    <h1 style="font-size:large"><label asp-for="Price"></label></h1>
-                    <input asp-for="Price" class="form-control" placeholder="Set price" />
-                    <span asp-validation-for="Price" class="text-danger"></span>
+                    <partial name="_PropertyPricePartial" model="Model" />
                 </div>
                 <br />
 
                 @*Expiration Date*@
-                @if (Model.IsExpired)
-                {
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label>Activate for</label></h1>
-                        <select class="form-select" asp-for="ExpirationDays">
-                            <option value="0">0 days</option>
-                            <option value="30">30 days</option>
-                            <option value="60">60 days</option>
-                            <option value="90">90 days</option>
-                        </select>
-                        <span asp-validation-for="ExpirationDays" class="text-danger"></span>
-                    </div>
-                }
-                else
-                {
-                    <div class="col-3">
-                        <h1 style="font-size:large"><label asp-for="ExpirationDays"></label></h1>
-                        <select class="form-select" asp-for="ExpirationDays">
-                            <option value="0">+0 days</option>
-                            <option value="30">+30 days</option>
-                            <option value="60">+60 days</option>
-                            <option value="90">+90 days</option>
-                        </select>
-                        <span asp-validation-for="ExpirationDays" class="text-danger"></span>
-                    </div>
-                }
+                <partial name="_PropertyExpDaysPartial" model="Model" />
+
                 <br />
 
                 @*Buttons*@
@@ -133,7 +105,7 @@
                     <div class="col-md-12">
                         <div class="container py-3">
                             <div class="input-group custom-file-button">
-                                <label class="input-group-text" for="inputGroupFile">Your Custom Text</label>
+                                <label class="input-group-text" for="inputGroupFile">Изберете Снимки</label>
                                 <input type="file" class="form-control" id="inputGroupFile">
                             </div>
                         </div>
